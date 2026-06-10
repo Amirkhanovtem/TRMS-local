@@ -1,0 +1,34 @@
+.trainee-cart-side-nav-list-header {
+  margin-bottom: 0;
+
+  .title-with-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .title {
+      font-size: large;
+    }
+  }
+}
+
+.trainee-cart-side-nav-list {
+  &:hover,
+  &.selected {
+    background: #01635238;
+    cursor: pointer;
+  }
+
+  .item-num {
+    margin-right: 10px !important;
+    font-size: 18px !important;
+    color: black !important;
+  }
+
+  .item-active-span {
+    &:hover {
+      cursor: pointer;
+      color: #006251;
+    }
+  }
+}

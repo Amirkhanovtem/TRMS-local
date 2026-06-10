@@ -1,0 +1,25 @@
+@use '/src/assets/styles/global-vars' as gv;
+
+.row-btns {
+  &.add {
+    &:hover {
+      color: gv.$trms-green-500;
+    }
+  }
+
+  &.edit {
+    &:hover {
+      color: gv.$trms-blue;
+    }
+  }
+
+  &.remove {
+    &:hover {
+      color: gv.$trms-red;
+    }
+  }
+}
+
+.tree-node-btns-container {
+  margin-inline: 25px;
+}

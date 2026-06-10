@@ -1,0 +1,27 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'certificateReissueHierarchyTable'"
+  [displayedColumns]="displayedColumns"
+  [tableContainerClass]="'expansion-table'"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="open" let-certificate="row">
+    <button
+      color="primary"
+      mat-raised-button
+      openUpdateCertificateDirective
+      [beforeOpen]="getBeforeOpen()"
+      [certificateId]="certificate.id"
+    >
+      {{ 'openBtn' | transloco }}
+    </button>
+  </ng-template>
+  <ng-template tableWrapperColumn="download" let-certificate="row">
+    <app-download-certificate-by-participant-card-ids
+      [titleLocaleKey]="'downloadBtn'"
+      [participantTrainingCardIds]="[certificate.participantTrainingCard.id]"
+    >
+    </app-download-certificate-by-participant-card-ids>
+  </ng-template>
+</app-table-wrapper>

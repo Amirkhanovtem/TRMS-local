@@ -1,0 +1,18 @@
+<div class="self-enrollment-content-container" [class.mobile-view]="isMobileView">
+  @if (isMobileView && showEvents) {
+    <div class="mobile-navigation">
+      <button mat-icon-button (click)="backToFilters()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span class="nav-title">{{ 'selfEnrollment.backToFilters' | transloco }}</span>
+    </div>
+  }
+
+  <div class="filter-container" [class.hidden-mobile]="isMobileView && !showFilters">
+    <app-self-enrollment-filters (acceptFiltersOutput)="applyFilters($event)"></app-self-enrollment-filters>
+  </div>
+
+  <div class="events-container" [class.hidden-mobile]="isMobileView && !showEvents">
+    <app-self-enrollment-events></app-self-enrollment-events>
+  </div>
+</div>

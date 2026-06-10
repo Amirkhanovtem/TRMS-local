@@ -1,0 +1,12 @@
+.snack-bar-info-btn-container {
+  text-align: end;
+
+  a {
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      color: #000;
+    }
+  }
+}

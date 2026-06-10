@@ -1,0 +1,119 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('equipmentCategoryModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('equipmentModalPageViewTitle' | transloco)
+            : ('equipmentCategoryModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentCategoryNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'equipmentCategoryNameColTable' | transloco"
+              [(ngModel)]="equipmentCategory.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   LOCATION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentCategoryLocationColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              [required]="true"
+              [placeholder]="'equipmentCategoryLocationColTable' | transloco"
+              [value]="getLocationName(equipmentCategory?.location)"
+              [attr.disabled]="dialogParams?.isView"
+              formControlName="location"
+            >
+              @for (location of locations; track location) {
+                <mat-option [value]="getLocationName(location)" (click)="equipmentCategory.location = location">
+                  {{ getLocationName(location) }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!--   AVAILABLE COUNT   -->
+        @if (dialogParams?.isUpdate || dialogParams?.isView) {
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'equipmentCategoryAvailableCountColTable' | transloco }}
+            </p>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                type="text"
+                [placeholder]="'equipmentCategoryAvailableCountColTable' | transloco"
+                [(ngModel)]="equipmentCategory.availableCount"
+                formControlName="availableCount"
+                [readonly]="true"
+              />
+            </mat-form-field>
+          </div>
+        }
+
+        <!--   TOTAL COUNT   -->
+        @if (dialogParams?.isUpdate || dialogParams?.isView) {
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'equipmentCategoryTotalCountColTable' | transloco }}
+            </p>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                type="text"
+                [placeholder]="'equipmentCategoryTotalCountColTable' | transloco"
+                [(ngModel)]="equipmentCategory.totalCount"
+                formControlName="totalCount"
+                [readonly]="true"
+              />
+            </mat-form-field>
+          </div>
+        }
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveEquipmentCategory()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

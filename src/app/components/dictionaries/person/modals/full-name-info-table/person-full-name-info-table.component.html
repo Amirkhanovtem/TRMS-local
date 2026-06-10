@@ -1,0 +1,14 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="tableId"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableContainerClass]="'expansion-table'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="actions" let-person="row">
+    <div class="row-with-action-btns-container">
+      <mat-icon class="row-btns view" (click)="openViewPersonModal(person)">visibility</mat-icon>
+    </div>
+  </ng-template>
+</app-table-wrapper>

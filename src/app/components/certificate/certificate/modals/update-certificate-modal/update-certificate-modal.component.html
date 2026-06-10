@@ -1,0 +1,322 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('certificateModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('certificateModalPageViewTitle' | transloco)
+            : ('certificateModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="input-fields-container">
+      <!--   PERSON   -->
+      <div class="modal-input-field center-field">
+        <p class="modal-input-field-title">
+          {{ 'certificateModalPerson' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            required
+            [placeholder]="'certificateModalPerson' | transloco"
+            [value]="
+              certificate?.participantTrainingCard?.person?.fullNameEn +
+              ' ' +
+              certificate?.participantTrainingCard?.person?.personalNumber
+            "
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="group-field-container">
+        <!--   TRAINING NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateModalTrainingName' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateModalTrainingName' | transloco"
+              [value]="certificate?.participantTrainingCard?.training?.trainingTemplate?.name"
+              readonly
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   TRAINING DATES   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateModalTrainingPeriod' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateModalTrainingPeriod' | transloco"
+              [value]="
+                (certificate?.participantTrainingCard?.training?.startTrainingDate | date: 'dd.MM.yyyy') +
+                ' - ' +
+                (certificate?.participantTrainingCard?.training?.endTrainingDate | date: 'dd.MM.yyyy')
+              "
+              readonly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="group-field-container">
+        <!--   CERTIFICATE NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateModalCertificateName' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateModalCertificateName' | transloco"
+              [value]="certificate?.certificateTemplate?.name"
+              readonly
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   CERTIFICATE STATUS   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateModalCertificateStatus' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateModalCertificateStatus' | transloco"
+              [value]="certificate?.certificateStatus?.[localEnumField]"
+              readonly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div [formGroup]="modalForm">
+        <div class="group-field-container">
+          <!--   SERIAL NUMBER CODE   -->
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'certificateSerialNumberInfo.code' | transloco }}
+            </p>
+
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                [placeholder]="'certificateSerialNumberInfo.code' | transloco"
+                [value]="certificate?.serialNumberInfo?.code"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+
+          <!--   SERIAL NUMBER UNIQUE NUMBER   -->
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'certificateSerialNumberInfo.number' | transloco }}
+            </p>
+
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                type="number"
+                appAllowNumbersOnlyDirective
+                required
+                [placeholder]="'certificateSerialNumberInfo.number' | transloco"
+                [(ngModel)]="certificate.serialNumberInfo.number"
+                formControlName="numberOfSerialNumber"
+                min="0"
+                [readonly]="dialogParams?.isView"
+              />
+            </mat-form-field>
+
+            <div class="error-message">
+              @if (isFieldEmpty('numberOfSerialNumber')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+
+              @if (isFieldLessThenZero('numberOfSerialNumber')) {
+                <span>
+                  {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="group-field-container certificate-fields-container">
+          <!--   DATE OF ISSUE   -->
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'certificateModalCertificateDateOfIssue' | transloco }}
+            </p>
+
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                [matDatepicker]="datepickerDateOfIssue"
+                [(ngModel)]="certificate.dateOfIssue"
+                [readonly]="dialogParams?.isView"
+                formControlName="dateIssue"
+                [placeholder]="'certificateModalCertificateDateOfIssue' | transloco"
+              />
+
+              @if (!dialogParams?.isView) {
+                <mat-datepicker-toggle matSuffix [for]="datepickerDateOfIssue"> </mat-datepicker-toggle>
+              }
+              <mat-datepicker #datepickerDateOfIssue></mat-datepicker>
+            </mat-form-field>
+
+            <div class="error-message">
+              @if (isFieldEmpty('dateIssue')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+
+              @if (controlHasError('dateIssue', 'expireBeforeStart')) {
+                <span>
+                  {{ 'reissueCertificatesExpireDateBeforeIssueDateErrorMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+
+          <!--   BASE MONTH   -->
+          @if (isBaseMonthDurationType()) {
+            <div class="modal-input-field">
+              <p class="modal-input-field-title">
+                {{ 'certificateModalCertificateBasMonth' | transloco }}
+              </p>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  required
+                  [placeholder]="'certificateModalCertificateBasMonth' | transloco"
+                  [value]="certificate?.dateOfExpire | date: 'MMMM'"
+                  readonly
+                />
+              </mat-form-field>
+            </div>
+          }
+
+          <!--   DATE OF EXPIRE   -->
+          @if (!isInfiniteDurationType()) {
+            <div class="modal-input-field">
+              <p class="modal-input-field-title">
+                {{ 'certificateModalCertificateExpireDate' | transloco }}
+              </p>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  required
+                  [readonly]="dialogParams?.isView"
+                  [matDatepicker]="datepickerDateOfExpire"
+                  [(ngModel)]="certificate.dateOfExpire"
+                  formControlName="dateExpire"
+                  [placeholder]="'certificateModalCertificateExpireDate' | transloco"
+                />
+                @if (!dialogParams?.isView) {
+                  <mat-datepicker-toggle matSuffix [for]="datepickerDateOfExpire"> </mat-datepicker-toggle>
+                }
+                <mat-datepicker
+                  #datepickerDateOfExpire
+                  (monthSelected)="setMonthAndYear($event, datepickerDateOfExpire)"
+                  [startView]="getExpireDatePickerView()"
+                >
+                </mat-datepicker>
+              </mat-form-field>
+              <div class="error-message">
+                @if (isFieldEmpty('dateExpire')) {
+                  <span>
+                    {{ 'validatorsEmptyFieldMessage' | transloco }}
+                  </span>
+                }
+                @if (controlHasError('dateExpire', 'expireBeforeStart')) {
+                  <span>
+                    {{ 'reissueCertificatesExpireDateBeforeIssueDateErrorMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+
+          <!--   DATE OF EXPIRE   -->
+          @if (isInfiniteDurationType()) {
+            <div class="modal-input-field">
+              <p class="modal-input-field-title">
+                {{ 'certificateModalCertificateExpireDate' | transloco }}
+              </p>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  required
+                  [placeholder]="'certificateModalCertificateExpireDate' | transloco"
+                  [value]="certificate?.certificateDurationSettings?.durationType?.[localEnumField]"
+                  readonly
+                />
+              </mat-form-field>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!--   CERTIFICATE REISSUE HIERARCHY   -->
+      <div class="modal-input-field">
+        <mat-accordion class="accordion" multi>
+          <mat-expansion-panel class="expansion">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-expansion-bold-title">
+                {{ 'certificateModalReissueHierarchy' | transloco }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-certificate-reissue-hierarchy-table [targetCertificateId]="certificate.id">
+            </app-certificate-reissue-hierarchy-table>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <app-download-certificate-by-participant-card-ids
+        [titleLocaleKey]="'downloadBtn'"
+        [class]="'secondaryBtn'"
+        [participantTrainingCardIds]="[certificate.participantTrainingCard.id]"
+      >
+      </app-download-certificate-by-participant-card-ids>
+
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="saveCertificate()">
+          {{ (dialogParams?.isUpdate ? 'saveBtn' : 'createBtn') | transloco }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

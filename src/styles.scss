@@ -1,0 +1,31 @@
+@use 'assets/styles/main';
+@use 'assets/styles/scrollbar';
+@use 'assets/styles/modal';
+@use 'assets/styles/table';
+@use 'assets/styles/gantt';
+@use 'assets/styles/jodit';
+@use 'assets/styles/calendar';
+@use 'assets/styles/material';
+
+// Mobile breakpoint - should match APP_CONSTANTS.MOBILE_BREAKPOINT
+$mobile-breakpoint: 768px;
+
+// Prevent horizontal scroll on mobile devices
+@media (max-width: $mobile-breakpoint) {
+  html,
+  body {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .self-enrollment-page *,
+  .mobile-menu * {
+    box-sizing: border-box;
+  }
+}

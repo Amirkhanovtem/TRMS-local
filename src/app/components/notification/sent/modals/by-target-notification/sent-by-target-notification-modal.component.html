@@ -1,0 +1,23 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'sentNotificationPageTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-sent-notification-selection-table
+      [tableId]="'sentNotificationByTargetSelectionTable'"
+      [dataSourceObs]="sentNotificationService.listByTargetId(dialogParams.targetId)"
+    >
+    </app-sent-notification-selection-table>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

@@ -1,0 +1,33 @@
+<div class="tag-person-linker-container">
+  <div class="title-container">
+    <span class="page-title">
+      {{ 'tagPersonLinkerPage.title' | transloco }}
+    </span>
+  </div>
+
+  <div class="cards-container">
+    <app-selection-card
+      [titleKey]="'tagPersonLinkerPage.categoryCardTitle'"
+      [data]="tagsViewData()"
+      [getVisualFunc]="getTagVisualFunc"
+      [selectedItem]="selectedTag()"
+      (selectionEvent)="onTagSelection($event)"
+    />
+    <app-selection-card
+      [titleKey]="'tagPersonLinkerPage.roleCardTitle'"
+      [interactionMode]="'toggle-select'"
+      [data]="tagRolesViewData()"
+      [getVisualFunc]="getTagRoleVisualFunc"
+      [selectedItem]="selectedTagRole()"
+      (actionEvent)="onTagRoleAction($event)"
+      (selectionEvent)="onTagRoleSelection($event)"
+    />
+    <app-selection-card
+      [titleKey]="'tagPersonLinkerPage.personCardTitle'"
+      [interactionMode]="'toggle-select'"
+      [data]="personsViewData()"
+      [getVisualFunc]="getPersonVisualFunc"
+      (actionEvent)="onPersonAction($event)"
+    />
+  </div>
+</div>

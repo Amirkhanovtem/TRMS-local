@@ -1,0 +1,275 @@
+@use 'src/assets/styles/global-vars.scss' as gv;
+
+// vars
+
+// template selectors
+
+// selectors
+button {
+  &.calendar-holiday-btn {
+    background: #fb8181 !important;
+    border-radius: 100% !important;
+  }
+}
+
+mat-paginator {
+  position: sticky;
+  left: 0;
+  bottom: 0;
+}
+
+mat-step-header {
+  border-radius: 10px;
+}
+
+mat-spinner {
+  height: 50px !important;
+  margin: auto;
+}
+
+::ng-deep {
+  .mat-sort-header-arrow {
+    color: #fff;
+  }
+
+  .mat-sort-header-content {
+    text-align: start !important;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    height: 0;
+  }
+}
+
+.table-container {
+  overflow: auto;
+}
+
+.mat-mdc-table {
+  thead {
+    background-color: gv.$trms-green-500 !important;
+    position: sticky !important;
+    top: 35px !important;
+    z-index: 1;
+  }
+}
+
+.page-title {
+  font-size: x-large;
+  font-weight: 500;
+}
+
+.header-title {
+  color: #fff;
+  font-weight: 500;
+}
+
+.mat-mdc-header-row {
+  $table-header-border: 1px solid rgb(255 255 255 / 30%);
+
+  th {
+    border-top: $table-header-border;
+
+    &:not(:last-child) {
+      border-right: $table-header-border;
+    }
+  }
+}
+
+.title-container {
+  margin-block: 2%;
+  display: flex;
+  justify-content: space-between;
+
+  &.gantt-page {
+    margin-bottom: 0;
+  }
+}
+
+.search-input {
+  width: 419px;
+
+  &:focus-visible {
+    outline-color: gv.$trms-green-500;
+  }
+}
+
+.expansion-search-input-field {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  input {
+    height: 35px;
+    font-size: 17px;
+  }
+
+  app-search {
+    mat-form-field {
+      width: 100% !important;
+
+      mat-icon {
+        padding: 10px 0 10px 10px !important;
+        font-size: 15px !important;
+        height: 12px !important;
+      }
+    }
+  }
+
+  .mat-mdc-form-field-infix {
+    padding: 0 !important;
+    min-height: 15px !important;
+    margin-block: auto !important;
+  }
+}
+
+.table-col-input-field {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  input {
+    height: 40px !important;
+    font-size: 17px;
+  }
+
+  mat-form-field {
+    width: 50%;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding: 0 !important;
+    min-height: 40px !important;
+  }
+}
+
+.expansion {
+  label {
+    height: 40px;
+  }
+}
+
+.creating-event-modal-search-input {
+  width: 99%;
+  margin-inline: 3px;
+  margin-top: 5px;
+  max-height: 50px;
+
+  mat-icon {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+
+  label {
+    min-width: 75px;
+    transform: var(
+      --mat-mdc-form-field-label-transform,
+      translateY(-50%) translateX(calc(0 * (0px + var(--mat-mdc-form-field-label-offset-x, 0px))))
+    ) !important;
+  }
+}
+
+.internal-input-field {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 125px;
+
+  input {
+    height: 35px;
+    font-size: 17px;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding: 0 !important;
+    min-height: 15px !important;
+    width: 100%;
+  }
+}
+
+.mat-mdc-input-element.input-field {
+  height: 25px;
+}
+
+.not-found-message-tr {
+  text-align: center;
+}
+
+.not-found-message-td {
+  padding-top: 10px;
+  font-weight: 500;
+}
+
+.table-actions-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.btns-container {
+  display: flex;
+  align-items: flex-end;
+
+  button {
+    margin-right: 10px;
+  }
+}
+
+.btns-container > * {
+  margin-right: 10px;
+}
+
+.table-row-btn {
+  font-size: inherit;
+}
+
+.selected-items-mat-chip {
+  overflow: auto;
+  margin-top: 5px;
+
+  div {
+    flex-flow: row;
+  }
+}
+
+.table-wrapper-col {
+  &:has(.event-table-row) {
+    cursor: pointer;
+  }
+}
+
+.tree-table {
+  .tree-container {
+    max-height: 70vh;
+  }
+}
+
+.tree-selection-modal {
+  height: 100%;
+
+  .tree-container {
+    max-height: calc(100% - 70px);
+  }
+}
+
+.mat-chip-container {
+  margin-top: 7px;
+}
+
+.check-icon {
+  color: gv.$trms-green-500;
+}
+
+.invalid-icon {
+  color: gv.$trms-red;
+}
+
+.load-page-spinner-container {
+  visibility: hidden;
+
+  mat-spinner {
+    visibility: visible;
+  }
+}

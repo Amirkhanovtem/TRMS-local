@@ -1,0 +1,31 @@
+@use 'global-vars' as gv;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: gv.$trms-font-family;
+}
+
+.active-link {
+  span {
+    color: gv.$trms-yellow !important;
+  }
+}
+
+cdk-virtual-scroll-viewport {
+  height: 100%;
+  width: 100%;
+  max-height: 140px !important;
+}
+
+.cdk-virtual-scroll-content-wrapper {
+  max-width: 150px !important;
+}
+
+.cdk-mat-select-selected-option {
+  display: none;
+}

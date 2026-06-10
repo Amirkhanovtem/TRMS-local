@@ -1,0 +1,103 @@
+@use 'src/assets/styles/global-vars.scss' as gv;
+
+::ng-deep.mat-mdc-dialog-surface {
+  &:has(.resizable-modal) {
+    resize: both;
+    width: 50vw;
+    height: 80vh;
+    border-radius: 28px;
+    overflow-y: hidden;
+    display: block;
+
+    &::after {
+      width: 10px;
+      height: 10px;
+      background: gv.$trms-green-500;
+    }
+  }
+}
+
+::ng-deep.cdk-overlay-pane {
+  &:has(.resizable-modal) {
+    max-width: 98vw !important;
+    max-height: 97vh !important;
+    min-width: 15vw !important;
+    min-height: 22vh !important;
+    position: absolute !important;
+  }
+}
+
+.resizable-modal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .mat-mdc-dialog-content {
+    max-height: none;
+  }
+}
+
+.content-container {
+  &:has(.modal-top-fixed-stepper) {
+    padding-top: 0;
+
+    ::ng-deep .modal-top-fixed-stepper {
+      .mat-horizontal-stepper-header-container {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 200;
+        padding-top: 20px;
+      }
+    }
+  }
+
+  .modal-loading-spinner {
+    top: 50%;
+  }
+}
+
+.footer-container {
+  padding-inline: 40px;
+  justify-content: end;
+
+  .resize-handler {
+    $border-radius: 6px solid gv.$trms-green-500;
+
+    border-right: $border-radius;
+    border-bottom: $border-radius;
+    border-bottom-right-radius: 28px;
+    z-index: 0;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  ::ng-deep button {
+    margin-bottom: 8px !important;
+    margin-right: 8px !important;
+    margin-left: 0 !important;
+  }
+}
+
+.header-container {
+  cursor: grab;
+  display: flex;
+  padding-right: 0;
+  max-height: 50%;
+  overflow: auto;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .header-btns-container {
+    justify-content: end;
+    display: flex;
+    flex-grow: 1;
+    position: sticky;
+    top: 0;
+  }
+}

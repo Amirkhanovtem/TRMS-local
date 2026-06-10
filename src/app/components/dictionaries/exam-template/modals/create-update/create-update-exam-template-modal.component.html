@@ -1,0 +1,305 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('examTemplateModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('examTemplateModalPageViewTitle' | transloco)
+            : ('examTemplateModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplateNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'examTemplateNameColTable' | transloco"
+              [(ngModel)]="examTemplate.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplateCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'examTemplateCodeColTable' | transloco"
+              [(ngModel)]="examTemplate.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplateDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'examTemplateDescriptionColTable' | transloco"
+              [(ngModel)]="examTemplate.description"
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplateTypeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'examTemplateTypeColTable' | transloco"
+              [(ngModel)]="examTemplate.type"
+              [compareWith]="compareWithFn"
+              formControlName="type"
+            >
+              @for (examTemplateType of allExamTemplateTypes; track examTemplateType) {
+                <mat-option [value]="examTemplateType" [disabled]="dialogParams?.isView">
+                  {{ examTemplateType[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('type')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   SCORE TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplateScoreTypeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'examTemplateScoreTypeColTable' | transloco"
+              [value]="examTemplate?.scoreType?.[localEnumField]"
+              formControlName="scoreType"
+            >
+              @for (scoreType of allExamScoreTypes; track scoreType) {
+                <mat-option
+                  [value]="scoreType[localEnumField]"
+                  [disabled]="dialogParams?.isView"
+                  (click)="changeScoreType(scoreType)"
+                >
+                  {{ scoreType[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('scoreType')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   MAX SCORE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplateMaxScoreColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="number"
+              [placeholder]="'examTemplateMaxScoreColTable' | transloco"
+              [(ngModel)]="examTemplate.maxScore"
+              formControlName="maxScore"
+              required
+              appAllowNumbersOnlyDirective
+              min="0"
+              [max]="MAX_SCORE"
+              [readonly]="dialogParams?.isView || isPercentScoreType()"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('maxScore')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldLessThenZero('maxScore')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldOutOfTheRange('maxScore')) {
+              <span>
+                {{ fieldOutOfTheRangeErrorMessage(0, MAX_SCORE) }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   PASSING SCORE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplatePassingScoreColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="number"
+              [placeholder]="'examTemplatePassingScoreColTable' | transloco"
+              [(ngModel)]="examTemplate.passingScore"
+              formControlName="passingScore"
+              required
+              appAllowNumbersOnlyDirective
+              min="0"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('passingScore')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldLessThenZero('passingScore')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (controlHasError('passingScore', 'passingScoreExceedMaxScore')) {
+              <span>
+                {{ 'examTemplatePassingScoreExceedError' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   TRIES COUNT   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'examTemplateTriesCountColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="number"
+              [placeholder]="'examTemplateTriesCountColTable' | transloco"
+              [(ngModel)]="examTemplate.triesCount"
+              formControlName="triesCount"
+              required
+              appAllowNumbersOnlyDirective
+              min="1"
+              [max]="MAX_TRIES_COUNT"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('triesCount')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldOutOfTheRange('triesCount')) {
+              <span>
+                {{ fieldOutOfTheRangeErrorMessage(1, MAX_TRIES_COUNT) }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   TRAINING TEMPLATE   -->
+        @if (this.dialogParams?.isUpdate || this.dialogParams?.isView) {
+          <div class="modal-input-field expansion">
+            <mat-accordion class="accordion">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="mat-expansion-bold-title">
+                    {{ 'examTemplateTrainingTemplateColTable' | transloco }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-exam-template-training-template-table
+                  [examTemplate]="examTemplate"
+                ></app-exam-template-training-template-table>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        }
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveExamTemplate()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

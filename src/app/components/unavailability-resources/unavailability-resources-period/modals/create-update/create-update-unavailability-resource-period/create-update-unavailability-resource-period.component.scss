@@ -1,0 +1,14 @@
+.date-period-input-fields-container {
+  display: flex;
+
+  .date-period-slash {
+    height: min-content;
+    margin-inline: 20px;
+    font-size: 40px;
+    margin-top: 3%;
+  }
+}
+
+mat-button-toggle {
+  flex-grow: 3;
+}

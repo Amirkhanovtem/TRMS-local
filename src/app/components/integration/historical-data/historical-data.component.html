@@ -1,0 +1,34 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'historicalDataPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'historicalDataTable'"
+  [displayedColumns]="displayedColumns"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-container table-buttons>
+    <button mat-raised-button color="primary" (click)="openHistoricalDataUploadModal()">
+      {{ 'historicalDataLoadBtn' | transloco }}
+    </button>
+
+    <button mat-raised-button class="secondaryBtn" (click)="loadHistoricalData()">
+      {{ 'refreshBtn' | transloco }}
+    </button>
+  </ng-container>
+
+  <ng-template tableWrapperColumn="info" let-historicalData="row">
+    <mat-icon class="row-btns view" (click)="openHistoricalDataUploadInfo(historicalData)">visibility</mat-icon>
+  </ng-template>
+
+  <ng-template tableWrapperColumn="historicalDataFile" let-historicalData="row">
+    @if (historicalData?.fileStorage?.id) {
+      <mat-icon class="attached-file-icon" (click)="loadAttachedFile(historicalData?.fileStorage, $event)">
+        attach_file
+      </mat-icon>
+    }
+  </ng-template>
+</app-table-wrapper>

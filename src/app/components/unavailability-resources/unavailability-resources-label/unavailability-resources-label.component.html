@@ -1,0 +1,30 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'resourceUnavailabilityLabelPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'resourceUnavailabilityLabelDictionaryTable'"
+  [displayedColumns]="displayedColumns"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="unavailabilityResourcesLabelService"
+      (loadData)="loadUnavailabilityResourcesTypes()"
+    >
+    </app-crud-btns>
+  </ng-container>
+
+  <ng-template tableWrapperColumn="color" let-unavailabilityResourcesLabel="row">
+    <div
+      class="unavailability-resource-label-color-col-table"
+      [style.background]="unavailabilityResourcesLabel.color"
+    ></div>
+  </ng-template>
+</app-table-wrapper>

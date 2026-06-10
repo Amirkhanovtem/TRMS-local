@@ -1,0 +1,1284 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning Journey Desktop</title>
+  <style>
+    :root {
+      --bg: #f3f5f2;
+      --surface: #ffffff;
+      --ink: #1f2726;
+      --muted: #687270;
+      --line: #dce5e2;
+      --teal: #007c78;
+      --teal-2: #0c928a;
+      --navy: #092d35;
+      --dark: #05363d;
+      --mint: #d9eee9;
+      --gold: #b9985b;
+      --gold-2: #ead8ad;
+      --blue: #315d83;
+      --green: #3f7d4f;
+      --red: #d64545;
+      --coral: #d96c4f;
+      --shadow: 0 14px 34px rgba(5, 54, 61, .09);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 276px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #073a41, #0a4d55);
+      color: #fff;
+      padding: 24px 18px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 24px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      display: grid;
+      gap: 4px;
+    }
+
+    .brand strong {
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .brand span {
+      color: #b8cfca;
+      font-size: 13px;
+    }
+
+    .nav {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .nav button {
+      min-height: 46px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #dbe9e5;
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 10px;
+      align-items: center;
+      text-align: left;
+      padding: 0 12px;
+      font-weight: 800;
+    }
+
+    .nav button.active,
+    .nav button:hover {
+      background: rgba(255, 255, 255, .13);
+      color: #fff;
+    }
+
+    .sidebar-profile {
+      border-top: 1px solid rgba(255, 255, 255, .14);
+      padding-top: 18px;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: var(--gold-2);
+      color: var(--dark);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .sidebar-profile strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .sidebar-profile span {
+      color: #b8cfca;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    main {
+      min-width: 0;
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .topbar {
+      min-height: 76px;
+      border-radius: 18px;
+      padding: 16px 18px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 76% -30%, rgba(234, 216, 173, .34), transparent 34%),
+        linear-gradient(135deg, #063941, #0c807b);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .topbar p {
+      margin: 5px 0 0;
+      color: #d5e4e0;
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      display: grid;
+      place-items: center;
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .page {
+      display: none;
+      gap: 18px;
+    }
+
+    .page.active {
+      display: grid;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    [data-modal],
+    [data-go],
+    .tab,
+    .like,
+    .enroll {
+      cursor: pointer;
+    }
+
+    [data-modal]:hover,
+    [data-go]:hover,
+    .course-row:hover,
+    .session-card:hover,
+    .recommend-card:hover,
+    .position-row:hover,
+    .tree-node:hover,
+    .forum-row:hover,
+    .podium-card:hover,
+    .list-row:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0, 124, 120, .34);
+      box-shadow: 0 12px 24px rgba(5, 54, 61, .10);
+    }
+
+    .panel,
+    .course-row,
+    .session-card,
+    .recommend-card,
+    .position-row,
+    .tree-node,
+    .forum-row,
+    .podium-card,
+    .list-row {
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .panel-pad {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel-head {
+      min-height: 56px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-head h2,
+    .panel h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .panel-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .text-button {
+      border: 0;
+      background: transparent;
+      color: var(--teal);
+      font-weight: 900;
+      padding: 4px 0;
+    }
+
+    .profile-card {
+      color: #fff;
+      border: 0;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .10), transparent 30%),
+        linear-gradient(135deg, #073a41, #086f6e);
+    }
+
+    .profile-large {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .avatar-large {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: var(--gold-2);
+      color: var(--dark);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .profile-large h2 {
+      font-size: 24px;
+    }
+
+    .profile-large p {
+      color: rgba(255, 255, 255, .76);
+      margin: 6px 0 0;
+      line-height: 1.35;
+    }
+
+    .stat {
+      min-height: 116px;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .stat small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat strong {
+      font-size: 30px;
+      color: var(--dark);
+    }
+
+    .journey-pass {
+      min-height: 180px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .16), transparent 42%),
+        linear-gradient(135deg, #0a3c45, #0b7775);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .journey-pass::after {
+      content: "";
+      position: absolute;
+      right: -48px;
+      bottom: -70px;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      border: 1px solid rgba(234, 216, 173, .34);
+    }
+
+    .pass-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .pass-content small {
+      color: rgba(255, 255, 255, .68);
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .pass-content h2 {
+      margin-top: 8px;
+      font-size: 26px;
+    }
+
+    .pass-badge {
+      width: 88px;
+      height: 88px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .16);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--gold-2);
+      font-weight: 900;
+    }
+
+    .hours-content {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .ring {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      background: conic-gradient(var(--teal) 0 68%, #e7eeeb 68% 100%);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .ring::after {
+      content: "";
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .ring strong {
+      position: relative;
+      z-index: 1;
+      font-size: 24px;
+      color: var(--dark);
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 42px;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .bar {
+      height: 8px;
+      background: #e9eeee;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--blue);
+    }
+
+    .bar span.offline {
+      background: var(--coral);
+    }
+
+    .employee-tree {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      padding-left: 8px;
+    }
+
+    .tree-line {
+      position: absolute;
+      left: 22px;
+      top: 20px;
+      bottom: 28px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--green) 0 50%, var(--gold) 50% 70%, var(--red) 70% 100%);
+    }
+
+    .tree-node {
+      position: relative;
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 70px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 6px solid var(--green);
+      background: #fff;
+      z-index: 1;
+    }
+
+    .dot.progress { border-color: var(--gold); }
+    .dot.locked { border-color: var(--red); }
+
+    .tree-node strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .tree-node span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      min-height: 28px;
+      border-radius: 999px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: #075a52;
+      background: var(--mint);
+      white-space: nowrap;
+    }
+
+    .pill.warn { color: #7c5707; background: #f6e3b4; }
+    .pill.muted { color: #963434; background: #f7d8d8; }
+
+    .recommend-card,
+    .position-row,
+    .forum-row,
+    .list-row {
+      min-height: 70px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      background: #fff;
+      display: grid;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .recommend-card {
+      grid-template-columns: 6px 1fr auto;
+    }
+
+    .source {
+      width: 6px;
+      height: 100%;
+      min-height: 44px;
+      border-radius: 999px;
+      background: var(--teal);
+    }
+
+    .source.position { background: var(--blue); }
+    .source.manager { background: var(--gold); }
+
+    .position-row,
+    .forum-row,
+    .list-row {
+      grid-template-columns: 42px 1fr auto;
+    }
+
+    .row-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--teal);
+      background: #edf7f4;
+    }
+
+    .store-layout {
+      display: grid;
+      grid-template-columns: 380px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .control {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      padding: 0 12px;
+    }
+
+    .primary,
+    .secondary {
+      min-height: 46px;
+      border: 0;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 900;
+      padding: 0 16px;
+    }
+
+    .primary { background: var(--teal); }
+    .primary:disabled { background: #d7d7d7; color: #9a9a9a; }
+    .secondary { background: #30374f; }
+
+    .session-card {
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .session-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .session-row {
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: 26px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .session-row:last-child { border-bottom: 0; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .tab {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f7faf8;
+      color: var(--muted);
+      font-weight: 900;
+      padding: 0 12px;
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      border-color: var(--teal);
+      background: var(--mint);
+      color: var(--teal);
+    }
+
+    .course-row {
+      display: grid;
+      grid-template-columns: 1fr 140px 120px 120px;
+      gap: 12px;
+      align-items: center;
+      min-height: 68px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .course-row.hidden {
+      display: none;
+    }
+
+    .podium {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      align-items: end;
+      min-height: 220px;
+    }
+
+    .podium-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: #fff;
+      text-align: center;
+      display: grid;
+      gap: 10px;
+    }
+
+    .podium-card.first {
+      min-height: 190px;
+      background: linear-gradient(180deg, rgba(234, 216, 173, .40), #fff);
+    }
+
+    .podium-card.second { min-height: 154px; }
+    .podium-card.third { min-height: 132px; }
+
+    .rank {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      background: var(--mint);
+      color: var(--teal);
+    }
+
+    .podium-card.first .rank {
+      background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      color: var(--dark);
+    }
+
+    .composer {
+      display: grid;
+      gap: 10px;
+    }
+
+    .composer textarea {
+      min-height: 110px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 22, 24, .42);
+      display: none;
+      place-items: center;
+      padding: 20px;
+      z-index: 20;
+    }
+
+    .modal-backdrop.open {
+      display: grid;
+    }
+
+    .modal {
+      width: min(720px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 24px 70px rgba(5, 54, 61, .28);
+    }
+
+    .modal-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-body {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 30;
+      min-width: 260px;
+      max-width: 360px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      color: #fff;
+      background: #073a41;
+      box-shadow: 0 18px 44px rgba(5, 54, 61, .25);
+      font-weight: 800;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .toast.open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail {
+      min-height: 78px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fbfcfa;
+    }
+
+    .detail small {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .detail strong {
+      display: block;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; grid-template-rows: auto; }
+      .nav { grid-template-columns: repeat(4, 1fr); }
+      .sidebar-profile { display: none; }
+      .grid-3,
+      .grid-2,
+      .store-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand" data-go="home">
+        <strong>Learning Journey</strong>
+        <span>Desktop employee experience</span>
+      </div>
+      <nav class="nav" aria-label="Навигация">
+        <button class="active" data-page="home"><svg class="icon" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/></svg>Home</button>
+        <button data-page="store"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h12l2 7H4z"/><path d="M5 9v11h14V9"/><path d="M9 13h6"/></svg>Витрина</button>
+        <button data-page="forum"><svg class="icon" viewBox="0 0 24 24"><path d="M4 5h16v10H7l-3 3z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg>Форум</button>
+        <button data-page="history"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v6l4 2"/></svg>История</button>
+      </nav>
+      <div class="sidebar-profile" data-modal="profileDetails">
+        <div class="avatar">ИЧ</div>
+        <div>
+          <strong>Игорь Чипликов</strong>
+          <span>Director Corporate Learning and Development</span>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <h1>Learning Journey</h1>
+          <p id="pageSubtitle">Профиль, путь обучения, витрина тренингов и история сотрудника.</p>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" title="Уведомления" data-modal="notifications"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></button>
+          <button class="icon-button" title="AI" data-modal="aiAssistant"><svg class="icon" viewBox="0 0 24 24"><path d="M8 17 12 3l4 14"/><path d="m7 17 5 4 5-4"/></svg></button>
+        </div>
+      </header>
+
+      <section class="page active" id="homePage">
+        <div class="grid-3">
+          <section class="panel profile-card" data-modal="profileDetails">
+            <div class="panel-pad profile-large">
+              <div class="avatar-large">ИЧ</div>
+              <div>
+                <h2>Игорь Чипликов</h2>
+                <p>Director Corporate Learning and Development · Training Academy · Almaty</p>
+              </div>
+            </div>
+          </section>
+          <section class="panel stat" data-go="history"><small>Часы обучения</small><strong>42</strong></section>
+          <section class="panel stat" data-modal="learningPlan"><small>Осталось пройти</small><strong>4</strong></section>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel journey-pass" data-modal="learningPlan">
+            <div class="panel-pad pass-content">
+              <div>
+                <small>Next learning journey</small>
+                <h2>New Employee Orientation Plan</h2>
+              </div>
+              <div class="pass-badge">4<br>Steps</div>
+            </div>
+          </section>
+
+          <section class="panel" data-modal="hoursDetails">
+            <div class="panel-head">
+              <div>
+                <h2>Часы обучения</h2>
+                <p>План и фактическая активность.</p>
+              </div>
+            </div>
+            <div class="panel-pad hours-content">
+              <div class="ring"><strong>68%</strong></div>
+              <div>
+                <strong>До полного внедрения осталось 4 тренинга</strong>
+                <p style="color: var(--muted); margin: 8px 0;">Прогресс считается по матрице позиции и истории прохождения.</p>
+                <div class="bar-row"><span>Онлайн</span><div class="bar"><span style="width:75%"></span></div><span>18 ч</span></div>
+                <div class="bar-row"><span>Оффлайн</span><div class="bar"><span class="offline" style="width:100%"></span></div><span>24 ч</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>Employee Way</h2><p>Тренинги за текущий год.</p></div>
+              <button class="text-button" data-modal="employeeFilter">Фильтр</button>
+            </div>
+            <div class="panel-pad employee-tree">
+              <div class="tree-line"></div>
+              <div class="tree-node" data-modal="wayOrientation"><span class="dot"></span><div><strong>Orientation Program</strong><span>Январь · онлайн</span></div><span class="pill">Пройден</span></div>
+              <div class="tree-node" data-modal="waySecurity"><span class="dot"></span><div><strong>Aviation Security</strong><span>Февраль · класс</span></div><span class="pill">Пройден</span></div>
+              <div class="tree-node" data-modal="wayLine"><span class="dot progress"></span><div><strong>Line Training</strong><span>Июнь · текущий чекпоинт</span></div><span class="pill warn">В процессе</span></div>
+              <div class="tree-node" data-modal="wayHuman"><span class="dot locked"></span><div><strong>Human Factors Initial</strong><span>Июль · следующий шаг</span></div><span class="pill muted">Не начато</span></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>Мой путь по позиции</h2><p>Director Corporate Learning and Development</p></div>
+              <span class="pill warn">68%</span>
+            </div>
+            <div class="panel-pad">
+              <div class="position-row" data-modal="positionLeadership"><div class="row-icon">1</div><div><strong>Leadership Curriculum</strong><span>2 из 3 модулей закрыты</span></div><span class="pill warn">В процессе</span></div>
+              <div class="position-row" data-modal="positionDigital"><div class="row-icon">2</div><div><strong>Digital Learning Strategy</strong><span>Следующий рекомендуемый тренинг</span></div><span class="pill muted">Не начато</span></div>
+              <div class="position-row" data-modal="positionGovernance"><div class="row-icon">3</div><div><strong>Academy Governance</strong><span>Требование позиции выполнено</span></div><span class="pill">Пройдено</span></div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div><h2>Рекомендованные тренинги</h2><p>Цвет показывает источник рекомендации.</p></div>
+            <button class="text-button" data-modal="recommendFilter">Фильтр</button>
+          </div>
+          <div class="panel-pad grid-3">
+            <div class="recommend-card" data-modal="recExperience"><span class="source"></span><div><strong>Learning Experience Design</strong><span>Коллеги · 8 рекомендаций</span></div><span class="pill">Коллеги</span></div>
+            <div class="recommend-card" data-modal="recDigital"><span class="source position"></span><div><strong>Digital Learning Strategy</strong><span>Для позиции · обязательный трек</span></div><span class="pill">Позиция</span></div>
+            <div class="recommend-card" data-modal="recBudget"><span class="source manager"></span><div><strong>Academy Budget Planning</strong><span>Руководитель · приоритет Q3</span></div><span class="pill warn">Руководитель</span></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="page" id="storePage">
+        <div class="store-layout">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Витрина тренингов</h2><p>Заполните фильтры последовательно для поиска тренингов.</p></div></div>
+            <div class="panel-pad form-grid">
+              <div class="field"><label>Тренинги</label><select class="control" id="deskTraining"><option value="">Тренинги</option><option>ERP training for Special Assistance Team Volunteers</option><option>International Taxation for Business Initiators</option></select></div>
+              <div class="field"><label>Города</label><select class="control" id="deskCity"><option value="">Города</option><option>Алматы</option><option>Астана, Алматы</option></select></div>
+              <div class="grid-2">
+                <div class="field"><label>Дата с</label><input class="control" id="deskFrom" type="date" value="2026-06-05"></div>
+                <div class="field"><label>Дата до</label><input class="control" id="deskTo" type="date" value="2026-08-30"></div>
+              </div>
+              <button class="primary" id="deskShowTrainings">Показать тренинги</button>
+              <button class="secondary" id="deskClearTrainings">Очистить</button>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Результаты</h2><p>Доступные сессии по выбранным фильтрам.</p></div></div>
+            <div class="panel-pad">
+              <article class="session-card panel" data-modal="storeErp">
+                <h2>ERP training for Special Assistance Team Volunteers</h2>
+                <div class="session-box">
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span>23.06.2026</span><span class="pill">4 места</span></div>
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Алматы, Кульджинский тракт, 4в корпус Ю, St 311</span></div>
+                </div>
+                <button class="primary enroll">Принять участие</button>
+              </article>
+              <article class="session-card panel" data-modal="storeTax">
+                <h2>International Taxation for Business Initiators</h2>
+                <div class="session-box">
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span>19.06.2026</span><span class="pill">8 мест</span></div>
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Алматы, Достык 38, KD London</span></div>
+                </div>
+                <button class="primary enroll">Принять участие</button>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="forumPage">
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Top 3 обсуждения</h2><p>Самые активные темы.</p></div></div>
+            <div class="panel-pad podium">
+              <div class="podium-card second" data-modal="topicCertificate"><div class="rank">2</div><strong>Где скачать сертификат после теста?</strong><span>17 ответов</span><button class="text-button like">♡ 12</button></div>
+              <div class="podium-card first" data-modal="topicOrientation"><div class="rank">1</div><strong>Как быстро закрыть Orientation Program?</strong><span>24 ответа</span><button class="text-button like">♡ 18</button></div>
+              <div class="podium-card third" data-modal="topicIt"><div class="rank">3</div><strong>IT безопасность: тест не открылся</strong><span>14 ответов</span><button class="text-button like">♡ 9</button></div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Написать коллегам</h2><p>Создайте обсуждение или задайте вопрос.</p></div></div>
+            <div class="panel-pad composer">
+              <textarea id="deskForumText" placeholder="Коллеги, кто уже проходил Orientation Program онлайн?"></textarea>
+              <button class="primary" id="deskForumSend">Отправить</button>
+            </div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head"><div><h2>Обсуждения</h2><p>Ветки сотрудников и тренеров.</p></div><button class="text-button" id="deskNewTopic">Новая тема</button></div>
+          <div class="panel-pad" id="deskDiscussionList">
+            <div class="forum-row" data-modal="topicHeart"><div class="row-icon">?</div><div><strong>Как применять HEART в ночную смену?</strong><span>6 ответов · Front Office</span></div><button class="text-button like">♡ 6</button></div>
+            <div class="forum-row" data-modal="topicService"><div class="row-icon">?</div><div><strong>Лучшие практики по жалобам гостей</strong><span>12 ответов · Service</span></div><button class="text-button like">♡ 12</button></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="page" id="historyPage">
+        <section class="panel" data-modal="hoursDetails">
+          <div class="panel-head"><div><h2>Часы обучения</h2><p>План и фактическая активность.</p></div></div>
+          <div class="panel-pad hours-content">
+            <div class="ring"><strong>68%</strong></div>
+            <div>
+              <strong>До полного внедрения осталось 4 тренинга</strong>
+              <p style="color: var(--muted); margin: 8px 0;">Система считает прогресс по обязательной матрице позиции и истории прохождения.</p>
+              <div class="bar-row"><span>Онлайн</span><div class="bar"><span style="width:75%"></span></div><span>18 ч</span></div>
+              <div class="bar-row"><span>Оффлайн</span><div class="bar"><span class="offline" style="width:100%"></span></div><span>24 ч</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><div><h2>Education</h2><p>Курсы, статусы и подробности.</p></div></div>
+          <div class="panel-pad">
+            <div class="tabs">
+              <button class="tab active" data-course-filter="all">All courses (141)</button>
+              <button class="tab" data-course-filter="progress">In progress (34)</button>
+              <button class="tab" data-course-filter="planned">Planned (12)</button>
+              <button class="tab" data-course-filter="completed">Completed (95)</button>
+              <button class="tab" data-course-mode="online">Online</button>
+              <button class="tab" data-course-mode="offline">Offline</button>
+            </div>
+            <div class="course-row" data-modal="courseSecurity" data-status="planned" data-mode="online"><strong>Security Awareness 2026 (Air Astana)</strong><span>online</span><span>Planned</span><span>Score 0</span></div>
+            <div class="course-row" data-modal="courseBoeing" data-status="completed" data-mode="online"><strong>Boeing 787 Refresher Course</strong><span>online</span><span>Passed</span><span>Score 85</span></div>
+            <div class="course-row" data-modal="courseLeadership" data-status="progress" data-mode="offline"><strong>Leadership Workshop: Learning Academy</strong><span>offline</span><span>In progress</span><span>45%</span></div>
+          </div>
+        </section>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Последние обучения</h2><p>Недавние записи.</p></div></div>
+            <div class="panel-pad">
+              <div class="list-row" data-modal="recentHeart"><div class="row-icon">✓</div><div><strong>HEART Basics</strong><span>28 мая · оффлайн · 8 ч</span></div><span class="pill">Пройдено</span></div>
+              <div class="list-row" data-modal="recentSafety"><div class="row-icon">✓</div><div><strong>Safety & Emergency</strong><span>23 мая · онлайн · тест 91%</span></div><span class="pill">3 ч</span></div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Сертификаты</h2><p>Активные сертификаты.</p></div></div>
+            <div class="panel-pad">
+              <div class="list-row" data-modal="certHeart"><div class="row-icon">C</div><div><strong>HEART Basics</strong><span>Активен до 28.05.2027</span></div><span class="pill">Active</span></div>
+              <div class="list-row" data-modal="certSafety"><div class="row-icon">C</div><div><strong>Safety & Emergency</strong><span>Активен до 23.05.2027</span></div><span class="pill">Active</span></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <section class="modal">
+      <header class="modal-head">
+        <div>
+          <small id="modalKicker" style="color: var(--teal); font-weight: 900;">Details</small>
+          <h2 id="modalTitle" style="margin: 4px 0 0;">Details</h2>
+        </div>
+        <button class="text-button" id="modalClose">Закрыть</button>
+      </header>
+      <div class="modal-body" id="modalBody"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const pages = {
+      home: document.getElementById("homePage"),
+      store: document.getElementById("storePage"),
+      forum: document.getElementById("forumPage"),
+      history: document.getElementById("historyPage")
+    };
+
+    const subtitles = {
+      home: "Профиль, путь обучения и рекомендации.",
+      store: "Самозачисление на тренинги по фильтрам.",
+      forum: "Сообщество сотрудников, FAQ и обсуждения.",
+      history: "История обучения, сертификаты и курсы."
+    };
+
+    function switchPage(page) {
+      const targetButton = document.querySelector(`[data-page="${page}"]`);
+      document.querySelectorAll("[data-page]").forEach((item) => item.classList.toggle("active", item === targetButton));
+      Object.entries(pages).forEach(([key, section]) => section.classList.toggle("active", key === page));
+      document.getElementById("pageSubtitle").textContent = subtitles[page];
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll("[data-page]").forEach((button) => {
+      button.addEventListener("click", () => switchPage(button.dataset.page));
+    });
+
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalKicker = document.getElementById("modalKicker");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const toast = document.getElementById("toast");
+    let toastTimer;
+
+    const modalData = {
+      learningPlan: ["Next learning journey", "Учебный план нового сотрудника", [
+        ["Orientation Day", "Класс · Пройдено"],
+        ["Orientation Program", "Онлайн · В процессе"],
+        ["Охрана труда", "Онлайн + тест · Не начато"],
+        ["IT безопасность", "Онлайн · Не начато"]
+      ]],
+      certHeart: ["Сертификат", "HEART Basics", [["Статус", "Активен"], ["Certificate ID", "HB-2026-184"], ["Дата выдачи", "28.05.2026"], ["Действует до", "28.05.2027"]]],
+      certSafety: ["Сертификат", "Safety & Emergency", [["Статус", "Активен"], ["Certificate ID", "SE-2026-090"], ["Дата выдачи", "23.05.2026"], ["Результат", "Тест 91%"]]],
+      courseSecurity: ["Education", "Security Awareness 2026 (Air Astana)", [["Format", "online"], ["Status", "Planned"], ["Enrollment", "01.06.2026"], ["Course code", "AvSec_Awareness_KC_staff"], ["Score", "0"]]],
+      courseBoeing: ["Education", "Boeing 787 Refresher Course", [["Format", "online"], ["Status", "Passed"], ["Duration", "3 hours"], ["Course code", "B787_REF_2026"], ["Score", "85"]]],
+      courseLeadership: ["Education", "Leadership Workshop: Learning Academy", [["Format", "offline"], ["Status", "In progress"], ["Duration", "6 hours"], ["Enrollment", "15.06.2026"], ["Progress", "45%"]]],
+      employeeFilter: ["Employee Way", "Фильтр по годам", [["2024", "Service Excellence, First Aid Basics, CRM Refresher"], ["2025", "Emergency Response, Dangerous Goods"], ["2026", "Orientation Program, Aviation Security, Line Training"]]],
+      recommendFilter: ["Рекомендации", "Фильтр источника", [["Коллеги", "Learning Experience Design"], ["Позиция", "Digital Learning Strategy"], ["Руководитель", "Academy Budget Planning"]]],
+      notifications: ["Уведомления", "Ближайшие события", [["Зачисление", "Вы записаны на ERP training · 23.06.2026"], ["Предстоящий тренинг", "Orientation Program нужно завершить до 12.06.2026"], ["Напоминание", "IT безопасность ожидает прохождения теста"]]],
+      aiAssistant: ["AI assistant", "Помощник Learning Journey", [["Что умеет", "Подсказывает тренинги, сертификаты и правила зачисления"], ["Интеграции", "Портал сотрудника, LMS, HR-система"], ["Пример запроса", "Какие тренинги мне нужно закрыть в июне?"]]],
+      profileDetails: ["Профиль сотрудника", "Игорь Чипликов", [["Должность", "Director Corporate Learning and Development"], ["Подразделение", "Training Academy"], ["Город", "Almaty"], ["План внедрения", "68% выполнено"]]],
+      hoursDetails: ["Часы обучения", "План и фактическая активность", [["Общий прогресс", "68%"], ["Онлайн", "18 ч"], ["Оффлайн", "24 ч"], ["До полного внедрения", "4 тренинга"]]],
+      wayOrientation: ["Employee Way", "Orientation Program", [["Статус", "Пройден"], ["Формат", "онлайн"], ["Период", "Январь 2026"], ["Результат", "100%"]]],
+      waySecurity: ["Employee Way", "Aviation Security", [["Статус", "Пройден"], ["Формат", "класс"], ["Период", "Февраль 2026"], ["Сертификат", "Активен"]]],
+      wayLine: ["Employee Way", "Line Training", [["Статус", "В процессе"], ["Формат", "практика"], ["Период", "Июнь 2026"], ["Следующий шаг", "Чекпоинт с тренером"]]],
+      wayHuman: ["Employee Way", "Human Factors Initial", [["Статус", "Не начато"], ["Формат", "онлайн"], ["Период", "Июль 2026"], ["Действие", "Откроется после Line Training"]]],
+      positionLeadership: ["Мой путь по позиции", "Leadership Curriculum", [["Статус", "В процессе"], ["Прогресс", "2 из 3 модулей"], ["Следующий модуль", "Coaching for performance"], ["Приоритет", "Высокий"]]],
+      positionDigital: ["Мой путь по позиции", "Digital Learning Strategy", [["Статус", "Не начато"], ["Почему нужно", "Рекомендовано для позиции"], ["Формат", "онлайн"], ["Плановая дата", "Июль 2026"]]],
+      positionGovernance: ["Мой путь по позиции", "Academy Governance", [["Статус", "Пройдено"], ["Формат", "класс"], ["Дата", "18.04.2026"], ["Результат", "Passed"]]],
+      recExperience: ["Рекомендованный тренинг", "Learning Experience Design", [["Источник", "Рекомендовано коллегами"], ["Лайки", "8 рекомендаций"], ["Формат", "онлайн"], ["Действие", "Можно добавить в план"]]],
+      recDigital: ["Рекомендованный тренинг", "Digital Learning Strategy", [["Источник", "Рекомендовано для позиции"], ["Статус", "Обязательный трек"], ["Формат", "онлайн"], ["Период", "Q3 2026"]]],
+      recBudget: ["Рекомендованный тренинг", "Academy Budget Planning", [["Источник", "Рекомендовано руководителем"], ["Приоритет", "Q3"], ["Формат", "класс"], ["Город", "Almaty"]]],
+      storeErp: ["Витрина", "ERP training for Special Assistance Team Volunteers", [["Дата", "23.06.2026"], ["Город", "Алматы"], ["Адрес", "Кульджинский тракт, 4в корпус Ю, St 311"], ["Свободные места", "4"]]],
+      storeTax: ["Витрина", "International Taxation for Business Initiators", [["Дата", "19.06.2026"], ["Город", "Алматы"], ["Адрес", "Достык 38, KD London"], ["Свободные места", "8"]]],
+      topicCertificate: ["Форум", "Где скачать сертификат после теста?", [["Ответов", "17"], ["Лайков", "12"], ["Последний ответ", "Training Academy · сегодня"], ["FAQ", "Сертификат доступен в разделе История"]]],
+      topicOrientation: ["Форум", "Как быстро закрыть Orientation Program?", [["Ответов", "24"], ["Лайков", "18"], ["Топ тема", "1 место"], ["Лучший ответ", "Пройти онлайн-модули и финальный чек-лист"]]],
+      topicIt: ["Форум", "IT безопасность: тест не открылся", [["Ответов", "14"], ["Лайков", "9"], ["Статус", "Передано IT support"], ["Решение", "Очистить кэш и открыть модуль заново"]]],
+      topicHeart: ["Форум", "Как применять HEART в ночную смену?", [["Ответов", "6"], ["Раздел", "Front Office"], ["Лучший ответ", "Использовать чек-лист ситуаций смены"], ["Статус", "Открыто"]]],
+      topicService: ["Форум", "Лучшие практики по жалобам гостей", [["Ответов", "12"], ["Раздел", "Service"], ["Лайков", "12"], ["Статус", "Открыто"]]],
+      recentHeart: ["Последнее обучение", "HEART Basics", [["Дата", "28 мая 2026"], ["Формат", "оффлайн"], ["Длительность", "8 ч"], ["Статус", "Пройдено"]]],
+      recentSafety: ["Последнее обучение", "Safety & Emergency", [["Дата", "23 мая 2026"], ["Формат", "онлайн"], ["Результат", "Тест 91%"], ["Длительность", "3 ч"]]]
+    };
+
+    function openModal(key) {
+      const data = modalData[key];
+      if (!data) return;
+      modalKicker.textContent = data[0];
+      modalTitle.textContent = data[1];
+      modalBody.innerHTML = `<div class="detail-grid">${data[2].map(([label, value]) => `<div class="detail"><small>${label}</small><strong>${value}</strong></div>`).join("")}</div>`;
+      modalBackdrop.classList.add("open");
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("open");
+      toastTimer = setTimeout(() => toast.classList.remove("open"), 2200);
+    }
+
+    document.addEventListener("click", (event) => {
+      const goTarget = event.target.closest("[data-go]");
+      if (goTarget) {
+        switchPage(goTarget.dataset.go);
+        return;
+      }
+
+      const like = event.target.closest(".like");
+      if (like) {
+        event.stopPropagation();
+        const match = like.textContent.match(/\d+/);
+        const value = match ? Number(match[0]) + 1 : 1;
+        like.textContent = `♥ ${value}`;
+        showToast("Лайк добавлен");
+        return;
+      }
+
+      const modalTarget = event.target.closest("[data-modal]");
+      if (modalTarget) {
+        const isNestedButton = event.target.closest("button") && !event.target.closest("button[data-modal]");
+        if (!isNestedButton) openModal(modalTarget.dataset.modal);
+      }
+    });
+
+    document.getElementById("modalClose").addEventListener("click", () => modalBackdrop.classList.remove("open"));
+    modalBackdrop.addEventListener("click", (event) => {
+      if (event.target === modalBackdrop) modalBackdrop.classList.remove("open");
+    });
+
+    document.querySelectorAll(".enroll, .primary.enroll").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        button.textContent = "Участие принято";
+        button.style.background = "var(--green)";
+        showToast("Вы записаны на тренинг");
+      });
+    });
+
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const group = tab.dataset.courseFilter ? "courseFilter" : "courseMode";
+        document.querySelectorAll(`.tab[data-${group.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}]`).forEach((item) => item.classList.remove("active"));
+        tab.classList.add("active");
+
+        const activeStatus = document.querySelector(".tab[data-course-filter].active")?.dataset.courseFilter || "all";
+        const activeMode = document.querySelector(".tab[data-course-mode].active")?.dataset.courseMode || "all";
+        document.querySelectorAll(".course-row").forEach((row) => {
+          const statusMatch = activeStatus === "all" || row.dataset.status === activeStatus;
+          const modeMatch = activeMode === "all" || row.dataset.mode === activeMode;
+          row.classList.toggle("hidden", !(statusMatch && modeMatch));
+        });
+      });
+    });
+
+    document.getElementById("deskShowTrainings").addEventListener("click", () => {
+      const training = document.getElementById("deskTraining").value || "Все тренинги";
+      const city = document.getElementById("deskCity").value || "Все города";
+      const from = document.getElementById("deskFrom").value;
+      const to = document.getElementById("deskTo").value;
+      modalData.storeSearch = ["Витрина", "Найденные тренинги", [["Тренинг", training], ["Город", city], ["Период", `${from} - ${to}`], ["Результат", "2 доступные сессии"]]];
+      openModal("storeSearch");
+    });
+
+    document.getElementById("deskClearTrainings").addEventListener("click", () => {
+      document.getElementById("deskTraining").value = "";
+      document.getElementById("deskCity").value = "";
+      document.getElementById("deskFrom").value = "2026-06-05";
+      document.getElementById("deskTo").value = "2026-08-30";
+      showToast("Фильтры очищены");
+    });
+
+    document.getElementById("deskNewTopic").addEventListener("click", () => {
+      switchPage("forum");
+      const input = document.getElementById("deskForumText");
+      input.focus();
+      input.value = "";
+      input.placeholder = "Введите тему обсуждения...";
+      showToast("Введите текст и нажмите Отправить");
+    });
+
+    document.getElementById("deskForumSend").addEventListener("click", () => {
+      const text = document.getElementById("deskForumText").value.trim();
+      if (!text) return;
+      const row = document.createElement("div");
+      row.className = "forum-row";
+      row.dataset.modal = "topicCreated";
+      row.innerHTML = `<div class="row-icon">?</div><div><strong>${text}</strong><span>0 ответов · создано вами</span></div><button class="text-button like">♡ 0</button>`;
+      modalData.topicCreated = ["Форум", text, [["Ответов", "0"], ["Статус", "Новая тема"], ["Автор", "Вы"], ["Раздел", "Общее обучение"]]];
+      document.getElementById("deskDiscussionList").prepend(row);
+      document.getElementById("deskForumText").value = "";
+      showToast("Тема создана");
+    });
+  </script>
+</body>
+</html>

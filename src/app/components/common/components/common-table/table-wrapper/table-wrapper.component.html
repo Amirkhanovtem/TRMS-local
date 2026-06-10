@@ -1,0 +1,191 @@
+<div class="table-wrapper-component-container">
+  <div class="table-actions-container">
+    <div class="btns-container">
+      <ng-content select="[table-buttons]"></ng-content>
+    </div>
+
+    <div [ngClass]="searchContainerClass">
+      <app-search (applySearch)="applySearch()"></app-search>
+    </div>
+  </div>
+
+  <div #tableWrapperContainer [ngClass]="tableContainerClass" class="table-wrapper-container" cdkScrollable>
+    <div class="table-top-bar">
+      @if (getMaxFilterOrder()) {
+        <div class="table-top-bar-el">
+          <mat-icon [matTooltip]="'tableClearLastFilter' | transloco" (click)="clearLastFilter()"> undo </mat-icon>
+        </div>
+      }
+      @if (getMaxFilterOrder()) {
+        <div class="table-top-bar-el">
+          <mat-icon [matTooltip]="'tableClearAllFilters' | transloco" (click)="clearAllFilters()">
+            delete_sweep
+          </mat-icon>
+          <span class="clear-all-filters-count">{{ getMaxFilterOrder() }}</span>
+        </div>
+      }
+      <div class="table-top-bar-el">
+        <app-table-save-visual [tableWrapperComponent]="this"></app-table-save-visual>
+      </div>
+      <div class="table-top-bar-el">
+        <app-table-hide-column [table]="this"></app-table-hide-column>
+      </div>
+      <div class="table-top-bar-el">
+        <app-table-export [tableWrapperComponent]="this"></app-table-export>
+      </div>
+    </div>
+
+    <!--   MAIN TABLE   -->
+    <table
+      mat-table
+      cdkDropList
+      cdkDropListAutoScrollStep="30"
+      cdkDropListOrientation="horizontal"
+      class="table-wrapper-table"
+      (cdkDropListDropped)="dropHeaderColHandler($event)"
+      [dataSource]="dataSource"
+      matSort
+    >
+      <!--   CHECKBOX   -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell [style.width]="0" *matHeaderCellDef>
+          <mat-checkbox
+            (change)="$event ? toggleAllRows() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+          >
+          </mat-checkbox>
+        </th>
+        <td mat-cell class="table-wrapper-select-col" *matCellDef="let row">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <!--   COL   -->
+      @for (col of getColsWithoutSelect(); track col; let colIndex = $index) {
+        <ng-container [matColumnDef]="col.colDef">
+          <th
+            mat-header-cell
+            (mouseover)="changeHoveredColHeaders(col.colDef, true)"
+            (mouseleave)="changeHoveredColHeaders(col.colDef, false)"
+            *matHeaderCellDef
+            mat-sort-header
+            class="header-title"
+            [cdkDragData]="{ col: col }"
+            [cdkDragStartDelay]="30"
+            [style.width.px]="col.width"
+            cdkDragBoundary=".table-wrapper-table"
+            cdkDragLockAxis="x"
+            cdkDrag
+          >
+            <div class="table-wrapper-header-title-container">
+              @if (!getColHeaderTemplateRefByColDef(col.colDef)) {
+                <div>
+                  {{ getColTitleByColDef(col.colDef) }}
+                </div>
+              }
+              <ng-container *ngTemplateOutlet="getColHeaderTemplateRefByColDef(col.colDef)"> </ng-container>
+            </div>
+            <div class="header-title-end-btns-container">
+              <div #filterPluginContainer class="table-plugin-container" id="filterPluginContainer-{{ colIndex }}">
+                @if (col.filterOrder) {
+                  <span class="filter-order-count">
+                    {{ col.filterOrder }}
+                  </span>
+                }
+                @if (!col.offFilter && checkPlugin(col.colDef, filterPluginContainer.id)) {
+                  <app-table-filter-column
+                    (changeActive)="changeActiveColHeaderPlugins(filterPluginContainer.id, $event)"
+                    class="table-wrapper-filter-btn"
+                    [table]="this"
+                    [col]="col"
+                  >
+                  </app-table-filter-column>
+                }
+              </div>
+              <div
+                #colResizePluginContainer
+                class="table-plugin-container"
+                id="colResizePluginContainer-{{ colIndex }}"
+              >
+                @if (checkPlugin(col.colDef, colResizePluginContainer.id)) {
+                  <app-table-resize-column
+                    (changeActive)="changeActiveColHeaderPlugins(colResizePluginContainer.id, $event)"
+                    [displayedColumns]="displayedColumns"
+                    [resizeCol]="col"
+                    [tableWrapperContainer]="tableWrapperContainer"
+                  >
+                  </app-table-resize-column>
+                }
+              </div>
+            </div>
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let row"
+            class="table-wrapper-col"
+            [matTooltip]="getVisualValue(row, col.colDef)"
+            [matTooltipShowDelay]="1000"
+            [matTooltipPositionAtOrigin]="true"
+          >
+            @if (!getColTemplateRefByColDef(col.colDef)) {
+              <div>
+                @if (col.colType === 'BOOLEAN') {
+                  <div>
+                    <mat-checkbox disabled [checked]="getColValue(row, col.colDef)"> </mat-checkbox>
+                  </div>
+                } @else {
+                  <div>
+                    {{ getVisualValue(row, col.colDef) }}
+                  </div>
+                }
+              </div>
+            }
+            <ng-container *ngTemplateOutlet="getColTemplateRefByColDef(col.colDef); context: { row: row }">
+            </ng-container>
+          </td>
+        </ng-container>
+      }
+
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumnDefs()"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: getDisplayedColumnDefs()"
+        (click)="selection.toggle(row)"
+        (dblclick)="rowDbClickFunc.emit(row)"
+      ></tr>
+
+      <tr class="not-found-message-tr" *matNoDataRow>
+        @if (!loading && !errorLoading) {
+          <td class="not-found-message-td" [colSpan]="getVisualDisplayedColumns()?.length">
+            {{ 'searchNotFoundMessage' | transloco }}
+          </td>
+        }
+        @if (loading) {
+          <td [colSpan]="getDisplayedColumnDefs()?.length">
+            <mat-spinner></mat-spinner>
+          </td>
+        }
+        @if (errorLoading) {
+          <td class="not-found-message-td" [colSpan]="getVisualDisplayedColumns()?.length">
+            {{ 'errorLoadingMessage' | transloco }}
+          </td>
+        }
+      </tr>
+    </table>
+
+    <mat-paginator
+      #paginator
+      [pageSizeOptions]="pageSizeOptions"
+      [pageSize]="standardPageSize"
+      showFirstLastButtons
+      aria-label="Select page of periodic elements"
+    >
+    </mat-paginator>
+  </div>
+</div>

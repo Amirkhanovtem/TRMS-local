@@ -1,0 +1,697 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('personModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('personModalPageViewTitle' | transloco)
+            : ('personModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   FULL NAME RU   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personFullNameRuColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personFullNameRuColTable' | transloco"
+              [(ngModel)]="person.fullNameRu"
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   FULL NAME EN   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personFullNameEnColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personFullNameEnColTable' | transloco"
+              [(ngModel)]="person.fullNameEn"
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   LAST NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personLastNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personLastNameColTable' | transloco"
+              [(ngModel)]="person.lastName"
+              formControlName="lastName"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('lastName')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   FIRST NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personFirstNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personFirstNameColTable' | transloco"
+              [(ngModel)]="person.firstName"
+              formControlName="firstName"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('firstName')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   PATRONYMIC   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personPatronymicColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personPatronymicColTable' | transloco"
+              [(ngModel)]="person.patronymic"
+              formControlName="patronymic"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   EMAIL   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personEmailColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personEmailColTable' | transloco"
+              [(ngModel)]="person.email"
+              formControlName="email"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('email')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldInvalidEmail('email')) {
+              <span>
+                {{ 'validatorsEmailMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   USERNAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personUserNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              (input)="person.username = person.username.toLowerCase()"
+              [placeholder]="'personUserNameColTable' | transloco"
+              [(ngModel)]="person.username"
+              formControlName="username"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('username')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('username')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   TRMS ROLE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personTrmsRoleColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personTrmsRoleColTable' | transloco"
+              [value]="person.trmsRole?.[localEnumField]"
+              formControlName="trmsRole"
+              [readonly]="true"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   EMPLOYMENT DATE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personEmploymentDateColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [matDatepicker]="datepickerEmploymentDate"
+              [placeholder]="'personEmploymentDateColTable' | transloco"
+              [(ngModel)]="person.employmentDate"
+              formControlName="employmentDate"
+              (dateChange)="calcExperience()"
+              [readonly]="dialogParams?.isView"
+              [max]="maxDate"
+            />
+
+            @if (!dialogParams?.isView) {
+              <mat-datepicker-toggle matSuffix [for]="datepickerEmploymentDate"></mat-datepicker-toggle>
+            }
+            <mat-datepicker #datepickerEmploymentDate></mat-datepicker>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('employmentDate')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   SUBDIVISION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personSubdivisionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personSubdivisionColTable' | transloco"
+              [value]="person.subdivision?.name ? person.subdivision?.name : person.subdivision?.[localEnumField]"
+              formControlName="subdivision"
+              [readonly]="true"
+            />
+
+            <button matSuffix mat-icon-button (click)="openSelectionSubdivision()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('subdivision')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   POSITION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personPositionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personPositionColTable' | transloco"
+              [value]="person.position?.[localEnumField]"
+              formControlName="position"
+            >
+              @for (position of positions; track position) {
+                <mat-option
+                  [value]="position?.[localEnumField]"
+                  [disabled]="dialogParams?.isView"
+                  (click)="changePersonPosition(position)"
+                >
+                  {{ position?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('position')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   COST CENTER   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personCostCenterColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personCostCenterColTable' | transloco"
+              [(ngModel)]="person.costCenter"
+              [compareWith]="compareWithFn"
+              formControlName="costCenter"
+            >
+              @for (costCenter of costCenters; track costCenter) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="costCenter">
+                  {{ costCenter?.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('costCenter')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   LANGUAGE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personLanguageColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              [placeholder]="'personLanguageColTable' | transloco"
+              [(ngModel)]="person.language"
+              [compareWith]="compareWithFn"
+              formControlName="language"
+            >
+              @for (personLanguage of allPersonLanguages; track personLanguage) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="personLanguage">
+                  {{ personLanguage?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   CITY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personCityColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personCityColTable' | transloco"
+              [(ngModel)]="person.city"
+              [compareWith]="compareWithFn"
+              formControlName="city"
+            >
+              @for (city of cities; track city) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="city">
+                  {{ city?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('city')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   COMPANY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personCompanyColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personCompanyColTable' | transloco"
+              [(ngModel)]="person.company"
+              [compareWith]="compareWithFn"
+              formControlName="company"
+            >
+              @for (company of companies; track company) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="company">
+                  {{ company?.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('company')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   STATUS   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personStatusColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personStatusColTable' | transloco"
+              [(ngModel)]="person.status"
+              [compareWith]="compareWithFn"
+              formControlName="status"
+            >
+              @for (personStatus of allPersonStatus; track personStatus) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="personStatus">
+                  {{ personStatus[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('status')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   PERSONNEL TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personnelTypeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              [placeholder]="'personnelTypeColTable' | transloco"
+              [(ngModel)]="person.personnelType"
+              [compareWith]="compareWithFn"
+              formControlName="personnelType"
+            >
+              @for (personnelType of allPersonnelTypes; track personnelType) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="personnelType">
+                  {{ personnelType?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   DATE OF BIRTH   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personDateOfBirthColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [matDatepicker]="datepickerDateOfBirth"
+              [placeholder]="'personDateOfBirthColTable' | transloco"
+              [(ngModel)]="person.dateOfBirth"
+              formControlName="dateOfBirth"
+              [readonly]="dialogParams?.isView"
+              [max]="maxDate"
+            />
+
+            @if (!dialogParams?.isView) {
+              <mat-datepicker-toggle matSuffix [for]="datepickerDateOfBirth"></mat-datepicker-toggle>
+            }
+            <mat-datepicker #datepickerDateOfBirth></mat-datepicker>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('dateOfBirth')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   GENDER   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personGenderColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personGenderColTable' | transloco"
+              [(ngModel)]="person.gender"
+              [compareWith]="compareWithFn"
+              formControlName="gender"
+            >
+              @for (personGender of allPersonGenders; track personGender) {
+                <mat-option [value]="personGender" [disabled]="dialogParams?.isView">
+                  {{ personGender[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('gender')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   PLACE OF BIRTH   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personPlaceOfBirthColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personPlaceOfBirthColTable' | transloco"
+              [(ngModel)]="person.placeOfBirth"
+              formControlName="placeOfBirth"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   TERMINATION DATE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personTerminationDateColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [matDatepicker]="datepickerTerminationDate"
+              [placeholder]="'personTerminationDateColTable' | transloco"
+              [(ngModel)]="person.terminationDate"
+              (dateChange)="calcExperience()"
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="dialogParams?.isView"
+            />
+
+            @if (!dialogParams?.isView) {
+              <mat-datepicker-toggle matSuffix [for]="datepickerTerminationDate"></mat-datepicker-toggle>
+            }
+            <mat-datepicker #datepickerTerminationDate></mat-datepicker>
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   EXPERIENCE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personExperienceColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personExperienceColTable' | transloco"
+              [(ngModel)]="person.experience"
+              [ngModelOptions]="{ standalone: true }"
+              [readonly]="true"
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   PERSONAL NUMBER   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personPersonalNumberColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personPersonalNumberColTable' | transloco"
+              [(ngModel)]="person.personalNumber"
+              formControlName="personalNumber"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('personalNumber')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('personalNumber')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   PERSON GROUP ID   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personPersonGroupIdColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personPersonGroupIdColTable' | transloco"
+              [value]="person.personGroupId"
+              [readonly]="true"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   TEAM   -->
+        <div class="modal-input-field expansion">
+          <mat-accordion class="accordion">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="mat-expansion-bold-title">
+                  {{ 'personTeamTable' | transloco }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-person-full-name-info-table #teamTable [tableId]="'createUpdatePersonModalTeamTable'">
+              </app-person-full-name-info-table>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+        <!--   SUPERVISOR   -->
+        <div class="modal-input-field expansion">
+          <mat-accordion class="accordion">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="mat-expansion-bold-title">
+                  {{ 'personSupervisorTable' | transloco }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-person-full-name-info-table #supervisorTable [tableId]="'createUpdatePersonModalSupervisorTable'">
+              </app-person-full-name-info-table>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSavePerson()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

@@ -1,0 +1,46 @@
+<div class="input-fields-container">
+  <!--   TRIGGER   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'notificationTriggerColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <mat-select
+        required
+        [placeholder]="'notificationTriggerColTable' | transloco"
+        [(ngModel)]="parent.notificationTemplate.trigger"
+        [compareWith]="compareWithFn"
+        [formControl]="triggerControl"
+      >
+        @for (notificationTemplateTrigger of allNotificationTemplateTriggers; track notificationTemplateTrigger) {
+          <mat-option
+            [value]="notificationTemplateTrigger"
+            [disabled]="isTriggerSelectDisabled()"
+            (click)="parent.changeTriggerHandler(notificationTemplateTrigger)"
+          >
+            {{ notificationTemplateTrigger[localEnumField] }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('trigger')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   FOR TRAINING   -->
+  @if (isShowSelectForTraining()) {
+    <app-select-training [parent]="parent"></app-select-training>
+  }
+
+  <!--   FOR SYLLABUS   -->
+  @if (isShowSelectForSyllabus()) {
+    <app-select-syllabus [parent]="parent"></app-select-syllabus>
+  }
+</div>

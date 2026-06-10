@@ -1,0 +1,21 @@
+---
+# Auto DevOps
+
+variables:
+  SYSTEM_NAME: 'trms'
+  SYSTEM_TYPE: 'web'
+
+include:
+  - remote: 'https://gitlab.airastana.com/templates/devops/gitlab-ci/-/raw/feature/v2/Static-Web-Application.gitlab-ci.yml'
+
+deploy:trm01ws001:
+  stage: deploy:test
+  variables:
+    AWX_TEMPLATE_ID: '17'
+    AWX_JOB_TAGS: 'web'
+    AWX_JOB_DOCKER_IMAGE_VAR_NAME: 'web_image_tag'
+  extends: .awx
+  environment:
+    name: trm01ws001
+    deployment_tier: testing
+    url: https://trmstst.air-astana.net/

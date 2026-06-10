@@ -1,0 +1,32 @@
+.unextended-icon {
+  font-size: 12px;
+  height: 12px;
+  width: 12px;
+  margin-right: 5px;
+}
+
+.tree-container {
+  overflow: auto;
+
+  mat-tree-node {
+    &:hover {
+      background-color: #e5e5e5;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid black;
+      border-bottom-color: rgb(0 0 0 / 12%);
+    }
+  }
+}
+
+.tree-top-bar-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  app-search {
+    width: 100%;
+    text-align: end;
+  }
+}

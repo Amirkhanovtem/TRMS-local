@@ -1,0 +1,144 @@
+<div class="input-fields-container">
+  <!--   SENDING TYPE   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'notificationSendingType' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <mat-select
+        required
+        [formControl]="sendingTypeControl"
+        [placeholder]="'notificationSendingType' | transloco"
+        [(ngModel)]="parent.notificationTemplate.sendingType"
+        [compareWith]="compareWithFn"
+      >
+        @for (sendingType of allSendingType; track sendingType) {
+          <mat-option
+            [value]="sendingType"
+            (click)="changeSendingTypeHandler()"
+            [disabled]="parent.dialogParams?.isView"
+          >
+            {{ sendingType[localEnumField] }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('sendingType')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   BEFORE/AFTER SENDING SETTINGS   -->
+  @if (isSelectedSendingTypeBeforeOrAfter()) {
+    <div class="modal-input-field">
+      <div class="multi-input-fields-container">
+        <!--   OFFSET COUNT AND OFFSET TYPE   -->
+        <div class="input-fields-group-container">
+          <!--  OFFSET COUNT   -->
+          <span>
+            {{
+              isSelectedSendingTypeBefore()
+                ? ('notificationOffsetBeforeLabel' | transloco)
+                : ('notificationOffsetAfterLabel' | transloco)
+            }}
+          </span>
+          <div class="input-field">
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                type="text"
+                appAllowNumbersOnlyDirective
+                min="1"
+                required
+                [formControl]="offsetCountControl"
+                [placeholder]="'notificationOffsetCount' | transloco"
+                [(ngModel)]="parent.notificationTemplate.offsetCount"
+                [readonly]="parent.dialogParams?.isView"
+              />
+            </mat-form-field>
+            <div class="error-message max-width-error-message">
+              @if (parent.isFieldEmpty('offsetCount')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+              @if (parent.isFieldLessThenZero('offsetCount')) {
+                <span>
+                  {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+          <!--   OFFSET TYPE   -->
+          <div class="input-field">
+            <mat-form-field appearance="outline" class="offset-type-input">
+              <mat-select
+                required
+                [placeholder]="'notificationOffsetType' | transloco"
+                [(ngModel)]="parent.notificationTemplate.offsetType"
+                [compareWith]="compareWithFn"
+                [formControl]="offsetTypeControl"
+              >
+                @for (offsetType of allOffsetType; track offsetType) {
+                  <mat-option
+                    [value]="offsetType"
+                    [disabled]="parent.dialogParams?.isView"
+                    (click)="changeOffsetTypeHandler()"
+                  >
+                    {{ offsetType[localEnumField] }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="error-message max-width-error-message">
+              @if (parent.isFieldEmpty('offsetType')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+        <!--   MAIN TIME SENDING   -->
+        @if (isOffsetTypeDay()) {
+          <div class="input-fields-group-container">
+            <span>
+              {{ ('notificationTime' | transloco) + ':' }}
+            </span>
+            <div class="input-field">
+              <mat-form-field appearance="outline">
+                <mat-select
+                  required
+                  [placeholder]="'notificationTime' | transloco"
+                  [(ngModel)]="parent.notificationTemplate.mainSendingTime"
+                  [formControl]="mainSendingTimeControl"
+                >
+                  @for (timeList of commonDateTimeService.workTimesList; track timeList) {
+                    <mat-option [value]="timeList" [disabled]="parent.dialogParams?.isView">
+                      {{ timeList }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+              <div class="error-message max-width-error-message">
+                @if (parent.isFieldEmpty('mainSendingTime')) {
+                  <span>
+                    {{ 'validatorsEmptyFieldMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <app-need-repeat-settings [parent]="parent"></app-need-repeat-settings>
+</div>

@@ -1,0 +1,16 @@
+<div class="modal-input-field">
+  <p class="modal-input-field-title">
+    {{ 'trainingCategoryLabel' | transloco }}
+  </p>
+
+  <div class="tree-selection-modal">
+    <app-common-tree
+      [loadDataObs]="trainingCategoryService.listWithTrainingTemplatesActive()"
+      [isSelectableTree]="true"
+      [selectedNodesId]="this.getSelectedNodesId()"
+      [treeSelectionType]="treeSelectionType"
+      [isView]="parent.dialogParams?.isView"
+    >
+    </app-common-tree>
+  </div>
+</div>

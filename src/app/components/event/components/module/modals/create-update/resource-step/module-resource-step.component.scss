@@ -1,0 +1,15 @@
+.mat-mdc-option {
+  &.mdc-list-item--disabled {
+    opacity: 1 !important;
+    cursor: default;
+
+    span {
+      opacity: 0.45 !important;
+      cursor: default;
+    }
+
+    mat-icon {
+      cursor: pointer;
+    }
+  }
+}

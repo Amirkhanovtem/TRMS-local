@@ -1,0 +1,360 @@
+<div class="requests-prototype planner-requests-page">
+  <header class="page-title">
+    <div>
+      <h1>Заявки Планер</h1>
+      <p>Планирование подтвержденных заявок, создание учебных планов из нескольких тренингов и передача проверенных событий в календарь.</p>
+    </div>
+    <button class="trms-btn green" type="button" (click)="openModal('requestRules', $event)">Процесс планирования</button>
+  </header>
+
+  <div class="stat-grid">
+    <button class="stat-card active" type="button" (click)="togglePlannerSection('queue')">
+      <small>В очереди планера</small>
+      <strong>{{ approvedRequests.length }}</strong>
+      <span class="muted">Подтвержденные заявки, готовые к планированию</span>
+    </button>
+    <button class="stat-card" type="button" (click)="togglePlannerSection('queue')">
+      <small>Черновики событий</small>
+      <strong>{{ draftCount }}</strong>
+      <span class="muted">Группы и события, сформированные планером</span>
+    </button>
+    <button class="stat-card" type="button" (click)="togglePlannerSection('auto')">
+      <small>Передано в календарь</small>
+      <strong>{{ calendarDraftCount }}</strong>
+      <span class="muted">Черновики доступны для drag and drop в TRMS Calendar</span>
+    </button>
+    <button class="stat-card" type="button" (click)="showHiddenRequests = !showHiddenRequests">
+      <small>Завершено и скрыто</small>
+      <strong>{{ hiddenPlannerRequests.length }}</strong>
+      <span class="muted">{{ showHiddenRequests ? 'Скрыть завершенные' : 'Показать завершенные заявки' }}</span>
+    </button>
+  </div>
+
+  <div class="planner-stack">
+    <section class="panel planner-section">
+      <button class="panel-head section-toggle" type="button" (click)="togglePlannerSection('queue')">
+        <div>
+          <h2>Очередь планера</h2>
+          <p>Подтвержденные заявки можно превратить в группы, передать в календарь или открыть для ручного drag and drop.</p>
+        </div>
+        <span class="pill">{{ plannerSections.queue ? 'Свернуть' : 'Раскрыть' }}</span>
+      </button>
+
+      @if (plannerSections.queue) {
+        <div class="panel-pad">
+          <div class="planner-controls">
+            <div class="field"><label>Размер группы</label><input class="control" type="number" min="1" [(ngModel)]="plannerOptions.groupSize" /></div>
+            <div class="field"><label>Начало</label><input class="control" type="time" [(ngModel)]="plannerOptions.startTime" /></div>
+            <div class="field"><label>Длительность, ч</label><input class="control" type="number" min="1" [(ngModel)]="plannerOptions.durationHours" /></div>
+            <div class="field"><label>Аудитория</label><select class="control" [(ngModel)]="plannerOptions.roomMode"><option value="auto">Автоподбор</option><option value="online">Онлайн</option></select></div>
+            <div class="field"><label>Тренер</label><select class="control" [(ngModel)]="plannerOptions.trainerMode"><option value="internal">Внутренние</option><option value="external">Внешний поставщик</option></select></div>
+          </div>
+
+          @for (request of approvedRequests; track request.id) {
+            <div class="planner-card">
+              <div class="planner-card-head">
+                <div>
+                  <strong>{{ request.title }}</strong>
+                  <span>{{ request.peopleCount }} чел. · {{ request.city }} · {{ request.periodFrom }} - {{ request.periodTo }}</span>
+                </div>
+                <span class="pill">{{ planProgress(request) }}</span>
+              </div>
+
+              <div class="planner-actions">
+                <button class="trms-btn green" type="button" (click)="generatePlan(request)">Сформировать группы</button>
+                <button class="trms-btn" type="button" (click)="sendPlanToCalendar(request)">Передать в календарь</button>
+                <button class="trms-btn" type="button" (click)="openCalendarForRequest(request)">Открыть календарь вручную</button>
+                <button class="trms-btn green" type="button" (click)="completePlanning(request)">Завершить и скрыть</button>
+                <button class="text-button" type="button" (click)="hideFromQueue(request)">Скрыть</button>
+              </div>
+
+              @if (plannerDraftsByRequest(request).length) {
+                <div class="draft-list">
+                  @for (draft of plannerDraftsByRequest(request); track draft.id) {
+                    <div class="draft-row editable-draft">
+                      <div class="draft-title">
+                        <strong>{{ draft.trainingTitle }} · группа {{ draft.groupNumber }}</strong>
+                        <span>{{ draft.equipment }}</span>
+                      </div>
+                      <div class="field compact-field"><label>Людей</label><input class="control compact-control" type="number" min="1" [ngModel]="draft.participants" (ngModelChange)="updateDraft(draft, { participants: $event, status: 'draft' })" /></div>
+                      <div class="field compact-field"><label>Старт</label><input class="control compact-control" type="datetime-local" [ngModel]="draftDateTimeValue(draft.startDate)" (ngModelChange)="updateDraftStart(draft, $event)" /></div>
+                      <div class="field compact-field"><label>Часы</label><input class="control compact-control" type="number" min="1" [ngModel]="draftDurationHours(draft)" (ngModelChange)="updateDraftDuration(draft, $event)" /></div>
+                      <div class="field compact-field">
+                        <label>Аудитория</label>
+                        <select class="control compact-control" [ngModel]="draft.room" (ngModelChange)="updateDraft(draft, { room: $event, resourceId: undefined, status: 'draft' })">
+                          @for (room of availableRooms; track room) {
+                            <option [value]="room">{{ room }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div class="field compact-field">
+                        <label>Тренер</label>
+                        <select class="control compact-control" [ngModel]="draft.trainer" (ngModelChange)="updateDraft(draft, { trainer: $event, status: 'draft' })">
+                          @for (trainer of availableTrainers; track trainer) {
+                            <option [value]="trainer">{{ trainer }}</option>
+                          }
+                        </select>
+                      </div>
+                      <span class="pill" [class.blue]="draft.status === 'draft'">{{ draft.status === 'sentToCalendar' ? 'В календаре' : 'Черновик' }}</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (!approvedRequests.length) {
+            <div class="planner-row">
+              <div><strong>Нет подтвержденных заявок</strong><span>После подтверждения Академией заявка появится здесь для планирования.</span></div>
+              <span class="pill gray">Очередь пуста</span>
+              <span>Планер ожидает</span>
+              <button class="text-button" type="button" (click)="openModal('requestRules', $event)">Процесс</button>
+            </div>
+          }
+
+          @if (hiddenPlannerRequests.length) {
+            <button class="trms-btn" type="button" (click)="showHiddenRequests = !showHiddenRequests">
+              {{ showHiddenRequests ? 'Скрыть завершенные заявки' : 'Показать завершенные заявки' }}
+            </button>
+          }
+
+          @if (showHiddenRequests) {
+            <div class="draft-list">
+              @for (request of hiddenPlannerRequests; track request.id) {
+                <div class="planner-row">
+                  <div><strong>{{ request.title }}</strong><span>{{ request.plannerSummary || 'Планирование завершено.' }}</span></div>
+                  <span class="pill">{{ request.plannerCompletedAt || 'Скрыто' }}</span>
+                  <span>{{ planProgress(request) }}</span>
+                  <button class="text-button" type="button" (click)="restoreToQueue(request)">Вернуть в очередь</button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="panel planner-section">
+      <button class="panel-head section-toggle" type="button" (click)="togglePlannerSection('manual')">
+        <div>
+          <h2>Создать тренинг / учебный план</h2>
+          <p>Учебный план состоит из нескольких тренингов. Планер выбирает план, группы, период и тренеров, затем проверяет созданные события и подтверждает корректность.</p>
+        </div>
+        <span class="pill">{{ plannerSections.manual ? 'Свернуть' : 'Раскрыть' }}</span>
+      </button>
+
+      @if (plannerSections.manual) {
+        <div class="panel-pad manual-plan-layout">
+          <div class="criteria-card">
+            <div class="manual-plan-grid">
+              <div class="field span-2">
+                <label>Учебный план</label>
+                <select class="control" [(ngModel)]="manualPlanForm.planId">
+                  @for (plan of learningPlanTemplates; track plan.id) {
+                    <option [value]="plan.id">{{ plan.title }}</option>
+                  }
+                </select>
+                <span class="helper-text">{{ selectedLearningPlan.description }}</span>
+              </div>
+              <div class="field"><label>Количество групп</label><input class="control" type="number" min="1" [(ngModel)]="manualPlanForm.groupCount" (ngModelChange)="onManualGroupCountChange()" /></div>
+              <div class="field"><label>Размер группы</label><input class="control" type="number" min="1" [(ngModel)]="manualPlanForm.groupSize" (ngModelChange)="applyGroupSizeToGroups()" /></div>
+              <div class="field"><label>Город</label><select class="control" [(ngModel)]="manualPlanForm.city"><option>Almaty</option><option>Astana</option></select></div>
+              <div class="field"><label>Дата с</label><input class="control" type="date" [(ngModel)]="manualPlanForm.periodFrom" /></div>
+              <div class="field"><label>Дата до</label><input class="control" type="date" [(ngModel)]="manualPlanForm.periodTo" /></div>
+              <div class="field"><label>Начало дня</label><input class="control" type="time" [(ngModel)]="manualPlanForm.startTime" /></div>
+              <div class="field"><label>Аудитории</label><select class="control" [(ngModel)]="manualPlanForm.roomMode"><option value="auto">Автоподбор</option><option value="online">Онлайн</option></select></div>
+            </div>
+
+            <div class="group-assignment-list">
+              <h3>Тренеры по группам</h3>
+              @for (group of manualPlanGroups; track group.groupNumber) {
+                <div class="group-assignment-row">
+                  <strong>Группа {{ group.groupNumber }}</strong>
+                  <div class="field compact-field">
+                    <label>Участников</label>
+                    <input class="control compact-control" type="number" min="1" [(ngModel)]="group.participants" />
+                  </div>
+                  <div class="field compact-field">
+                    <label>Тренер</label>
+                    <select class="control compact-control" [(ngModel)]="group.trainer">
+                      @for (trainer of availableTrainers; track trainer) {
+                        <option [value]="trainer">{{ trainer }}</option>
+                      }
+                    </select>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="inline-actions">
+              <button class="trms-btn green" type="button" (click)="createLearningPlan()">Сформировать учебный план</button>
+              <button class="trms-btn" type="button" (click)="openManualPlanCalendar()">Открыть календарь вручную</button>
+              <button class="trms-btn green" type="button" [disabled]="!manualPlanDrafts.length" (click)="confirmManualLearningPlan()">Подтвердить корректность</button>
+            </div>
+          </div>
+
+          <div class="criteria-card plan-preview-card">
+            <div class="planner-card-head">
+              <div>
+                <strong>Предпросмотр учебного плана</strong>
+                <span>{{ selectedLearningPlan.modules.length }} дней обучения · {{ manualPlanGroups.length }} групп · будет создано {{ selectedLearningPlan.modules.length * manualPlanGroups.length }} событий</span>
+              </div>
+              <span class="pill">{{ manualPlanDrafts.length ? 'Создано' : 'Не создано' }}</span>
+            </div>
+
+            <div class="flow compact-flow">
+              @for (module of selectedLearningPlan.modules.slice(0, 6); track module.day) {
+                <div class="flow-step" [class.warn]="module.format === 'Онлайн'">
+                  <strong>День {{ module.day }} · {{ module.title }}</strong>
+                  <span>{{ module.format }} · {{ module.durationHours }} ч</span>
+                </div>
+              }
+              @if (selectedLearningPlan.modules.length > 6) {
+                <div class="flow-step blue">
+                  <strong>Еще {{ selectedLearningPlan.modules.length - 6 }} дней</strong>
+                  <span>Они тоже будут разложены по рабочим дням выбранного периода.</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          @if (manualPlanDrafts.length) {
+            <div class="criteria-card span-full">
+              <div class="planner-card-head">
+                <div>
+                  <strong>Созданные события для проверки</strong>
+                  <span>Планер может изменить дату, длительность, аудиторию и тренера перед подтверждением.</span>
+                </div>
+                <span class="pill blue">{{ manualPlanDrafts.length }} событий</span>
+              </div>
+              <div class="manual-draft-list manual-group-list">
+                @for (group of groupedManualPlanDrafts; track group.groupNumber) {
+                  <section class="manual-group">
+                    <button class="manual-group-head" type="button" (click)="toggleManualGroup(group.groupNumber)">
+                      <div>
+                        <strong>Группа {{ group.groupNumber }}</strong>
+                        <span>{{ group.drafts.length }} дней · тренер {{ group.drafts[0]?.trainer }} · {{ group.drafts[0]?.participants }} участников</span>
+                      </div>
+                      <span class="pill">{{ openManualGroups[group.groupNumber] ? 'Свернуть' : 'Раскрыть' }}</span>
+                    </button>
+
+                    @if (openManualGroups[group.groupNumber]) {
+                      <div class="draft-list manual-group-drafts">
+                        @for (draft of group.drafts; track draft.id) {
+                          <div class="draft-row editable-draft">
+                            <div class="draft-title">
+                              <strong>{{ draft.trainingTitle }}</strong>
+                              <span>{{ draft.equipment }}</span>
+                            </div>
+                            <div class="field compact-field"><label>Людей</label><input class="control compact-control" type="number" min="1" [ngModel]="draft.participants" (ngModelChange)="updateDraft(draft, { participants: $event, status: 'draft' })" /></div>
+                            <div class="field compact-field"><label>Старт</label><input class="control compact-control" type="datetime-local" [ngModel]="draftDateTimeValue(draft.startDate)" (ngModelChange)="updateDraftStart(draft, $event)" /></div>
+                            <div class="field compact-field"><label>Часы</label><input class="control compact-control" type="number" min="1" [ngModel]="draftDurationHours(draft)" (ngModelChange)="updateDraftDuration(draft, $event)" /></div>
+                            <div class="field compact-field">
+                              <label>Аудитория</label>
+                              <select class="control compact-control" [ngModel]="draft.room" (ngModelChange)="updateDraft(draft, { room: $event, resourceId: undefined, status: 'draft' })">
+                                @for (room of availableRooms; track room) {
+                                  <option [value]="room">{{ room }}</option>
+                                }
+                              </select>
+                            </div>
+                            <div class="field compact-field">
+                              <label>Тренер</label>
+                              <select class="control compact-control" [ngModel]="draft.trainer" (ngModelChange)="updateDraft(draft, { trainer: $event, status: 'draft' })">
+                                @for (trainer of availableTrainers; track trainer) {
+                                  <option [value]="trainer">{{ trainer }}</option>
+                                }
+                              </select>
+                            </div>
+                            <span class="pill" [class.blue]="draft.status === 'draft'">{{ draft.status === 'sentToCalendar' ? 'В календаре' : 'Черновик' }}</span>
+                          </div>
+                        }
+                      </div>
+                    }
+                  </section>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="panel planner-section">
+      <button class="panel-head section-toggle" type="button" (click)="togglePlannerSection('auto')">
+        <div>
+          <h2>Автосоздание тренингов из заявки</h2>
+          <p>Выбор заявки, тренинга, даты, групп и ресурсов. События создаются как редактируемые черновики календаря.</p>
+        </div>
+        <span class="pill">{{ plannerSections.auto ? 'Свернуть' : 'Раскрыть' }}</span>
+      </button>
+
+      @if (plannerSections.auto) {
+        <div class="panel-pad">
+          <div class="criteria-card">
+            <div class="auto-plan-grid">
+              <div class="field">
+                <label>Заявка</label>
+                <select class="control" [(ngModel)]="autoPlanForm.requestId" (ngModelChange)="onAutoRequestChange()">
+                  @for (request of approvedRequests; track request.id) {
+                    <option [value]="request.id">{{ request.title }}</option>
+                  }
+                </select>
+              </div>
+              <div class="field">
+                <label>Тренинг</label>
+                <select class="control" [(ngModel)]="autoPlanForm.trainingTemplateId">
+                  @for (training of autoTrainingOptions; track training.id) {
+                    <option [value]="training.id">{{ training.title }}</option>
+                  }
+                </select>
+              </div>
+              <div class="field"><label>Дата старта</label><input class="control" type="date" [(ngModel)]="autoPlanForm.startDate" /></div>
+              <div class="field"><label>Время</label><input class="control" type="time" [(ngModel)]="autoPlanForm.startTime" /></div>
+              <div class="field"><label>Количество групп</label><input class="control" type="number" min="1" [(ngModel)]="autoPlanForm.groupCount" /></div>
+              <div class="field"><label>Размер группы</label><input class="control" type="number" min="1" [(ngModel)]="autoPlanForm.groupSize" /></div>
+              <div class="field"><label>Длительность, ч</label><input class="control" type="number" min="1" [(ngModel)]="autoPlanForm.durationHours" /></div>
+              <div class="field">
+                <label>Аудитория</label>
+                <select class="control" [(ngModel)]="autoPlanForm.room">
+                  <option value="auto">Автоподбор</option>
+                  @for (room of availableRooms; track room) {
+                    <option [value]="room">{{ room }}</option>
+                  }
+                </select>
+              </div>
+              <div class="field">
+                <label>Тренер</label>
+                <select class="control" [(ngModel)]="autoPlanForm.trainer">
+                  @for (trainer of availableTrainers; track trainer) {
+                    <option [value]="trainer">{{ trainer }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="inline-actions">
+              <button class="trms-btn green" type="button" (click)="runAutoPlan()">Создать на календаре</button>
+              <button class="trms-btn" type="button" (click)="openModal('autoPlanPreview', $event)">Показать конфликты</button>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  </div>
+
+  <div class="modal-backdrop" [class.open]="modalOpen" (click)="closeModal()">
+    <section class="modal" (click)="$event.stopPropagation()">
+      <header class="modal-head">
+        <h2>{{ selectedModal.title }}</h2>
+        <button class="modal-close" type="button" (click)="closeModal()">Закрыть</button>
+      </header>
+      <div class="modal-body">
+        <div class="detail"><span>Контекст</span><strong>{{ selectedModal.subtitle }}</strong></div>
+        @for (detail of selectedModal.details; track detail[0]) {
+          <div class="detail"><span>{{ detail[0] }}</span><strong>{{ detail[1] }}</strong></div>
+        }
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" [class.open]="toastText">{{ toastText }}</div>
+</div>

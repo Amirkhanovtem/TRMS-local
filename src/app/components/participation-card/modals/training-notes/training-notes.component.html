@@ -1,0 +1,45 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'trainingNoteModalTitle' | transloco: { 'trainingName': dialogParams.trainingName } }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'trainingNotesTable'"
+      [displayedColumns]="displayedColumns"
+      [tableColTemplateList]="tableColTemplateList"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+    >
+      <ng-container table-buttons>
+        <button mat-raised-button color="primary" (click)="openCreateModal()">
+          {{ 'createBtn' | transloco }}
+        </button>
+        <button mat-raised-button color="accent" [disabled]="!table?.isOneRowSelected()" (click)="openUpdateModal()">
+          {{ 'editBtn' | transloco }}
+        </button>
+        <button mat-raised-button [disabled]="!table?.selection?.hasValue()" (click)="openDeleteModal()" color="warn">
+          {{ 'deleteBtn' | transloco }}
+        </button>
+      </ng-container>
+
+      <ng-template tableWrapperColumn="attachment" let-trainingNote="row">
+        @if (trainingNote?.fileStorage?.id) {
+          <mat-icon class="attached-file-icon" (click)="loadAttachedFile(trainingNote?.fileStorage, $event)">
+            attach_file
+          </mat-icon>
+        }
+      </ng-template>
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

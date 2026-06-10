@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Training management system</title>
+    <script>
+      (function () {
+        var subPath = '/trms';
+        window.APP_SUB_PATH = subPath;
+        var base = document.createElement('base');
+        var path = window.location.pathname;
+        var href = window.location.href;
+        function getCookie(name) {
+          var matches = document.cookie.match(
+            new RegExp('(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'),
+          );
+          return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+
+        var isKcAppRoute = path.startsWith(subPath) || href.includes(subPath + '/') || href.endsWith(subPath);
+
+        if (isKcAppRoute) {
+          base.href = subPath + '/';
+          var accessToken = getCookie('access_token');
+          if (!accessToken) {
+            window.location.href = '/404';
+          }
+        } else {
+          base.href = '/';
+        }
+
+        document.head.appendChild(base);
+
+        window.IS_KC_APP_ROUTE = isKcAppRoute;
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  </head>
+  <body class="mat-typography">
+    <app-root></app-root>
+  </body>
+</html>

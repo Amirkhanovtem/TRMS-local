@@ -1,0 +1,111 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'navBarBtnProfile' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="input-fields-container">
+      <!--   LAST NAME   -->
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'personLastNameColTable' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [placeholder]="'personLastNameColTable' | transloco"
+            [value]="person.lastName"
+            [readonly]="true"
+          />
+        </mat-form-field>
+      </div>
+
+      <!--   FIRST NAME   -->
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'personFirstNameColTable' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [placeholder]="'personFirstNameColTable' | transloco"
+            [value]="person.firstName"
+            [readonly]="true"
+          />
+        </mat-form-field>
+      </div>
+
+      <!--   POSITION   -->
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'personPositionColTable' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [placeholder]="'personPositionColTable' | transloco"
+            [value]="person.position?.[localEnumField]"
+            [readonly]="true"
+          />
+        </mat-form-field>
+      </div>
+
+      <!--   EMAIL   -->
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'personEmailColTable' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <input matInput [placeholder]="'personEmailColTable' | transloco" [value]="person.email" [readonly]="true" />
+        </mat-form-field>
+      </div>
+
+      <!--   TRMS ROLE   -->
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'personTrmsRoleColTable' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [placeholder]="'personTrmsRoleColTable' | transloco"
+            [value]="person.trmsRole?.[localEnumField]"
+            [readonly]="true"
+          />
+        </mat-form-field>
+      </div>
+
+      <!--   TRAINING TABLE   -->
+      <div class="modal-input-field expansion">
+        <mat-accordion class="accordion">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title class="mat-expansion-bold-title">
+                {{ 'profileModalTrainingTable' | transloco }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-person-training-table [personId]="person.id"></app-person-training-table>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="primary" (click)="openFullPersonCardModal()">
+        {{ 'profileModalOpenFullInfoBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

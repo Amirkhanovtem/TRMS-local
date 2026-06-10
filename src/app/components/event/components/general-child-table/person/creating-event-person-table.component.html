@@ -1,0 +1,25 @@
+@if (!isView) {
+  <div class="btns-container">
+    <a (click)="openPersonModal()" class="link-btn">
+      {{ 'creatingEventPersonsTableAddPersons' | transloco }}
+    </a>
+  </div>
+}
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="tableId"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableContainerClass]="'expansion-table'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="actions" let-equipment="row">
+    <div class="row-with-action-btns-container">
+      <mat-icon class="row-btns view" (click)="personOpenViewModal(equipment)">visibility</mat-icon>
+      @if (!isView) {
+        <mat-icon class="row-btns remove" (click)="removePersonFromList(equipment)">clear</mat-icon>
+      }
+    </div>
+  </ng-template>
+</app-table-wrapper>

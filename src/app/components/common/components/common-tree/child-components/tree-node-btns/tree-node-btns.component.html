@@ -1,0 +1,17 @@
+<div [class.tree-node-btns-container]="!isSingleAddBtn">
+  @if (checkCreateBtnEnable()) {
+    <button mat-icon-button class="row-btns add" (click)="createOrUpdate(false)">
+      <mat-icon>add</mat-icon>
+    </button>
+  }
+  @if (checkEditBtnEnable()) {
+    <button mat-icon-button class="row-btns edit" (click)="createOrUpdate(true)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  }
+  @if (checkDeleteBtnEnable()) {
+    <button mat-icon-button class="row-btns remove" (click)="remove()">
+      <mat-icon>clear</mat-icon>
+    </button>
+  }
+</div>

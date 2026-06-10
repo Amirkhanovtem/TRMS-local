@@ -1,0 +1,222 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('resourceUnavailabilityPeriodModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('resourceUnavailabilityPeriodModalPageViewTitle' | transloco)
+            : ('resourceUnavailabilityPeriodModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <div class="modal-input-field">
+          <mat-button-toggle-group
+            #toggleGroup="matButtonToggleGroup"
+            [disabled]="dialogParams?.isView || dialogParams?.isUpdate"
+            [value]="ROOM_GROUP"
+          >
+            <mat-button-toggle [value]="ROOM_GROUP">{{ 'resourceGroupRoomTitle' | transloco }}</mat-button-toggle>
+            <mat-button-toggle [value]="TRAINER_GROUP">{{ 'resourceGroupTrainerTitle' | transloco }}</mat-button-toggle>
+            <mat-button-toggle [value]="EQUIPMENT_GROUP">{{
+              'resourceGroupEquipmentTitle' | transloco
+            }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <div class="modal-input-field">
+          <div class="multi-input-fields-container">
+            <div>
+              <p class="modal-input-field-title">
+                {{ 'resourceUnavailabilityPeriodUnavailabilityLabelColTable' | transloco }}
+              </p>
+
+              <mat-form-field appearance="outline">
+                <mat-select
+                  required
+                  [placeholder]="'resourceUnavailabilityPeriodUnavailabilityLabelColTable' | transloco"
+                  [value]="getSelectedLabelBySelectedGroup()"
+                  [compareWith]="compareWithFn"
+                  formControlName="label"
+                >
+                  @for (label of getLabelsByGroup(); track label) {
+                    <mat-option
+                      [value]="label"
+                      (click)="setLabelBySelectedGroup(label)"
+                      [disabled]="dialogParams?.isView"
+                    >
+                      {{ label.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <div class="error-message">
+                @if (isFieldEmpty('label')) {
+                  <span>
+                    {{ 'validatorsEmptyFieldMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+            <div>
+              <p class="modal-input-field-title">
+                {{ 'resourceUnavailabilityPeriodPeriodColTable' | transloco }}
+              </p>
+              <div class="date-period-input-fields-container">
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mtx-datetimepicker
+                      #startDatetimePicker
+                      [disabled]="dialogParams?.isView"
+                      [type]="'datetime'"
+                      [mode]="'auto'"
+                      [startView]="'month'"
+                      [timeInterval]="30"
+                      [timeInput]="false"
+                    >
+                    </mtx-datetimepicker>
+                    <input
+                      matInput
+                      required
+                      formControlName="startDate"
+                      [placeholder]="'resourceUnavailabilityPeriodStartColTable' | transloco"
+                      [(ngModel)]="unavailabilityResourcePeriod.startDate"
+                      [mtxDatetimepicker]="startDatetimePicker"
+                    />
+                    <mtx-datetimepicker-toggle [for]="startDatetimePicker" matSuffix></mtx-datetimepicker-toggle>
+                  </mat-form-field>
+
+                  <div class="error-message">
+                    @if (isFieldEmpty('startDate')) {
+                      <span>
+                        {{ 'validatorsEmptyFieldMessage' | transloco }}
+                      </span>
+                    }
+                  </div>
+                </div>
+                <div class="date-period-slash">-</div>
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mtx-datetimepicker
+                      #endDatetimePicker
+                      [disabled]="dialogParams?.isView"
+                      [type]="'datetime'"
+                      [mode]="'auto'"
+                      [startView]="'month'"
+                      [timeInterval]="30"
+                      [timeInput]="false"
+                    >
+                    </mtx-datetimepicker>
+                    <input
+                      matInput
+                      required
+                      formControlName="endDate"
+                      [placeholder]="'resourceUnavailabilityPeriodEndColTable' | transloco"
+                      [(ngModel)]="unavailabilityResourcePeriod.endDate"
+                      [mtxDatetimepicker]="endDatetimePicker"
+                    />
+                    <mtx-datetimepicker-toggle [for]="endDatetimePicker" matSuffix></mtx-datetimepicker-toggle>
+                  </mat-form-field>
+
+                  <div class="error-message">
+                    @if (isFieldEmpty('endDate')) {
+                      <span>
+                        {{ 'validatorsEmptyFieldMessage' | transloco }}
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <div class="error-message">
+                @if (isStartAfterEnd()) {
+                  <span>
+                    {{ 'validatorStartAfterEndMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-input-field" [style.display]="readyToHide && toggleGroup.value !== ROOM_GROUP ? 'none' : ''">
+          <p class="modal-input-field-title">
+            {{ 'navBarBtnRooms' | transloco }}
+          </p>
+
+          <div class="tree-selection-modal">
+            <app-common-tree
+              #roomTree
+              [isView]="dialogParams?.isView"
+              [isSelectableTree]="true"
+              [treeSelectionType]="treeSelectionType"
+              [loadDataObs]="ganttFilterService.roomHierarchy()"
+              [selectedNodesId]="[unavailabilityResourcePeriod?.resource?.id]"
+            >
+            </app-common-tree>
+          </div>
+        </div>
+
+        <div
+          class="modal-input-field"
+          [style.display]="readyToHide && toggleGroup.value !== TRAINER_GROUP ? 'none' : ''"
+        >
+          <p class="modal-input-field-title">
+            {{ 'navBarBtnTrainer' | transloco }}
+          </p>
+
+          <div class="tree-selection-modal">
+            <app-common-tree
+              #trainerTree
+              [isView]="dialogParams?.isView"
+              [isSelectableTree]="true"
+              [treeSelectionType]="treeSelectionType"
+              [loadDataObs]="ganttFilterService.trainerHierarchy()"
+              [selectedNodesId]="[unavailabilityResourcePeriod?.resource?.id]"
+            >
+            </app-common-tree>
+          </div>
+        </div>
+
+        <div
+          class="modal-input-field"
+          [style.display]="readyToHide && toggleGroup.value !== EQUIPMENT_GROUP ? 'none' : ''"
+        >
+          <p class="modal-input-field-title">
+            {{ 'navBarBtnEquipments' | transloco }}
+          </p>
+
+          <div class="tree-selection-modal">
+            <app-common-tree
+              #equipmentTree
+              [isView]="dialogParams?.isView"
+              [isSelectableTree]="true"
+              [treeSelectionType]="treeSelectionType"
+              [loadDataObs]="ganttFilterService.equipmentHierarchy()"
+              [selectedNodesId]="[unavailabilityResourcePeriod?.resource?.id]"
+            >
+            </app-common-tree>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveUnavailabilityResourceLabel()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

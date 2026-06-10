@@ -1,0 +1,160 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('positionModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('positionModalPageViewTitle' | transloco)
+            : ('positionModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME RU  -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'positionNameRuColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'positionNameRuColTable' | transloco"
+              [(ngModel)]="position.nameRu"
+              formControlName="nameRu"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('nameRu')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   NAME KZ  -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'positionNameKzColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'positionNameKzColTable' | transloco"
+              [(ngModel)]="position.nameKz"
+              formControlName="nameKz"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('nameKz')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   NAME EN  -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'positionNameEnColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'positionNameEnColTable' | transloco"
+              [(ngModel)]="position.nameEn"
+              formControlName="nameEn"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('nameEn')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'positionCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'positionCodeColTable' | transloco"
+              [(ngModel)]="position.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'positionDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'positionDescriptionColTable' | transloco"
+              [(ngModel)]="position.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSavePosition()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

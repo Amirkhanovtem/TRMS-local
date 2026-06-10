@@ -1,0 +1,119 @@
+<div class="filters-wrapper" [class.mobile-filters]="isMobileView">
+  @if (stepwiseActivation) {
+    <div class="mobile-hint">
+      <mat-icon>info</mat-icon>
+      <span>{{ 'selfEnrollmentFilter.stepwiseHint' | transloco }}</span>
+    </div>
+  }
+
+  <div class="filter-container">
+    <span class="title">{{ 'selfEnrollmentFilter.training' | transloco }}</span>
+    <div class="filter">
+      <mat-form-field appearance="outline">
+        <mat-select
+          multiple
+          [(ngModel)]="filters.trainingTemplateIds"
+          (ngModelChange)="onTrainingChange()"
+          [placeholder]="'selfEnrollmentFilter.training' | transloco"
+          [compareWith]="compareWithFn"
+        >
+          <app-search
+            #trainingTemplateSearch
+            [appearance]="'fill'"
+            (keydown.space)="$event.stopPropagation()"
+            [searchStyleClass]="'filter-search'"
+            (applySearch)="filterTrainingTemplates($event)"
+          >
+          </app-search>
+
+          @if (!filteredTrainingTemplates?.length) {
+            <mat-option class="not-found-option" disabled>
+              {{ 'notFound' | transloco }}
+            </mat-option>
+          }
+
+          @for (trainingTemplate of filteredTrainingTemplates; track trainingTemplate) {
+            <mat-option [value]="trainingTemplate.id">
+              {{ trainingTemplate.name }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="filter-container">
+    <span class="title">{{ 'selfEnrollmentFilter.city' | transloco }}</span>
+    <div class="filter">
+      <mat-form-field appearance="outline">
+        <mat-select
+          multiple
+          [(ngModel)]="filters.cityIds"
+          (ngModelChange)="onCityChange()"
+          [placeholder]="'selfEnrollmentFilter.city' | transloco"
+          [compareWith]="compareWithFn"
+          [disabled]="stepwiseActivation && filters.trainingTemplateIds?.length === 0"
+        >
+          <app-search
+            #citiesSearch
+            [appearance]="'fill'"
+            (keydown.space)="$event.stopPropagation()"
+            [searchStyleClass]="'filter-search'"
+            (applySearch)="filterCities($event)"
+          >
+          </app-search>
+
+          @if (!filteredCities?.length) {
+            <mat-option class="not-found-option" disabled>
+              {{ 'notFound' | transloco }}
+            </mat-option>
+          }
+
+          @for (city of filteredCities; track city) {
+            <mat-option [value]="city.id">
+              {{ city[localEnumField] }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="filter-container" [formGroup]="form">
+    <span class="title">{{ 'selfEnrollmentFilter.date' | transloco }}</span>
+    <div class="filter">
+      <mat-form-field
+        appearance="outline"
+        [class.disabled-field]="
+          stepwiseActivation && (!filters.trainingTemplateIds?.length || !filters.cityIds?.length)
+        "
+      >
+        <mat-date-range-input
+          [rangePicker]="picker"
+          [dateFilter]="activeDatesFilters"
+          [disabled]="stepwiseActivation && (!filters.trainingTemplateIds?.length || !filters.cityIds?.length)"
+        >
+          <input
+            matStartDate
+            required
+            formControlName="startDate"
+            [(ngModel)]="filters.startDate"
+            placeholder="dd.mm.yyyy"
+          />
+          <input matEndDate required formControlName="endDate" [(ngModel)]="filters.endDate" placeholder="dd.mm.yyyy" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="actions-container">
+    <button mat-raised-button color="primary" [disabled]="!canSubmit()" (click)="confirmFilters()">
+      {{ (stepwiseActivation ? 'selfEnrollmentFilter.showTrainings' : 'confirmBtn') | transloco }}
+    </button>
+    <button mat-raised-button class="secondaryBtn" (click)="clearFilters()">
+      {{ 'clearBtn' | transloco }}
+    </button>
+  </div>
+</div>

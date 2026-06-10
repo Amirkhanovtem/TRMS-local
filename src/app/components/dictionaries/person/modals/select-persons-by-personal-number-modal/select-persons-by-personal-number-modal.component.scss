@@ -1,0 +1,83 @@
+@use '/src/assets/styles/global-vars' as gv;
+
+.select-persons-by-personal-number-modal-container {
+  width: 500px;
+  max-width: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  justify-content: space-between;
+}
+
+.info-icon {
+  font-size: 14px;
+}
+
+.splitter-input {
+  width: 30px;
+  text-align: center;
+  font-size: 25px;
+  border: 0;
+  outline: 0;
+  background: whitesmoke;
+  border-bottom: 1px solid #8e8e8e;
+
+  &:focus {
+    outline: none !important;
+  }
+}
+
+.splitter-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.text-area-btn-container {
+  display: flex;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.accept-btn {
+  background-color: whitesmoke;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: gainsboro;
+  }
+}
+
+.invalid-chip {
+  background-color: gv.$trms-red !important;
+}
+
+.valid-chip {
+  background-color: gv.$trms-green-500 !important;
+}
+
+mat-chip {
+  button {
+    color: gv.$trms-white-500 !important;
+  }
+
+  span {
+    color: gv.$trms-white-500 !important;
+  }
+}
+
+:host ::ng-deep .mat-mdc-standard-chip {
+  .mdc-evolution-chip__cell--primary,
+  .mdc-evolution-chip__action--primary,
+  .mat-mdc-chip-action-label {
+    overflow: hidden !important;
+  }
+}
+
+.personal-number-text-area {
+  height: 125px;
+}

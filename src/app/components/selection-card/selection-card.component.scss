@@ -1,0 +1,52 @@
+:host {
+  width: 100%;
+
+  .selection-card {
+    height: 100%;
+
+    ::ng-deep {
+      .mat-mdc-card-header-text {
+        width: 100%;
+      }
+
+      mat-card-content {
+        overflow: auto;
+
+        .mdc-list-item {
+          display: flex;
+          border-radius: 50px;
+          margin-bottom: 2px;
+          height: 64px;
+
+          &.active {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            &.selected {
+              background: #c6dcd8;
+            }
+
+            &:hover {
+              background: #c6dcd8;
+            }
+
+            .mdc-list-item__primary-text {
+              opacity: 1;
+            }
+          }
+
+          &__content {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+          }
+
+          &__primary-text {
+            opacity: 0.4;
+            margin-bottom: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}

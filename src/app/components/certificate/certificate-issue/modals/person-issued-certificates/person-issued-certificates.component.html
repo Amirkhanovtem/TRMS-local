@@ -1,0 +1,60 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ getFormTitle() }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'personIssuedCertificatesTable'"
+      [displayedColumns]="displayedColumns"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+      [tableColTemplateList]="tableColTemplateList"
+    >
+      <ng-container table-buttons>
+        <button
+          mat-raised-button
+          [disabled]="!table?.isOneRowSelected()"
+          openUpdateCertificateDirective
+          [certificateId]="tableWrapper?.getSingleSelectedRow()?.id"
+        >
+          {{ 'editBtn' | transloco }}
+        </button>
+        <button
+          mat-raised-button
+          [disabled]="!table?.isOneRowSelected()"
+          openUpdateCertificateDirective
+          [isView]="true"
+          [certificateId]="tableWrapper?.getSingleSelectedRow()?.id"
+        >
+          {{ 'viewBtn' | transloco }}
+        </button>
+      </ng-container>
+
+      <ng-template tableWrapperColumn="certificate" let-certificateIssue="row">
+        <div class="icon-col-btns-container">
+          <app-certificate-issue-download-view-btns
+            (click)="$event.stopPropagation()"
+            [participantTrainingCardId]="certificateIssue.participantTrainingCard.id"
+          >
+          </app-certificate-issue-download-view-btns>
+        </div>
+        @if (showEmptyCertificateTemplateError(certificateIssue)) {
+          <span class="error-message">
+            {{ 'emptyCertificateTemplateErrorMessage' | transloco }}
+          </span>
+        }
+      </ng-template>
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

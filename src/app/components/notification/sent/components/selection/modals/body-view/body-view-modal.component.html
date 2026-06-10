@@ -1,0 +1,23 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'bodyViewModalTittle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="input-fields-container">
+      <div class="modal-input-field">
+        <jodit-editor [defaultValue]="dialogParams?.body"></jodit-editor>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

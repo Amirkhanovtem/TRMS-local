@@ -1,0 +1,49 @@
+<!--   ADDITIONAL E-MAIL   -->
+<div class="modal-input-field expansion">
+  <mat-accordion class="accordion">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="mat-expansion-bold-title">
+          {{ 'notificationAdditionalEmail' | transloco }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <!--   ENTER EMAIL INPUT   -->
+      @if (!parent.dialogParams?.isView) {
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'notificationAdditionalEmailEnterEmail' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'notificationAdditionalEmailMailColTable' | transloco"
+              [(ngModel)]="newAdditionalTargetEmail"
+              [formControl]="additionalTargetEmailControl"
+              [readonly]="isView"
+            />
+            @if (isNewAdditionalTargetEmailValid()) {
+              <button matSuffix mat-icon-button (click)="addNewAdditionalTargetEmail()">
+                <mat-icon>arrow_right_alt</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+          <div class="error-message">
+            @if (!isUniqueEmail()) {
+              <span>
+                {{ 'notificationAdditionalEmailNotUniqueEmailMessage' | transloco }}
+              </span>
+            }
+            @if (!additionalTargetEmailControl.valid) {
+              <span>
+                {{ 'validatorsEmailMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+
+      <app-additional-email [parent]="parent" [additionalEmailType]="additionalEmailType"> </app-additional-email>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

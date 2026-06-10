@@ -1,0 +1,172 @@
+<div class="divider-container">
+  <span>{{ 'reissueCertificatesCertificatesForReissueTittle' | transloco }}</span>
+  <mat-divider></mat-divider>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'reissueCertificateCurrentCertificatesModalTable'"
+  [displayedColumns]="displayedColumns"
+  [tableContainerClass]="'mat-elevation-z8 modal-table'"
+>
+</app-table-wrapper>
+
+<div class="divider-container new-cert-divider">
+  <div class="divider-container-header">
+    <div>
+      <span>{{ 'reissueCertificatesNewCertificateSettingsTittle' | transloco }}</span>
+    </div>
+    <div>
+      <mat-slide-toggle
+        labelPosition="before"
+        [color]="'primary'"
+        (change)="updateValidators($event.checked)"
+        [(ngModel)]="reissueCertificate.isCreateBySystem"
+      >
+        {{ 'reissueCertificatesNewCertificateGenerateBySystem' | transloco }}
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+</div>
+
+<div class="new-certificate-container" [formGroup]="modalForm">
+  <div class="new-certificate-input-container certificate-input">
+    <span class="new-certificate-input-label">{{ 'attendedTrainingCertificateColTable' | transloco }}</span>
+
+    <mat-form-field appearance="outline">
+      <input matInput [value]="reissueCertificate?.newCertificateBySystem.certificateTemplate.name" [readonly]="true" />
+    </mat-form-field>
+  </div>
+
+  <div class="new-certificate-container">
+    <div class="new-certificate-input-group-container">
+      <!--   SERIAL NUMBER CODE   -->
+      <div class="new-certificate-input-container serial-number-code">
+        <span class="new-certificate-input-label">
+          {{ 'certificateSerialNumberInfo.code' | transloco }}
+        </span>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            required
+            [placeholder]="'certificateSerialNumberInfo.code' | transloco"
+            [value]="reissueCertificate.newCertificateBySystem?.serialNumberInfo?.code"
+            readonly
+          />
+        </mat-form-field>
+      </div>
+
+      <!--   SERIAL NUMBER UNIQUE NUMBER   -->
+      <div class="new-certificate-input-container">
+        <span class="new-certificate-input-label">
+          {{ 'certificateSerialNumberInfo.number' | transloco }}
+        </span>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="number"
+            appAllowNumbersOnlyDirective
+            [placeholder]="'certificateSerialNumberInfo.autoGeneration' | transloco"
+            [(ngModel)]="certificateData.serialNumberInfo.number"
+            formControlName="numberOfSerialNumber"
+            min="0"
+            [readonly]="reissueCertificate?.isCreateBySystem"
+          />
+        </mat-form-field>
+
+        <div class="error-message">
+          @if (isFieldEmpty('numberOfSerialNumber')) {
+            <span>
+              {{ 'validatorsEmptyFieldMessage' | transloco }}
+            </span>
+          }
+
+          @if (isFieldLessThenZero('numberOfSerialNumber')) {
+            <span>
+              {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="new-certificate-input-group-container">
+      <div class="new-certificate-input-container">
+        <span class="new-certificate-input-label">{{ 'certificateIssueDateColTable' | transloco }}</span>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            required
+            [readonly]="reissueCertificate?.isCreateBySystem"
+            [matDatepicker]="datepickerDateOfIssue"
+            [(ngModel)]="certificateData.dateOfIssue"
+            formControlName="dateIssue"
+            [placeholder]="'certificateIssueDateColTable' | transloco"
+          />
+
+          @if (!reissueCertificate?.isCreateBySystem) {
+            <mat-datepicker-toggle matSuffix [for]="datepickerDateOfIssue"> </mat-datepicker-toggle>
+          }
+          <mat-datepicker #datepickerDateOfIssue></mat-datepicker>
+        </mat-form-field>
+
+        <div class="error-message">
+          @if (isFieldEmpty('dateIssue')) {
+            <span>
+              {{ 'validatorsEmptyFieldMessage' | transloco }}
+            </span>
+          }
+
+          @if (controlHasError('dateIssue', 'expireBeforeStart')) {
+            <span>
+              {{ 'reissueCertificatesExpireDateBeforeIssueDateErrorMessage' | transloco }}
+            </span>
+          }
+        </div>
+      </div>
+
+      @if (needShowExpireDatePicker()) {
+        <div class="new-certificate-input-container">
+          <span class="new-certificate-input-label">{{ 'certificateIssueExpireThroughColTable' | transloco }}</span>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [readonly]="checkDateOfExpireInputReadOnly()"
+              [matDatepicker]="datepickerDateOfExpire"
+              [(ngModel)]="certificateData.dateOfExpire"
+              formControlName="dateExpire"
+              [placeholder]="'certificateIssueDateColTable' | transloco"
+            />
+            @if (!reissueCertificate?.isCreateBySystem) {
+              <mat-datepicker-toggle matSuffix [for]="datepickerDateOfExpire"> </mat-datepicker-toggle>
+            }
+            <mat-datepicker
+              #datepickerDateOfExpire
+              (monthSelected)="setMonthAndYear($event, datepickerDateOfExpire)"
+              [startView]="getExpireDatePickerView()"
+            >
+            </mat-datepicker>
+          </mat-form-field>
+          <div class="error-message">
+            @if (isFieldEmpty('dateExpire')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (controlHasError('dateExpire', 'expireBeforeStart')) {
+              <span>
+                {{ 'reissueCertificatesExpireDateBeforeIssueDateErrorMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

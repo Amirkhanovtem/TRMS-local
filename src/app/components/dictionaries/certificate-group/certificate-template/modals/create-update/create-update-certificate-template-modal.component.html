@@ -1,0 +1,384 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('certificateTemplateModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('certificateTemplateModalPageViewTitle' | transloco)
+            : ('certificateTemplateModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateTemplateNameColTable' | transloco"
+              [(ngModel)]="certificateTemplate.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateTemplateCodeColTable' | transloco"
+              [(ngModel)]="certificateTemplate.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'certificateTemplateDescriptionColTable' | transloco"
+              [(ngModel)]="certificateTemplate.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   DURATION TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateDurationSettingsDurationType' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'certificateDurationSettingsDurationType' | transloco"
+              [value]="certificateTemplate.certificateDurationSettings.durationType"
+              [compareWith]="compareWithFn"
+              formControlName="durationType"
+            >
+              @for (certificateDurationType of allCertificateDurationTypes; track certificateDurationType) {
+                <mat-option
+                  [value]="certificateDurationType"
+                  (click)="changeDurationType(certificateDurationType)"
+                  [disabled]="dialogParams?.isView"
+                >
+                  {{ certificateDurationType[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('durationType')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   EXPIRE THROUGH   -->
+        @if (showExpireThroughField()) {
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'certificateTemplateExpireThroughColTable' | transloco }}
+            </p>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                type="text"
+                min="1"
+                (focusout)="expireThroughChangeHandler()"
+                [placeholder]="'certificateTemplateExpireThroughColTable' | transloco"
+                [(ngModel)]="certificateTemplate.certificateDurationSettings.expireThrough"
+                formControlName="expireThrough"
+                appAllowNumbersOnlyDirective
+                [readonly]="dialogParams?.isView"
+              />
+            </mat-form-field>
+            <div class="error-message">
+              @if (isFieldEmpty('expireThrough')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+              @if (isFieldLessThenZero('expireThrough')) {
+                <span>
+                  {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+        <!--   BASE MONTH PERIOD   -->
+        @if (showBaseMonthPeriodField()) {
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'certificateDurationSettingsBaseMonthPeriod' | transloco }}
+            </p>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                type="text"
+                min="1"
+                [placeholder]="'certificateDurationSettingsBaseMonthPeriod' | transloco"
+                [(ngModel)]="certificateTemplate.certificateDurationSettings.baseMonthPeriod"
+                formControlName="baseMonthPeriod"
+                appAllowNumbersOnlyDirective
+                [readonly]="dialogParams?.isView"
+              />
+            </mat-form-field>
+            <div class="error-message">
+              @if (isFieldEmpty('baseMonthPeriod')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+              @if (isFieldLessThenZero('baseMonthPeriod')) {
+                <span>
+                  {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+                </span>
+              }
+              @if (controlHasError('baseMonthPeriod', 'baseMonthMoreThenDuration')) {
+                <span>
+                  {{ 'certificateDurationSettingsBaseMonthPeriodMoreThenDuration' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+        <!--   CERTAIN PERIOD DELTA   -->
+        @if (showDayCountField()) {
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'certificateDurationSettingsDayCount' | transloco }}
+            </p>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                type="number"
+                [placeholder]="'certificateDurationSettingsDayCount' | transloco"
+                [(ngModel)]="certificateTemplate.certificateDurationSettings.certainPeriodDelta"
+                formControlName="certainPeriodDelta"
+                [readonly]="dialogParams?.isView"
+              />
+            </mat-form-field>
+            <div class="error-message">
+              @if (isFieldEmpty('certainPeriodDelta')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+              @if (isFieldOutOfTheRange('certainPeriodDelta')) {
+                <span>
+                  {{ fieldOutOfTheRangeErrorMessage(-28, 28) }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+        <!--   TEMPLATE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateTemplateColTable' | transloco }}
+          </p>
+
+          <app-common-input-file
+            #fileInput
+            [isView]="dialogParams?.isView"
+            [model]="certificateTemplate"
+            [allowedFormats]="getAllowedFileFormats()"
+          ></app-common-input-file>
+
+          <div class="error-message">
+            @if (fileInput.invalidFileFormat) {
+              <span>
+                {{ 'validatorsInvalidWordFileFormat' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   PREFIX CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplatePrefixCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'certificateTemplatePrefixCodeColTable' | transloco"
+              [(ngModel)]="certificateTemplate.prefixCode"
+              formControlName="prefixCode"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('prefixCode')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateTypeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'certificateTemplateTypeColTable' | transloco"
+              [(ngModel)]="certificateTemplate.type"
+              [compareWith]="compareWithFn"
+              formControlName="type"
+            >
+              @for (certificateTemplateType of allCertificateTemplateTypes; track certificateTemplateType) {
+                <mat-option [value]="certificateTemplateType" [disabled]="dialogParams?.isView">
+                  {{ certificateTemplateType[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('type')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CATEGORY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateCategoryColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'certificateTemplateCategoryColTable' | transloco"
+              [value]="certificateTemplate.trainingCategory?.name"
+              [readonly]="true"
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   TRAINING TEMPLATE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateTrainingTemplateColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'certificateTemplateTrainingTemplateColTable' | transloco"
+              [value]="certificateTemplate.trainingTemplate?.name"
+              [readonly]="true"
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   CERTIFICATE TEMPLATE GROUPS   -->
+        @if (this.dialogParams?.isUpdate || this.dialogParams?.isView) {
+          <div class="modal-input-field expansion">
+            <mat-accordion class="accordion">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="mat-expansion-bold-title">
+                    {{ 'certificateTemplateCertificateTemplateGroupsColTable' | transloco }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-certificate-template-group-child-table></app-certificate-template-group-child-table>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        }
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div class="modal-space-between-btns-container">
+      <div>
+        @if (dialogParams?.isView || dialogParams?.isUpdate) {
+          <button mat-raised-button class="secondaryBtn" (click)="openFileHistoricalModal()">
+            {{ 'certificateTemplateHistoryFileBtn' | transloco }}
+          </button>
+        }
+      </div>
+      <div>
+        @if (!dialogParams?.isView) {
+          <button mat-raised-button color="primary" (click)="createOrSaveCertificateTemplate()">
+            {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+          </button>
+        }
+        <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+          {{ 'closeBtn' | transloco }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</app-common-modal>

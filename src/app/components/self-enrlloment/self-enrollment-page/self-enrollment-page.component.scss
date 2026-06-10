@@ -1,0 +1,81 @@
+::ng-deep .table-container {
+  overflow: visible !important;
+
+  button {
+    box-shadow: none !important;
+  }
+}
+
+.self-enrollment-content-container {
+  margin-inline: auto;
+  display: flex;
+  gap: 20px;
+  max-width: 1850px;
+  min-width: 1200px;
+
+  .events-container {
+    overflow: auto;
+    padding-right: 10px;
+    margin-top: 25px;
+    flex-grow: 1;
+  }
+
+  .mobile-navigation {
+    display: none;
+  }
+
+  &.mobile-view {
+    min-width: unset;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+
+    .mobile-navigation {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      .nav-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin-left: 8px;
+      }
+    }
+
+    .filter-container {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+
+      &.hidden-mobile {
+        display: none;
+      }
+    }
+
+    .events-container {
+      width: 100%;
+      padding: 12px;
+      margin-top: 0;
+      box-sizing: border-box;
+      overflow: hidden auto;
+
+      &.hidden-mobile {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (width <= 768px) {
+  .self-enrollment-content-container {
+    min-width: unset;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}

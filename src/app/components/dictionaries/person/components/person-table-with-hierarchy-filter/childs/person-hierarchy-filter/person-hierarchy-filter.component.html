@@ -1,0 +1,68 @@
+<div class="person-hierarchy-filter-container">
+  <div class="top">
+    <div class="search-container">
+      <input
+        #search
+        matInput
+        type="text"
+        class="search"
+        (keyup.enter)="applySearch(search.value)"
+        [placeholder]="'searchTable' | transloco"
+      />
+      <button matIconButton (click)="applySearch(search.value)">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+    @if (prevFolder()) {
+      <div class="back" (click)="back()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+        <span>{{ 'back_to_target' | transloco: { target: prevFolder().name } }}</span>
+      </div>
+    } @else {
+      <span class="empty-prev">{{ 'select_folder' | transloco }}</span>
+    }
+    <mat-divider></mat-divider>
+  </div>
+
+  <div class="middle">
+    <mat-action-list>
+      <div class="opened-folder" mat-subheader>
+        <mat-icon>folder_open</mat-icon>
+        <span class="folder-name">{{ currentFolder().name }}</span>
+      </div>
+      @for (folder of currentFolder().children; track $index) {
+        <mat-list-item
+          class="closed-folder"
+          [matTooltip]="folder.name"
+          [matTooltipShowDelay]="2000"
+          (click)="open(folder)"
+        >
+          <mat-icon matListItemIcon>folder</mat-icon>
+          <div matListItemTitle>{{ folder.name }}</div>
+
+          @if (folder.children?.length > 0) {
+            <div matListItemMeta>
+              <mat-icon>keyboard_arrow_right</mat-icon>
+            </div>
+          }
+        </mat-list-item>
+      } @empty {
+        <div class="empty-folder-placeholder">
+          <mat-icon>grid_off</mat-icon>
+          <span class="text">{{ 'subfolders_is_empty' | transloco }}</span>
+        </div>
+      }
+    </mat-action-list>
+  </div>
+
+  <div class="bottom">
+    <mat-divider></mat-divider>
+    <div class="show-subordinates">
+      <mat-slide-toggle [checked]="showSubordinates()" (change)="onShowSubordinateChange($event.checked)">
+        <span>
+          {{ 'show_all_subordinate' | transloco }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+  </div>
+</div>

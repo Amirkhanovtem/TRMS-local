@@ -1,0 +1,123 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('resultExamEditExamResultModalTitle' | transloco)
+          : dialogParams?.isView
+            ? ('resultExamViewExamResultModalTitle' | transloco)
+            : ('resultExamAddExamResultModalTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   EXAM NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'resultExamExamNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'resultExamExamNameColTable' | transloco"
+              [(ngModel)]="examAttempt.participantTrainingCardExam.exam.name"
+              formControlName="examName"
+              [readonly]="true"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('examName')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   ATTEMPT NUMBER   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'resultExamAttemptNumberColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'resultExamAttemptNumberColTable' | transloco"
+              [(ngModel)]="examAttempt.attemptNumber"
+              formControlName="attemptNumber"
+              [readonly]="true"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('attemptNumber')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isMaxAttemptNumberError()) {
+              <span>
+                {{ 'resultExamAddExamResultValidatorErrorMaxAttemptNumber' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   SCORE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'resultExamResultColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              type="number"
+              min="0"
+              appAllowNumbersOnlyDirective
+              [placeholder]="'resultExamResultColTable' | transloco"
+              [(ngModel)]="examAttempt.score"
+              formControlName="score"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('score')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isScoreGreaterThanMax()) {
+              <span>
+                {{ 'resultExamScoreGreaterThanMaxErrorMessage' | transloco: { maxScore: examAttempt.maxScore } }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveExamAttempt()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modalComponent.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

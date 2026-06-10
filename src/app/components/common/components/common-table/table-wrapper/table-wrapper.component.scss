@@ -1,0 +1,140 @@
+@use '/src/assets/styles/global-vars' as gv;
+
+$trms-drag-cell-header-transform: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+.table-wrapper-component-container {
+  height: 100%;
+}
+
+.table-top-bar {
+  display: flex;
+  justify-content: flex-end;
+  background-color: gv.$trms-green-500;
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.table-top-bar-el {
+  margin-inline: 10px;
+  margin-block: 5px;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    color: #a9a5a5;
+  }
+
+  .clear-all-filters-count {
+    position: absolute;
+    font-size: 12px;
+  }
+}
+
+.table-wrapper-col {
+  max-width: 210px;
+  white-space: nowrap;
+
+  div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.table-wrapper-select-col {
+  width: 0;
+}
+
+.mdc-data-table__row {
+  &:not(.mdc-data-table__row--selected) {
+    &:hover {
+      background-color: whitesmoke;
+    }
+  }
+}
+
+.table-wrapper-filter-btn {
+  margin-left: 10px;
+  cursor: pointer;
+  visibility: hidden;
+
+  &:hover {
+    color: #a9a5a5;
+  }
+}
+
+.header-title {
+  &:hover {
+    .table-wrapper-filter-btn {
+      visibility: visible !important;
+    }
+  }
+}
+
+.table-wrapper-container {
+  overflow: auto;
+  max-height: 59vh;
+}
+
+.table-wrapper-header-title-container {
+  text-align: center;
+}
+
+.cdk-drag-preview {
+  background-color: gv.$trms-green-500 !important;
+  border: 1px solid white;
+  box-sizing: border-box;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 40px;
+  top: -5px !important;
+  box-shadow:
+    0 5px 5px -3px rgb(0 0 0 / 20%),
+    0 8px 10px 1px rgb(0 0 0 / 14%),
+    0 3px 14px 2px rgb(0 0 0 / 12%);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.5;
+  background: gv.$trms-green-900 !important;
+  transition: $trms-drag-cell-header-transform;
+}
+
+.cdk-drag-animating {
+  transition: $trms-drag-cell-header-transform;
+}
+
+table {
+  &.cdk-drop-list-dragging {
+    th {
+      &:not(.cdk-drag-placeholder) {
+        transition: $trms-drag-cell-header-transform;
+      }
+    }
+  }
+}
+
+.table-wrapper-table {
+  width: max-content;
+}
+
+.header-title-end-btns-container {
+  display: flex;
+  width: 34px;
+  height: 34px;
+
+  .table-plugin-container {
+    display: flex;
+    align-items: center;
+
+    .filter-order-count {
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      font-size: 12px;
+    }
+  }
+}

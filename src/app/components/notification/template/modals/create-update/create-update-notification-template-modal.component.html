@@ -1,0 +1,90 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('notificationUpdateModalTitle' | transloco)
+          : dialogParams?.isView
+            ? ('notificationViewModalTitle' | transloco)
+            : ('notificationCreateModalTitle' | transloco)
+      }}
+      {{
+        dialogParams?.targetName
+          ? ' ' + ('notificationCreateModalForTargetTitle' | transloco) + ' "' + dialogParams?.targetName + '"'
+          : ''
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <mat-stepper class="modal-top-fixed-stepper" #matStepper linear>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{ 'notificationCreateModalMainSettingsStep' | transloco }}
+          </ng-template>
+          <app-notification-template-general-settings-step
+            [parent]="this"
+          ></app-notification-template-general-settings-step>
+        </mat-step>
+        <mat-step [stepControl]="getValidator('trigger')">
+          <ng-template matStepLabel>
+            {{ 'notificationTemplateTriggerStepLabel' | transloco }}
+          </ng-template>
+          <app-notification-template-target-object-step [parent]="this"></app-notification-template-target-object-step>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{ 'notificationCreateModalTimeStep' | transloco }}
+          </ng-template>
+          <app-notification-template-time-step [parent]="this"></app-notification-template-time-step>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{ 'notificationCreateModalTargetAudienceStep' | transloco }}
+          </ng-template>
+          <app-notification-template-target-audience-step
+            #targetAudienceStep
+            [parent]="this"
+          ></app-notification-template-target-audience-step>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{ 'notificationCreateModalEditorStep' | transloco }}
+          </ng-template>
+          <app-notification-template-editor-step #editorStep [parent]="this"></app-notification-template-editor-step>
+        </mat-step>
+      </mat-stepper>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (isLastStep()) {
+        <button mat-raised-button class="secondaryBtn" (click)="openAttachmentsModal()">
+          {{ 'attachmentsBtn' | transloco }}
+        </button>
+      }
+      @if (!dialogParams?.isView && isLastStep()) {
+        <button mat-raised-button class="secondaryBtn" (click)="createUpdate(true)">
+          {{ 'saveAsDraftBtn' | transloco }}
+        </button>
+      }
+      @if (matStepper.selectedIndex !== 0) {
+        <button mat-raised-button (click)="matStepper.previous()" color="warn">
+          {{ 'backBtn' | transloco }}
+        </button>
+      }
+      @if (!dialogParams?.isView && isLastStep()) {
+        <button mat-raised-button color="primary" (click)="createUpdate(false)">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      @if (!isLastStep()) {
+        <button mat-raised-button (click)="matStepper.next()" color="primary">
+          {{ 'continueBtn' | transloco }}
+        </button>
+      }
+    </div>
+  </ng-container>
+</app-common-modal>

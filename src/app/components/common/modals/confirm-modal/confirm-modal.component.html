@@ -1,0 +1,22 @@
+<app-common-modal #modal [width]="'30vw'" [height]="'20vh'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ dialogParams.title ? dialogParams.title : defaultConfirmTitle }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <p [innerHTML]="dialogParams.message | safeHtml"></p>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button (click)="confirm()" color="primary">
+        {{ dialogParams.confirmBtnTitle ? dialogParams.confirmBtnTitle : defaultConfirmBtnTitle }}
+      </button>
+      <button mat-raised-button (click)="cancel()" color="warn">
+        {{ dialogParams.cancelBtnTitle ? dialogParams.cancelBtnTitle : defaultCancelBtnTitle }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

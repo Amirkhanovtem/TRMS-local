@@ -1,0 +1,23 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="tableId"
+  [displayedColumns]="displayedColumns"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-container table-buttons>
+    <button
+      mat-raised-button
+      [ngClass]="!table?.isOneRowSelected() ? '' : 'secondaryBtn'"
+      [disabled]="!table?.isOneRowSelected()"
+      (click)="showAttachments()"
+    >
+      {{ 'attachmentsBtn' | transloco }}
+    </button>
+  </ng-container>
+
+  <ng-template tableWrapperColumn="body" let-sentNotification="row">
+    <div class="icon-col-btns-container">
+      <mat-icon class="row-btns view" (click)="openBodyViewModal($event, sentNotification.body)">email</mat-icon>
+    </div>
+  </ng-template>
+</app-table-wrapper>

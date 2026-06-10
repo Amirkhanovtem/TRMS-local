@@ -1,0 +1,19 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'resourceUnavailabilityPeriodPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'resourceUnavailabilityPeriodTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [checkShowCrudBtnFunc]="getMapCheckCrudBtnShowFuncMap()"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="unavailabilityResourcesPeriodService"
+      (loadData)="loadUnavailabilityResourcePeriods()"
+    >
+    </app-crud-btns>
+  </ng-container>
+</app-table-wrapper>

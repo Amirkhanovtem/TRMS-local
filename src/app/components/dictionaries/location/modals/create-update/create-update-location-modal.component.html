@@ -1,0 +1,134 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('locationModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('locationModalPageViewTitle' | transloco)
+            : ('locationModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'locationNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'locationNameColTable' | transloco"
+              [(ngModel)]="location.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'locationDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'locationDescriptionColTable' | transloco"
+              [(ngModel)]="location.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   ADDRESS   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'locationAddressColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'locationAddressColTable' | transloco"
+              [(ngModel)]="location.address"
+              formControlName="address"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('address')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CITY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'locationCityColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'locationCityColTable' | transloco"
+              [value]="location?.city?.[localEnumField]"
+              [attr.disabled]="dialogParams?.isView"
+              formControlName="city"
+            >
+              @for (city of cities; track city) {
+                <mat-option [value]="city[localEnumField]" (click)="location.city = city">
+                  {{ city[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('city')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveLocation()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

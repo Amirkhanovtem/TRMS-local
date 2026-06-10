@@ -1,0 +1,63 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'addPersonModalPageTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-person-table-with-hierarchy-filter>
+      <app-table-wrapper
+        table
+        #tableWrapper
+        [tableId]="'personSelectionModalTable'"
+        [displayedColumns]="displayedColumns"
+        [tableContainerClass]="'mat-elevation-z8 modal-table'"
+        [tableColTemplateList]="tableColTemplateList"
+        [tableColHeaderTemplateList]="tableColHeaderTemplateList"
+      >
+        <ng-container table-buttons>
+          <button mat-raised-button class="secondaryBtn" (click)="openSelectPersonsByPersonalNumber()">
+            {{ 'addPersonModalAddPersonsByPersonalNumberBtn' | transloco }}
+          </button>
+        </ng-container>
+
+        <ng-template tableWrapperColumnHeader="position">
+          <div class="table-header-with-mat-select-container">
+            <span>{{ tableWrapper.getColTitleByColDef('position') }}</span>
+
+            <mat-icon class="table-header-mat-select-trigger-icon" (click)="openPositionList($event)"
+              >playlist_add_check</mat-icon
+            >
+
+            <div class="table-header-mat-select-container">
+              <mat-form-field>
+                <mat-select multiple #selectByPositionMatSelect>
+                  @for (positionName of getUniquePositionsList(); track positionName) {
+                    <mat-option
+                      [value]="positionName"
+                      (onSelectionChange)="selectUnselectByPosition($event, positionName)"
+                    >
+                      {{ positionName }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </ng-template>
+      </app-table-wrapper>
+    </app-person-table-with-hierarchy-filter>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="closeModal()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="primary" (click)="checkSelectedPersons()">
+        {{ 'saveBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

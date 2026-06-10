@@ -1,0 +1,27 @@
+<div class="file-attached-container">
+  @if (!isView) {
+    <div class="file-attached-container-btns" (click)="fileInput.click()">
+      <mat-icon>attach_file</mat-icon>
+      <span>{{ 'attachFileBtn' | transloco }}</span>
+    </div>
+  }
+  <div class="file-attached-load-progress-container">
+    @if (fileLoadInProcess) {
+      <mat-progress-bar mode="indeterminate" class="file-attached-mat-process-bar"></mat-progress-bar>
+    }
+    <mat-icon [style.color]="model.fileStorage?.name ? 'green' : 'red'" class="file-attached-loaded">
+      insert_drive_file
+    </mat-icon>
+    @if (model.fileStorage?.name) {
+      <div class="attached-file-name-container">
+        <span class="attached-file-name" [title]="model.fileStorage?.name" (click)="loadAttachedFile()">
+          {{ model.fileStorage?.name }}
+        </span>
+        @if (!isView) {
+          <mat-icon class="file-attached-clear" (click)="removeFile()"> highlight_off </mat-icon>
+        }
+      </div>
+    }
+  </div>
+</div>
+<input hidden (change)="onFileSelected()" #fileInput type="file" id="file" [accept]="allowedFormats" />

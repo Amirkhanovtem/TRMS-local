@@ -1,0 +1,13 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'completedTrainingsPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'completeTrainingsTable'"
+  [displayedColumns]="displayedColumns"
+  (rowDbClickFunc)="openEditEventModal($event)"
+>
+</app-table-wrapper>

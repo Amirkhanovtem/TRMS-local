@@ -1,0 +1,40 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ dialogParams.title }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'attachmentInfoTable'"
+      [displayedColumns]="displayedColumns"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+      [tableColTemplateList]="tableColTemplateList"
+    >
+      <ng-template tableWrapperColumn="actions" let-attachment="row">
+        <div class="row-with-action-btns-container">
+          <mat-icon class="row-btns edit" (click)="loadAttachedFile(attachment, $event)">save_alt</mat-icon>
+          @if (!dialogParams.isView) {
+            <mat-icon class="row-btns remove" (click)="openRemoveModal(attachment)"> clear </mat-icon>
+          }
+        </div>
+      </ng-template>
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+      @if (!dialogParams.isView) {
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+          {{ 'uploadAttachmentsBtn' | transloco }}
+          <input hidden (change)="onFileSelected()" multiple #fileInput type="file" id="file" />
+        </button>
+      }
+    </div>
+  </ng-container>
+</app-common-modal>

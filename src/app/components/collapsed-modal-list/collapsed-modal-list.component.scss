@@ -1,0 +1,13 @@
+.collapsed-modals-btn-container {
+  position: absolute;
+  right: 1vw;
+  bottom: 2vh;
+}
+
+.collapsed-modals-btn {
+  ::ng-deep span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

@@ -1,0 +1,25 @@
+@use 'src/assets/styles/global-vars.scss' as gv;
+
+// vars
+
+// template selectors
+
+// selectors
+* {
+  scrollbar-width: auto;
+  scrollbar-color: gv.$trms-green-500 gv.$trms-white-500;
+
+  &::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: gv.$trms-white-500;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: gv.$trms-green-500;
+    border-radius: 10px;
+    border: 4px solid gv.$trms-white-500;
+  }
+}

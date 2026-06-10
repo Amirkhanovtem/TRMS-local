@@ -1,0 +1,189 @@
+<div class="training-cards-container">
+  <!-- Filters Section -->
+  @if (hasTrainingsLoaded) {
+    <div class="filters-section">
+      <div class="filters-row">
+        <!-- Status Filter -->
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'personTrainingTableFilterByStatus' | transloco }}</mat-label>
+          <mat-select [(value)]="statusFilter" (selectionChange)="onStatusFilterChange()">
+            <mat-option value="all">{{ 'personTrainingTableFilterAll' | transloco }}</mat-option>
+            <mat-option value="COMPLETED">{{ 'personTrainingTableFilterCompleted' | transloco }}</mat-option>
+            <mat-option value="IN_PROGRESS">{{ 'personTrainingTableFilterInProgress' | transloco }}</mat-option>
+            <mat-option value="PLANNED">{{ 'personTrainingTableFilterPlanned' | transloco }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Training Name Filter -->
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'personTrainingTableFilterByTraining' | transloco }}</mat-label>
+          <mat-select [(value)]="trainingNameFilter" (selectionChange)="onTrainingNameFilterChange()">
+            <mat-option value="">{{ 'personTrainingTableFilterAllTrainings' | transloco }}</mat-option>
+            @for (name of availableTrainingNames; track name) {
+              <mat-option [value]="name">{{ name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Certificate Filter -->
+        <mat-checkbox class="certificate-filter" [(ngModel)]="certificateFilter" (change)="onCertificateFilterChange()">
+          {{ 'personTrainingTableFilterWithCertificate' | transloco }}
+        </mat-checkbox>
+      </div>
+    </div>
+  }
+
+  <!-- Loading state -->
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!isLoading && trainings.length === 0) {
+    <div class="empty-state">
+      <mat-icon>school</mat-icon>
+      <p>{{ 'personTrainingTableEmptyMessage' | transloco }}</p>
+    </div>
+  }
+
+  <!-- No results state -->
+  @if (hasTrainingsLoaded && filteredTrainings.length === 0) {
+    <div class="empty-state">
+      <mat-icon>filter_list_off</mat-icon>
+      <p>{{ 'personTrainingTableNoFilterResults' | transloco }}</p>
+    </div>
+  }
+
+  <!-- Grouped Training cards -->
+  @if (!isLoading && filteredTrainings.length > 0) {
+    <div class="years-container">
+      @for (year of getYears(); track year) {
+        <div class="year-group">
+          <div class="year-header" (click)="toggleYear(year)">
+            <mat-icon class="expand-icon">{{ isYearCollapsed(year) ? 'expand_more' : 'expand_less' }}</mat-icon>
+            <h3 class="year-title">{{ year }}</h3>
+            <span class="year-count"
+              >({{ groupedTrainings.get(year).length }} {{ 'personTrainingTableEvents' | transloco }})</span
+            >
+          </div>
+
+          @if (!isYearCollapsed(year)) {
+            <div class="training-cards-grid">
+              @for (training of groupedTrainings.get(year); track training.participantTrainingCardId) {
+                <div
+                  class="training-card"
+                  [class.has-certificate]="training.certificate"
+                  [class.status-completed]="training.trainingFactualStatus?.id === 'COMPLETED'"
+                  [class.status-in-progress]="training.trainingFactualStatus?.id === 'IN_PROGRESS'"
+                  [class.status-planned]="training.trainingFactualStatus?.id === 'PLANNED'"
+                >
+                  <!-- Card Header -->
+                  <div class="card-header">
+                    <mat-icon class="training-icon">school</mat-icon>
+                    <h3 class="training-name">{{ training.trainingTemplateName }}</h3>
+                  </div>
+
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <!-- Dates and modules section -->
+                    <div class="info-section">
+                      <div class="info-item">
+                        <mat-icon>date_range</mat-icon>
+                        <span
+                          >{{ training.startDateTraining | date: 'dd.MM.yyyy' }} -
+                          {{ training.endDateTraining | date: 'dd.MM.yyyy' }}</span
+                        >
+                      </div>
+                      @if (training.modules) {
+                        <div class="info-item">
+                          <mat-icon>view_module</mat-icon>
+                          <span>{{ 'personTrainingTableModulesCol' | transloco }}: {{ training.modules }}</span>
+                        </div>
+                      }
+                    </div>
+
+                    <!-- Status section -->
+                    <div class="status-section">
+                      <div class="status-item">
+                        <span class="status-label"
+                          >{{ 'personTrainingTableTrainingFactualStatusCol' | transloco }}:</span
+                        >
+                        <span
+                          class="status-value"
+                          [class.status-badge]="true"
+                          [class.status-completed]="training.trainingFactualStatus?.id === 'COMPLETED'"
+                          [class.status-in-progress]="training.trainingFactualStatus?.id === 'IN_PROGRESS'"
+                          [class.status-planned]="training.trainingFactualStatus?.id === 'PLANNED'"
+                        >
+                          {{ training.trainingFactualStatus?.[localEnumField] }}
+                        </span>
+                      </div>
+                      <div class="status-item">
+                        <span class="status-label"
+                          >{{ 'personTrainingTableTrainingAttendanceStatusCol' | transloco }}:</span
+                        >
+                        <span class="status-value">{{ training.attendanceStatus?.[localEnumField] }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Certificate section -->
+                  <div class="card-footer" [class.has-certificate]="training.certificate">
+                    @if (training.certificate) {
+                      <div class="certificate-section">
+                        <div class="certificate-header">
+                          <mat-icon>workspace_premium</mat-icon>
+                          <span class="certificate-title">{{ 'personTrainingTableCertificateTitle' | transloco }}</span>
+                        </div>
+                        <div class="certificate-info">
+                          @if (training.expireDateCertificate) {
+                            <div class="certificate-detail">
+                              <span class="detail-label"
+                                >{{ 'personTrainingTableCertificateExpiresDateCol' | transloco }}:</span
+                              >
+                              <span class="detail-value">{{
+                                training.expireDateCertificate | date: 'dd.MM.yyyy'
+                              }}</span>
+                            </div>
+                          }
+                          @if (training.certificateStatus) {
+                            <div class="certificate-detail">
+                              <span class="detail-label"
+                                >{{ 'personTrainingTableCertificateStatusCol' | transloco }}:</span
+                              >
+                              <span
+                                class="detail-value"
+                                [class.cert-active]="training.certificateStatus?.id === 'ACTIVE'"
+                                [class.cert-expired]="training.certificateStatus?.id === 'EXPIRED'"
+                                [class.cert-expiring]="training.certificateStatus?.id === 'EXPIRING'"
+                              >
+                                {{ training.certificateStatus?.[localEnumField] }}
+                              </span>
+                            </div>
+                          }
+                        </div>
+                        <div class="certificate-actions">
+                          <app-certificate-issue-download-view-btns
+                            [participantTrainingCardId]="training.participantTrainingCardId"
+                          >
+                          </app-certificate-issue-download-view-btns>
+                        </div>
+                      </div>
+                    } @else {
+                      <div class="no-certificate">
+                        <mat-icon>cancel</mat-icon>
+                        <span>{{ 'personTrainingTableNoCertificate' | transloco }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,49 @@
+::ng-deep mat-datepicker-content {
+  border-radius: 10px !important;
+
+  .mat-calendar {
+    height: auto !important;
+
+    mat-month-view {
+      .mat-calendar-table-header {
+        &-divider {
+          display: none;
+        }
+
+        span {
+          font-size: 14px;
+          font-weight: 400;
+          color: #b5bec6;
+        }
+      }
+
+      .mat-calendar-body-cell-content {
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .mat-calendar-body-label {
+        visibility: hidden;
+      }
+
+      .mat-calendar-body-label[colspan='7'] {
+        display: none;
+      }
+    }
+  }
+
+  .mat-calendar-controls {
+    margin: 0;
+
+    .mat-calendar-period-button {
+      padding: 0;
+
+      .mdc-button__label {
+        letter-spacing: 0.5px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #757575;
+      }
+    }
+  }
+}

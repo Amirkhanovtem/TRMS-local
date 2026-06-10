@@ -1,0 +1,14 @@
+<div class="person-table-with-hierarchy-filter-container">
+  <mat-drawer-container class="drawer-container" autosize>
+    <mat-drawer #drawer class="drawer" mode="side" opened>
+      <app-person-hierarchy-filter (folderSelectEvent)="onFolderSelectEvent($event)"></app-person-hierarchy-filter>
+    </mat-drawer>
+
+    <div class="table-container" [class.drawed]="drawer.opened">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>{{ drawer.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
+      </button>
+      <ng-content select="[table]"></ng-content>
+    </div>
+  </mat-drawer-container>
+</div>

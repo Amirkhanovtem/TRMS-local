@@ -1,0 +1,4 @@
+export enum NotificationTemplateTriggerTargetTypeEnum {
+  SYLLABUS_TEMPLATE = 'SYLLABUS_TEMPLATE',
+  TRAINING_CATEGORY_AS_TRAINING = 'TRAINING_CATEGORY_AS_TRAINING',
+}

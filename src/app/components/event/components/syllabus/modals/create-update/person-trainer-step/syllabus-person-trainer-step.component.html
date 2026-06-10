@@ -1,0 +1,68 @@
+<div class="input-fields-container">
+  <!--   MAIN TRAINERS   -->
+  <div class="modal-info-field">
+    <div class="mat-chip-container">
+      <span class="mat-expansion-bold-title">
+        {{ 'syllabusCreatingSelectedMainTrainers' | transloco }}
+      </span>
+      <mat-chip-listbox aria-label="Selected main trainers" class="selected-items-mat-chip">
+        @for (mainTrainer of getAllUniqueMainTrainers(); track mainTrainer) {
+          <mat-chip (click)="openTrainerViewModal($event, mainTrainer)">
+            {{ mainTrainer.person | personFioPipe }}
+          </mat-chip>
+        }
+      </mat-chip-listbox>
+    </div>
+  </div>
+
+  <!--   LINEAR TRAINERS   -->
+  <div class="modal-info-field">
+    <div class="mat-chip-container">
+      <span class="mat-expansion-bold-title">
+        {{ 'syllabusCreatingSelectedLinearTrainers' | transloco }}
+      </span>
+      <mat-chip-listbox aria-label="Selected linear trainers" class="selected-items-mat-chip">
+        @for (linearTrainer of getAllUniqueLinearTrainers(); track linearTrainer) {
+          <mat-chip (click)="openTrainerViewModal($event, linearTrainer)">
+            {{ linearTrainer.person | personFioPipe }}
+          </mat-chip>
+        }
+      </mat-chip-listbox>
+    </div>
+  </div>
+
+  <div class="modal-input-field">
+    <mat-accordion class="accordion" multi>
+      <!--   PERSON   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'syllabusPersonsListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-person-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventSyllabusPersonTable'"
+          [modules]="collectAllModules()"
+        >
+        </app-creating-event-person-table>
+      </mat-expansion-panel>
+
+      <!--   TRAINING   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'syllabusTrainingsListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-syllabus-training-table
+          [isUpdatingSyllabus]="parent.dialogParams.isUpdate"
+          [isView]="parent.dialogParams?.isView"
+          (updateChildComponentsTable)="parent.updateChildComponentsTable()"
+          [syllabus]="this.parent.syllabus"
+        >
+        </app-syllabus-training-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

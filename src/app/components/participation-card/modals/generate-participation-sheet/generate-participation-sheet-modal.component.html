@@ -1,0 +1,42 @@
+<app-common-modal #modal [width]="'25vw'" [height]="'30vh'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'generateParticipationSheetModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="input-fields-container">
+      <div class="modal-input-field">
+        <!--   FORMAT SELECT  -->
+        <p class="modal-input-field-title">
+          {{ 'generateParticipationSheetModalFormatSelect' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <mat-select
+            [value]="selectedFormats?.[localEnumField]"
+            [placeholder]="'generateParticipationSheetModalFormatSelect' | transloco"
+          >
+            @for (format of allParticipationSheetList; track format) {
+              <mat-option [value]="format[localEnumField]" (click)="selectedFormats = format">
+                {{ format[localEnumField] }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="primary" (click)="downLoadParticipationSheet()">
+        {{ 'participationCardLoadParticipationSheetBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

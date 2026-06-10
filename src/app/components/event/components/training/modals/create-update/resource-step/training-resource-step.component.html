@@ -1,0 +1,176 @@
+<div class="input-fields-container">
+  <div class="duration-author-container">
+    <!--   DURATION   -->
+    <div class="modal-info-field">
+      <p>
+        <span class="mat-expansion-bold-title">
+          {{ 'trainingCreatingDurationMessage' | transloco }}
+        </span>
+        <span> {{ calcTrainingDuration() }} {{ 'hours' | transloco }} </span>
+      </p>
+    </div>
+
+    <!--   AUTHOR   -->
+    @if (checkShowAuthor()) {
+      <div class="modal-info-field">
+        <p>
+          <span class="mat-expansion-bold-title">
+            {{ 'trainingCreatingAuthorMessage' | transloco }}
+          </span>
+          <span>
+            {{ this.parent.training?.['author'] }}
+          </span>
+        </p>
+      </div>
+    }
+  </div>
+
+  <!--   NAME   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'trainingNameColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        required
+        [placeholder]="'trainingNameColTable' | transloco"
+        [(ngModel)]="parent.training.name"
+        [formControl]="nameControl"
+        [readonly]="parent.dialogParams?.isView"
+      />
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('name')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   TRAINING TEMPLATE NAME   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'trainingTrainingTemplateNameColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [placeholder]="'trainingTrainingTemplateNameColTable' | transloco"
+        [value]="parent.training.trainingTemplate.name"
+        [readonly]="true"
+      />
+    </mat-form-field>
+
+    <div class="error-message"></div>
+  </div>
+
+  <!--   SESSION CODE   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'trainingSessionCodeColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [placeholder]="'trainingSessionCodeColTable' | transloco"
+        [value]="parent.training.sessionCode"
+        [readonly]="true"
+      />
+    </mat-form-field>
+
+    <div class="error-message"></div>
+  </div>
+
+  <!--   DESCRIPTION   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'trainingDescriptionColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [placeholder]="'trainingDescriptionColTable' | transloco"
+        [(ngModel)]="parent.training.description"
+        [ngModelOptions]="{ standalone: true }"
+        [readonly]="parent.dialogParams?.isView"
+      />
+    </mat-form-field>
+  </div>
+
+  <!--   GROUP   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'trainingGroupColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [placeholder]="'trainingGroupColTable' | transloco"
+        [(ngModel)]="parent.training.group"
+        [ngModelOptions]="{ standalone: true }"
+        [readonly]="parent.dialogParams?.isView"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="modal-input-field">
+    <mat-accordion class="accordion" multi>
+      <!--   ROOMS   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'syllabusRoomsColTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-room-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventTrainingRoomTable'"
+          [modules]="parent.training.trainingModules"
+          (updateEquipmentsBySelectedRooms)="selectedEquipmentsTable.updateEquipmentsBySelectedRooms()"
+          (removeEquipmentsByRoom)="selectedEquipmentsTable.removeEquipmentsByRoom($event)"
+          [isModuleForm]="false"
+        >
+        </app-creating-event-room-table>
+      </mat-expansion-panel>
+
+      <!--   EQUIPMENTS   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'trainingEquipmentsListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-equipment-table
+          #selectedEquipmentsTable
+          [tableId]="'creatingEventTrainingEquipmentTable'"
+          [isView]="parent.dialogParams?.isView"
+          [modules]="parent.training.trainingModules"
+        >
+        </app-creating-event-equipment-table>
+      </mat-expansion-panel>
+
+      <!--   MODULE   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'trainingModulesListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-training-module-table
+          (updateChildComponentsTable)="parent.updateChildComponentsTable()"
+          [training]="parent.training"
+          [isView]="parent.dialogParams?.isView"
+          [allModulesInEvent]="parent.collectAllModulesInEvent()"
+        ></app-training-module-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

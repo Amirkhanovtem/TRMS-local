@@ -1,0 +1,31 @@
+<div class="tag-resource-linker-container">
+  <div class="title-container">
+    <span class="page-title">
+      {{ 'tagResourceLinkerPage.title' | transloco }}
+    </span>
+  </div>
+
+  <div class="cards-container">
+    <app-selection-card
+      [titleKey]="'tagResourceLinkerPage.categoryCardTitle'"
+      [data]="tagsViewData()"
+      [getVisualFunc]="getTagVisualFunc"
+      [selectedItem]="selectedTag()"
+      (selectionEvent)="onTagSelection($event)"
+    />
+    <app-selection-card
+      [titleKey]="'tagResourceLinkerPage.resourceTypeCardTitle'"
+      [data]="resourceTypesViewData()"
+      [getVisualFunc]="getResourceTypeVisualFunc"
+      [selectedItem]="selectedResourceType()"
+      (selectionEvent)="onResourceTypeSelection($event)"
+    />
+    <app-selection-card
+      [titleKey]="'tagResourceLinkerPage.resourceCardTitle'"
+      [interactionMode]="'toggle-select'"
+      [data]="resourcesViewData()"
+      [getVisualFunc]="getResourceVisualFunc"
+      (actionEvent)="onResourceAction($event)"
+    />
+  </div>
+</div>

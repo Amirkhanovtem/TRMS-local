@@ -1,0 +1,122 @@
+<app-common-modal #modal [width]="'25vw'" [height]="'60vh'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'ganttRangeViewSelectModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="input-fields-container">
+      <div class="modal-input-field">
+        <!--   RANGE SELECT  -->
+        <p class="modal-input-field-title">
+          {{ 'ganttRangeSelect' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <mat-select [value]="selectedGanttRange" [placeholder]="'ganttRangeSelect' | transloco">
+            @for (ganttRange of ganttRanges; track ganttRange) {
+              <mat-option [value]="ganttRange.valueOf()" (click)="ganttRangeChanged(ganttRange)">
+                {{ rangeLocalMessagePrefix + ganttRange.valueOf() | transloco }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!--   VIEW SELECT   -->
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'ganttViewSelect' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <mat-select [value]="selectedGanttView" [placeholder]="'ganttViewSelect' | transloco">
+            @for (ganttView of ganttViews; track ganttView) {
+              <mat-option [value]="ganttView.valueOf()" (click)="ganttViewChanged(ganttView)">
+                {{ viewLocalMessagePrefix + ganttView.valueOf() | transloco }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div [formGroup]="modalForm">
+        <!--   SINGLE DATE START DATE SELECT   -->
+        @if (!isDateRange()) {
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'ganttRangeSelectStartDate' | transloco }}
+            </p>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                formControlName="startDate"
+                (dateChange)="startDateChanged($event)"
+                [matDatepicker]="datepickerEmploymentDate"
+                [placeholder]="'DD.MM.YYYY'"
+              />
+              <mat-datepicker-toggle matSuffix [for]="datepickerEmploymentDate"></mat-datepicker-toggle>
+              <mat-datepicker #datepickerEmploymentDate></mat-datepicker>
+            </mat-form-field>
+            <div class="error-message">
+              @if (isInvalidDate()) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+
+        <!--   RANGE DATE SELECT   -->
+        @if (isDateRange()) {
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'ganttRangeSelectRangeDate' | transloco }}
+            </p>
+            <mat-form-field appearance="outline">
+              <mat-date-range-input [rangePicker]="picker">
+                <input
+                  matStartDate
+                  required
+                  formControlName="startDate"
+                  (dateChange)="startDateChanged($event)"
+                  placeholder="DD.MM.YYYY"
+                />
+                <input
+                  matEndDate
+                  required
+                  formControlName="endDate"
+                  (dateChange)="endDateChanged($event)"
+                  placeholder="DD.MM.YYYY"
+                />
+              </mat-date-range-input>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+            <div class="error-message">
+              @if (isInvalidDate()) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="primary" (click)="confirm()">
+        {{ 'confirmBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

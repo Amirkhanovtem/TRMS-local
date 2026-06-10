@@ -1,0 +1,33 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ dialogParams.modalTitle }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="tree-selection-modal">
+      <app-common-tree
+        [loadDataObs]="dialogParams.loadTreeDataObs"
+        [isSelectableTree]="true"
+        [selectedNodesId]="dialogParams.selectedNodesId"
+        [treeSelectionType]="dialogParams.treeSelectionType"
+        [isView]="dialogParams.isView"
+      >
+      </app-common-tree>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+      @if (!dialogParams.isView) {
+        <button mat-raised-button color="primary" (click)="save()">
+          {{ 'saveBtn' | transloco }}
+        </button>
+      }
+    </div>
+  </ng-container>
+</app-common-modal>

@@ -1,0 +1,55 @@
+@use '/src/assets/styles/global-vars' as gv;
+
+.file-attached-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.file-attached-container-btns {
+  color: gv.$trms-green-500;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.file-attached-load-progress-container {
+  display: flex;
+  align-items: center;
+}
+
+.file-attached-mat-process-bar {
+  width: 30px;
+}
+
+.file-attached-loaded {
+  color: gv.$trms-white-500;
+}
+
+.file-attached-clear {
+  color: gv.$trms-red;
+  margin-left: 16px;
+  cursor: pointer;
+}
+
+.attached-file-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 400px;
+  cursor: pointer;
+
+  &:hover {
+    color: gv.$trms-green-900;
+    text-decoration: underline;
+  }
+}
+
+.attached-file-name-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+.attached-file-icon {
+  color: gv.$trms-green-500;
+  cursor: pointer;
+}

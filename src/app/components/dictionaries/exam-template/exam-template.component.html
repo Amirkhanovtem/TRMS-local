@@ -1,0 +1,19 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'examTemplatePageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'examTemplateDictionaryTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [checkShowCrudBtnFunc]="getMapCheckCrudBtnShowFuncMap()"
+      [service]="examTemplateService"
+      (loadData)="loadExamTemplates()"
+    >
+    </app-crud-btns>
+  </ng-container>
+</app-table-wrapper>

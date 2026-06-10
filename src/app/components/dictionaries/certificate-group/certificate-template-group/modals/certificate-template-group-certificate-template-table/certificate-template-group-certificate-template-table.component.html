@@ -1,0 +1,29 @@
+@if (!isView) {
+  <div class="btns-container">
+    <a (click)="openCertificateTemplateSelectionModal()" class="link-btn">
+      {{ 'certificateTemplateSelectionModalPageTitle' | transloco }}
+    </a>
+  </div>
+}
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'certificateTemplateGroupCertificateTemplateTable'"
+  [displayedColumns]="displayedColumns"
+  [tableContainerClass]="'expansion-table'"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="actions" let-certificateTemplate="row">
+    <div class="row-with-action-btns-container">
+      <mat-icon class="row-btns view" (click)="openCertificateTemplateViewModal(certificateTemplate)"
+        >visibility</mat-icon
+      >
+      @if (!isView) {
+        <mat-icon class="row-btns remove" (click)="removeCertificateTemplateTemplateFromList(certificateTemplate)"
+          >clear</mat-icon
+        >
+      }
+    </div>
+  </ng-template>
+</app-table-wrapper>

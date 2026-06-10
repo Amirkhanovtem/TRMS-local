@@ -1,0 +1,49 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'certificateIssuePageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'certificateIssueTable'"
+  [tableColTemplateList]="tableColTemplateList"
+  [displayedColumns]="displayedColumns"
+>
+  <ng-container table-buttons>
+    <button
+      mat-raised-button
+      [ngClass]="table?.isOneRowSelected() ? 'secondaryBtn' : ''"
+      [disabled]="!table?.isOneRowSelected()"
+      (click)="openFileHistoricalModal()"
+    >
+      {{ 'certificateTemplateHistoryFileBtn' | transloco }}
+    </button>
+    <button
+      mat-raised-button
+      [disabled]="isEditOrViewDisabled()"
+      openUpdateCertificateDirective
+      [certificateId]="tableWrapper?.getSingleSelectedRow()?.id"
+    >
+      {{ 'editBtn' | transloco }}
+    </button>
+    <button
+      mat-raised-button
+      [disabled]="isEditOrViewDisabled()"
+      openUpdateCertificateDirective
+      [isView]="true"
+      [certificateId]="tableWrapper?.getSingleSelectedRow()?.id"
+    >
+      {{ 'viewBtn' | transloco }}
+    </button>
+  </ng-container>
+
+  <ng-template tableWrapperColumn="certificateActivityStatusByExpireDate" let-certificateIssue="row">
+    <span
+      class="certificate-activity-status-by-expire-date"
+      [ngClass]="certificateIssue.certificateActivityStatusByExpireDate.id"
+    >
+      {{ certificateIssue.certificateActivityStatusByExpireDate[this.localization.getLocalFieldEnumName()] }}
+    </span>
+  </ng-template>
+</app-table-wrapper>

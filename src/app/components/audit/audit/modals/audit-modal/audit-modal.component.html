@@ -1,0 +1,26 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'auditModalTittle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'auditModalTable'"
+      [displayedColumns]="displayedColumns"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+      (rowDbClickFunc)="openAuditInfoModal($event)"
+    >
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

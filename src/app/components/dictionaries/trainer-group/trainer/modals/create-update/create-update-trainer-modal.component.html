@@ -1,0 +1,313 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('trainerModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('trainerModalPageViewTitle' | transloco)
+            : ('trainerModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   PERSON   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainerPersonColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              [placeholder]="'trainerPersonColTable' | transloco"
+              [value]="trainer?.person?.fullName"
+              (openedChange)="cdkVirtualScrollViewport.checkViewportSize()"
+              formControlName="person"
+            >
+              <div class="person-select-search-container">
+                <app-search
+                  #personSearch
+                  (keydown.space)="$event.stopPropagation()"
+                  [searchStyleClass]="'creating-event-modal-search-input'"
+                >
+                </app-search>
+              </div>
+
+              <mat-option
+                [disabled]="dialogParams?.isView"
+                [value]="trainer?.person?.fullName ? trainer?.person?.fullName : undefined"
+                class="cdk-mat-select-selected-option"
+              >
+                {{ trainer?.person?.fullName }}
+              </mat-option>
+
+              <cdk-virtual-scroll-viewport
+                itemSize="25"
+                #cdkVirtualScrollViewport
+                [ngStyle]="{ 'height.px': allPersonsUnattachedTrainer.length * 48 }"
+              >
+                <mat-option
+                  [disabled]="dialogParams?.isView"
+                  *cdkVirtualFor="let person of getAllFilteredPersons()"
+                  [value]="person.fullName"
+                  (click)="loadPersonDetail(person.id)"
+                >
+                  {{ person.fullName }}
+                </mat-option>
+              </cdk-virtual-scroll-viewport>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldNotUnique('person')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   FULL NAME RU   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personFullNameRuColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personFullNameRuColTable' | transloco"
+              [(ngModel)]="trainer.person.fullNameRu"
+              formControlName="fullNameRu"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   FULL NAME EN   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personFullNameEnColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'personFullNameEnColTable' | transloco"
+              [(ngModel)]="trainer.person.fullNameEn"
+              formControlName="fullNameEn"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   EMAIL   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personEmailColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personEmailColTable' | transloco"
+              [(ngModel)]="trainer.person.email"
+              formControlName="email"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('email')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldInvalidEmail('email')) {
+              <span>
+                {{ 'validatorsEmailMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   POSITION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personPositionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personPositionColTable' | transloco"
+              [(ngModel)]="trainer.person.position"
+              [compareWith]="compareWithFn"
+              formControlName="position"
+            >
+              @for (position of positions; track position) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="position">
+                  {{ position?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('position')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CITY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personCityColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'personCityColTable' | transloco"
+              [(ngModel)]="trainer.person.city"
+              [compareWith]="compareWithFn"
+              formControlName="city"
+            >
+              @for (city of cities; track city) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="city">
+                  {{ city?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('city')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   PERSONAL NUMBER   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'personPersonalNumberColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'personPersonalNumberColTable' | transloco"
+              [(ngModel)]="trainer.person.personalNumber"
+              formControlName="personalNumber"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('personalNumber')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('personalNumber')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <br />
+
+        <!--   SUBDIVISION   -->
+        <div class="modal-input-field">
+          <div class="btns-container">
+            <a (click)="openSelectionSubdivision()" class="link-btn">
+              {{ 'addSubdivisionBtn' | transloco }}
+            </a>
+          </div>
+        </div>
+
+        <!--   TRAINER CATEGORY   -->
+        <div class="modal-input-field">
+          <div class="btns-container">
+            <a (click)="openSelectionTrainerCategory()" class="link-btn">
+              {{ 'addTrainerCategoryBtn' | transloco }}
+            </a>
+          </div>
+        </div>
+
+        <!--   MAIN TRAINING CATEGORY   -->
+        <div class="modal-input-field">
+          <div class="btns-container">
+            <a (click)="openSelectionMainTrainingCategoryAndTemplate()" class="link-btn">
+              {{ 'addMainTrainingCategoryBtn' | transloco }}
+            </a>
+          </div>
+        </div>
+
+        <!--   LINEAR TRAINING CATEGORY   -->
+        <div class="modal-input-field">
+          <div class="btns-container">
+            <a (click)="openSelectionLinearTrainingCategoryAndTemplate()" class="link-btn">
+              {{ 'addLinearTrainingCategoryBtn' | transloco }}
+            </a>
+          </div>
+        </div>
+
+        <!--   TRAINING TABLE   -->
+        @if (dialogParams?.isUpdate || dialogParams?.isView) {
+          <div class="modal-input-field expansion">
+            <mat-accordion class="accordion">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="mat-expansion-bold-title">
+                    {{ 'trainerModalTrainingTable' | transloco }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-trainer-training-table [trainerId]="dialogParams?.model?.id"></app-trainer-training-table>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        }
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div class="trainer-btn-container">
+      <div>
+        @if (dialogParams?.isView || dialogParams?.isUpdate) {
+          <button mat-raised-button class="secondaryBtn" (click)="openFullProfile()">
+            {{ 'profileModalOpenFullInfoBtn' | transloco }}
+          </button>
+        }
+      </div>
+      <div>
+        @if (!dialogParams?.isView) {
+          <button mat-raised-button color="primary" (click)="createOrSaveTrainer()">
+            {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+          </button>
+        }
+        <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+          {{ 'closeBtn' | transloco }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</app-common-modal>

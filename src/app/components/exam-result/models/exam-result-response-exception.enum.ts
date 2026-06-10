@@ -1,0 +1,3 @@
+export enum ExamResultResponseExceptionEnum {
+  MAX_ATTEMPT_CHECK_EXCEPTION_CONTENT = 'MAX_ATTEMPT_CHECK_EXCEPTION_CONTENT',
+}

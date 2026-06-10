@@ -1,0 +1,51 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'creatingEventModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="event-modal-tree-selection-container">
+      <p>
+        {{ 'creatingEventModalChoseTitle' | transloco }}
+      </p>
+
+      <div class="tree-selection-modal">
+        <app-common-tree
+          #treeSelection
+          [loadDataObs]="trainingCategoryService.listWithTrainingTemplatesActive()"
+          [isSelectableTree]="true"
+          [filterFunc]="treeFilterFunc"
+          [treeSelectionType]="treeSelectionType"
+        >
+          <ng-container tree-btns>
+            <div class="event-modal-tree-selection-top-bar-container">
+              <div>
+                <mat-button-toggle-group [(ngModel)]="selectedToggleBtn" (change)="changeToggleHandler($event)">
+                  <mat-button-toggle value="training">
+                    {{ 'navBarBtnTraining' | transloco }}
+                  </mat-button-toggle>
+                  <mat-button-toggle value="syllabus">
+                    {{ 'navBarBtnSyllabus' | transloco }}
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+            </div>
+          </ng-container>
+        </app-common-tree>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="primary" [disabled]="checkContinueBtnDisabled()" (click)="continueCreating()">
+        {{ 'continueBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

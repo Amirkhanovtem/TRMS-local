@@ -1,0 +1,74 @@
+mat-toolbar {
+  height: 88px;
+  width: 100%;
+  padding-inline: 2.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.logo-container {
+  height: 44px;
+  width: 180px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.arrow-logo {
+  background: url('../../../assets/images/logo-arrow.png');
+  height: 44px;
+  width: 36px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.name-logo {
+  background: url('../../../assets/images/logo-name.png');
+  height: 25px;
+  width: 134px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 5px;
+}
+
+.navigation-menu-button {
+  color: #5d5a88;
+}
+
+button[mat-menu-item] {
+  min-width: 260px;
+}
+
+button[mat-menu-item] mat-icon {
+  color: #5d5a88;
+}
+
+.active-link {
+  color: #b9966e;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  mat-toolbar {
+    height: 64px;
+    padding: 12px;
+  }
+
+  .logo-container {
+    height: 36px;
+    width: 150px;
+  }
+
+  .arrow-logo {
+    height: 36px;
+    width: 30px;
+  }
+
+  .name-logo {
+    height: 20px;
+    width: 110px;
+  }
+}

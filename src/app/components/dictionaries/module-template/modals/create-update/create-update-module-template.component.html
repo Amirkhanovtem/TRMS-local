@@ -1,0 +1,298 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('moduleTemplateModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('moduleTemplateModalPageViewTitle' | transloco)
+            : ('moduleTemplateModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'moduleTemplateNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'moduleTemplateNameColTable' | transloco"
+              [(ngModel)]="moduleTemplate.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'moduleTemplateDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'moduleTemplateDescriptionColTable' | transloco"
+              [(ngModel)]="moduleTemplate.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+        </div>
+
+        <!--   FORMAT INPUT   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateFormatColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'trainingTemplateFormatColTable' | transloco"
+              [(ngModel)]="moduleTemplate.format"
+              [compareWith]="compareWithFn"
+              formControlName="format"
+            >
+              @for (format of allTrainingTemplateFormats; track format) {
+                <mat-option [value]="format" [disabled]="dialogParams?.isView">
+                  {{ format?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('format')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DURATION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'moduleTemplateDurationColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="text"
+              [placeholder]="'moduleTemplateDurationColTable' | transloco"
+              [(ngModel)]="moduleTemplate.duration"
+              formControlName="duration"
+              min="0.5"
+              required
+              appAllowOnlyNumberStepHalfPointDirective
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('duration')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldLessThenZero('duration')) {
+              <span> {{ 'validatorsMinimumNumberMessageTemplate' | transloco }} 0.5 </span>
+            }
+
+            @if (isDurationLongerThenWorkDay()) {
+              <span>
+                {{ 'moduleTemplateModalPageDurationLongerThenWorkDayMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   MIN BREAK TIME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'moduleTemplateMinBreakTimeColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="text"
+              [placeholder]="'moduleTemplateMinBreakTimeColTable' | transloco"
+              [(ngModel)]="moduleTemplate.breakAfterModuleMin"
+              formControlName="minBreakTime"
+              required
+              min="0"
+              appAllowNumbersOnlyDirective
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('minBreakTime')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldLessThenZero('minBreakTime')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isInvalidBreakTimeMinMaxValidator()) {
+              <span>
+                {{ 'moduleTemplateModalPageInvalidCompareBreakTimeMinMaxMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   MAX BREAK TIME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'moduleTemplateMaxBreakTimeColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="text"
+              [placeholder]="'moduleTemplateMaxBreakTimeColTable' | transloco"
+              [(ngModel)]="moduleTemplate.breakAfterModuleMax"
+              formControlName="maxBreakTime"
+              required
+              min="0"
+              appAllowNumbersOnlyDirective
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('maxBreakTime')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldLessThenZero('maxBreakTime')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isInvalidBreakTimeMinMaxValidator()) {
+              <span>
+                {{ 'moduleTemplateModalPageInvalidCompareBreakTimeMinMaxMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   BREAK TIME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'moduleTemplateBreakTimeColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="text"
+              [placeholder]="'moduleTemplateBreakTimeColTable' | transloco"
+              [(ngModel)]="moduleTemplate.breakTime"
+              formControlName="breakTime"
+              required
+              min="0"
+              appAllowNumbersOnlyDirective
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('breakTime')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldLessThenZero('breakTime')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isInvalidBreakTimeInMinMaxRangeValidator()) {
+              <span>
+                {{ 'moduleTemplateModalPageInvalidBreakTimeInMinMaxRangeMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   MINIMAL TRAINERS COUNT   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'moduleTemplateMinTrainersCountColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="text"
+              [placeholder]="'moduleTemplateMinTrainersCountColTable' | transloco"
+              [(ngModel)]="moduleTemplate.minimalTrainersCount"
+              formControlName="minimalTrainersCount"
+              required
+              min="0"
+              appAllowNumbersOnlyDirective
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('minimalTrainersCount')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldLessThenZero('minimalTrainersCount')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveModuleTemplate()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modalComponent.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

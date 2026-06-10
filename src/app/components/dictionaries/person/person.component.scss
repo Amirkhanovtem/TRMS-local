@@ -1,0 +1,7 @@
+::ng-deep {
+  app-person-table-with-hierarchy-filter {
+    .person-table-with-hierarchy-filter-container {
+      height: calc(100vh - 270px) !important;
+    }
+  }
+}

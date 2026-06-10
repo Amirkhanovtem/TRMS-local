@@ -1,0 +1,32 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'aimsIntegrationInfoPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'aimsIntegrationInfoTable'"
+  [displayedColumns]="displayedColumns"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-container table-buttons>
+    <button mat-raised-button color="primary" (click)="startIntegration()">
+      {{ 'aimsIntegrationInfoStartIntegrationBtn' | transloco }}
+    </button>
+  </ng-container>
+
+  <ng-template tableWrapperColumn="detailInfo" let-aimsIntegrationInfo="row">
+    <mat-icon class="row-btns view" (click)="openAimsIntegrationInfoDetail(aimsIntegrationInfo.id)"
+      >visibility</mat-icon
+    >
+  </ng-template>
+
+  <ng-template tableWrapperColumn="file" let-aimsIntegrationInfo="row">
+    @if (aimsIntegrationInfo?.fileStorage?.id) {
+      <mat-icon class="attached-file-icon" (click)="loadAttachedFile(aimsIntegrationInfo?.fileStorage, $event)">
+        attach_file
+      </mat-icon>
+    }
+  </ng-template>
+</app-table-wrapper>

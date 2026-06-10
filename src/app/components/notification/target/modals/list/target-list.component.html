@@ -1,0 +1,46 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'eventNotificationTemplatesTargetListTittle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="modal-table-search-input-container">
+      <app-search (applySearch)="applySearch()"></app-search>
+    </div>
+
+    <div class="input-fields-container">
+      <mat-selection-list>
+        @for (target of targetDataSource; track target) {
+          <div>
+            <mat-list-item
+              class="target-item"
+              [ngClass]="target.isSended ? 'notification-sent' : ''"
+              (click)="openEvenNotificationTableModal(target)"
+            >
+              <div class="row-with-action-btns">
+                <span>
+                  {{ target.name }}
+                </span>
+                <div class="row-with-action-btns-container">
+                  <mat-icon [ngClass]="target.isSended ? 'check-icon' : ''">
+                    {{ target.isSended ? 'email' : 'send' }}
+                  </mat-icon>
+                </div>
+              </div>
+            </mat-list-item>
+          </div>
+        }
+      </mat-selection-list>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

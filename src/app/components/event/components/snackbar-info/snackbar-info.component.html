@@ -1,0 +1,31 @@
+<div>
+  <button type="button" class="toast-close-button" (click)="remove()">
+    <span>×</span>
+  </button>
+  <div>
+    @if (title) {
+      <div [class]="options.titleClass">
+        {{ title }}
+      </div>
+    }
+    @if (message) {
+      <div [class]="options.messageClass" [innerHTML]="options.enableHtml ? message : null"></div>
+    }
+  </div>
+
+  <hr />
+
+  <div class="snack-bar-info-btn-container">
+    @if (options.closeButton) {
+      <a (click)="detail()">
+        {{ self.localization.getLocalTextFromKey('detailBtn') }}
+      </a>
+    }
+  </div>
+</div>
+
+@if (options.progressBar) {
+  <div>
+    <div class="toast-progress" [style.width]="width + '%'"></div>
+  </div>
+}

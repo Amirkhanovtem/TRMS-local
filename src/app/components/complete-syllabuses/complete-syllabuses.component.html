@@ -1,0 +1,26 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'completedSyllabusesPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'completeSyllabusesTable'"
+  [displayedColumns]="displayedColumns"
+  [tableColTemplateList]="tableColTemplateList"
+  (rowDbClickFunc)="openEditEventModal($event)"
+>
+  <ng-template tableWrapperColumn="factualStatus" let-completeSyllabus="row">
+    <mat-select [value]="completeSyllabus.factualStatus?.[localEnumField]" (click)="$event.stopPropagation()">
+      @for (factualStatus of allFactualStatuses; track factualStatus) {
+        <mat-option
+          [value]="factualStatus[localEnumField]"
+          (click)="saveFactualStatus(completeSyllabus, factualStatus)"
+        >
+          {{ factualStatus[localEnumField] }}
+        </mat-option>
+      }
+    </mat-select>
+  </ng-template>
+</app-table-wrapper>

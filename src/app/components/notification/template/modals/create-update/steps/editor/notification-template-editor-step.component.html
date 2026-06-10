@@ -1,0 +1,61 @@
+<div class="input-fields-container">
+  <!--   FROM   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'notificationFromColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        required
+        [placeholder]="'notificationFromColTable' | transloco"
+        [(ngModel)]="parent.notificationTemplate.from"
+        [formControl]="fromNameControl"
+        [readonly]="parent.dialogParams?.isView"
+      />
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('fromName')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   EMAIL SUBJECT   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'notificationMailSubjectColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        required
+        [placeholder]="'notificationMailSubjectColTable' | transloco"
+        [(ngModel)]="parent.notificationTemplate.subject"
+        [formControl]="emailSubjectControl"
+        [readonly]="parent.dialogParams?.isView"
+      />
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('emailSubject')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   TEXT   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ ('notificationEditorTextColTable' | transloco) + ':' }}
+    </p>
+    <jodit-editor [defaultValue]="parent.notificationTemplate.body"></jodit-editor>
+  </div>
+</div>

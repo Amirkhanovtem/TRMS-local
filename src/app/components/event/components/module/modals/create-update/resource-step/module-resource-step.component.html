@@ -1,0 +1,192 @@
+<div class="input-fields-container">
+  <!--   NAME   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'moduleNameColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        required
+        [placeholder]="'moduleNameColTable' | transloco"
+        [(ngModel)]="parent.module.name"
+        [formControl]="nameControl"
+        [readonly]="parent.dialogParams?.isView"
+      />
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('name')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   DESCRIPTION   -->
+  <div class="modal-input-field">
+    <p class="modal-input-field-title">
+      {{ 'moduleDescriptionColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <input
+        matInput
+        [placeholder]="'moduleDescriptionColTable' | transloco"
+        [(ngModel)]="parent.module.description"
+        [ngModelOptions]="{ standalone: true }"
+        [readonly]="parent.dialogParams?.isView"
+      />
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('description')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   DATE TIME   -->
+  <div class="modal-input-field">
+    <div class="multi-input-fields-container">
+      <!--   DATE   -->
+      <div>
+        <p class="modal-input-field-title">
+          {{ 'moduleDateColTable' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            required
+            [readonly]="parent.dialogParams?.isView"
+            [matDatepicker]="datepickerDate"
+            [value]="getDate(parent.module.startDate)"
+            [formControl]="dateControl"
+            [placeholder]="'moduleDateColTable' | transloco"
+            (dateChange)="changeDates($event)"
+          />
+
+          @if (!parent.dialogParams?.isView) {
+            <mat-datepicker-toggle matSuffix [for]="datepickerDate"></mat-datepicker-toggle>
+          }
+          <mat-datepicker [dateClass]="dateClass" #datepickerDate></mat-datepicker>
+        </mat-form-field>
+
+        <div class="error-message">
+          @if (parent.isFieldEmpty('date')) {
+            <span>
+              {{ 'validatorsEmptyFieldMessage' | transloco }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <!--   START TIME   -->
+      <div>
+        <p class="modal-input-field-title">
+          {{ 'moduleStartTimeColTable' | transloco }}
+        </p>
+
+        <app-time-picker
+          [hour]="getStartHour()"
+          [minute]="getStartMinute()"
+          [disabled]="parent.dialogParams?.isView"
+          [invalid]="isInvalidTimeRange()"
+          [formControl]="timeStartControl"
+          (hourChange)="changeStartHour($event)"
+          (minuteChange)="changeStartMinute($event)"
+        ></app-time-picker>
+
+        <div class="error-message">
+          @if (parent.isFieldEmpty('timeStart')) {
+            <span>
+              {{ 'validatorsEmptyFieldMessage' | transloco }}
+            </span>
+          }
+        </div>
+      </div>
+
+      <!--   END TIME   -->
+      <div>
+        <p class="modal-input-field-title">
+          {{ 'moduleEndTimeColTable' | transloco }}
+        </p>
+
+        <app-time-picker
+          [hour]="getEndHour()"
+          [minute]="getEndMinute()"
+          [disabled]="parent.dialogParams?.isView"
+          [invalid]="isInvalidTimeRange()"
+          [formControl]="timeEndControl"
+          (hourChange)="changeEndHour($event)"
+          (minuteChange)="changeEndMinute($event)"
+        ></app-time-picker>
+
+        <div class="error-message">
+          @if (parent.isFieldEmpty('timeEnd')) {
+            <span>
+              {{ 'validatorsEmptyFieldMessage' | transloco }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="error-message">
+      @if (isInvalidTimeRange()) {
+        <div>
+          {{ 'moduleModalInvalidTimeRangeMessage' | transloco }}
+        </div>
+      }
+      @if (isInvalidOverlapTimeRangeWithOtherModules()) {
+        <div>
+          {{ 'moduleModalInvalidOverlapTimeRangeWithOtherModulesErrorMessage' | transloco }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="modal-input-field">
+    <mat-accordion class="accordion" multi>
+      <!--   ROOMS   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'syllabusRoomsColTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-room-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventModuleRoomTable'"
+          [modules]="[parent.module]"
+          [isModuleForm]="true"
+          (updateEquipmentsBySelectedRooms)="selectedEquipmentsTable.updateEquipmentsBySelectedRooms()"
+          (removeEquipmentsByRoom)="selectedEquipmentsTable.removeEquipmentsByRoom($event)"
+          (changeModuleTimeByRoomsTime)="changeModuleTimeByRoomsTime()"
+        >
+        </app-creating-event-room-table>
+      </mat-expansion-panel>
+
+      <!--   EQUIPMENTS   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'moduleEquipmentListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-equipment-table
+          #selectedEquipmentsTable
+          [tableId]="'creatingEventModuleEquipmentTable'"
+          [isView]="parent.dialogParams?.isView"
+          [modules]="[parent.module]"
+        >
+        </app-creating-event-equipment-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

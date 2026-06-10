@@ -1,0 +1,97 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.person-hierarchy-filter-container {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  min-height: 0;
+  gap: 16px;
+  flex-grow: 1;
+
+  mat-icon {
+    min-width: 24px;
+  }
+
+  .top {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .search-container {
+      display: flex;
+      gap: 5px;
+      width: 100%;
+      flex-direction: row;
+
+      .search {
+        border: 1px solid #dadada;
+        padding: 8px 15px;
+        border-radius: 8px;
+        background: #dbdbdb1f;
+        flex-grow: 1;
+      }
+    }
+
+    .back {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      cursor: pointer;
+      gap: 8px;
+      height: 24px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .empty-prev {
+      height: 24px;
+      opacity: 0.4;
+    }
+  }
+
+  .middle {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .bottom {
+    flex: 0 0 auto;
+    margin-top: auto;
+
+    .show-subordinates {
+      padding: 12px 12px 0 12px;
+    }
+  }
+
+  .opened-folder {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: flex-start;
+
+    .folder-name {
+      font-weight: bold;
+    }
+  }
+
+  .closed-folder {
+    padding-left: 16px;
+  }
+
+  .empty-folder-placeholder {
+    display: flex;
+    flex-direction: column;
+    opacity: 0.5;
+    min-height: 150px;
+    justify-content: center;
+    align-items: center;
+  }
+}

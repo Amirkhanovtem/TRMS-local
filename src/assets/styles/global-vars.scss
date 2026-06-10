@@ -1,0 +1,59 @@
+/* For use in src/lib/core/theming/_palette.scss */
+@use 'sass:map';
+
+$trms-green: (
+  50: #e0ecea,
+  100: #b3d0cb,
+  200: #80b1a8,
+  300: #4d9185,
+  400: #267a6b,
+  500: #006251,
+  600: #005a4a,
+  700: #005040,
+  800: #004637,
+  900: #003427,
+  A100: #6cffcf,
+  A200: #39ffbf,
+  A400: #06ffae,
+  A700: #00eb9f,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #000,
+    A400: #000,
+    A700: #000,
+  ),
+);
+$trms-white: (
+  100: #cbd2e0,
+  200: #cbd2e0,
+  300: #f5f5f5,
+  400: #f5f5f6,
+  500: #fff,
+  700: #fff,
+  contrast: (
+    200: #000,
+    300: #32384a,
+    400: #000,
+    500: #5d5a88,
+  ),
+);
+$trms-white-100: map.get($trms-white, 100);
+$trms-white-500: map.get($trms-white, 500);
+$trms-green-500: map.get($trms-green, 500);
+$trms-green-900: map.get($trms-green, 900);
+$trms-blue: #32384a;
+$trms-gray: #666;
+$trms-smoky-white: #ccc;
+$trms-yellow: #b9966e;
+$trms-red: #8d2323;
+$trms-font-family: gilroy, proximanova, daxwebpro, daxscwebpro, 'Helvetica Neue', helvetica, sans-serif;

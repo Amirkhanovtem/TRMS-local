@@ -1,0 +1,180 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ getPageTitle() }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'participationCardTable'"
+      [displayedColumns]="displayedColumns"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+      [tableColTemplateList]="tableColTemplateList"
+      [tableColHeaderTemplateList]="tableColHeaderTemplateList"
+    >
+      <ng-container table-buttons>
+        <mat-form-field appearance="outline" class="factual-status-select">
+          <mat-select
+            required
+            [placeholder]="'participationCardModalFactualStatusPageTitle' | transloco"
+            [value]="factualStatus?.[localEnumField]"
+          >
+            @for (newFactualStatus of allFactualStatus; track newFactualStatus) {
+              <mat-option [value]="newFactualStatus[localEnumField]" (click)="factualStatus = newFactualStatus">
+                {{ newFactualStatus[localEnumField] }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="factual-status-select">
+          <mat-select
+            required
+            [matTooltipShowDelay]="1000"
+            [matTooltip]="'participationCardModalSetAllTrainingAttendanceStatusPlaceHolder' | transloco"
+            [placeholder]="'participationCardModalSetAllTrainingAttendanceStatusPlaceHolder' | transloco"
+          >
+            @for (newAttendanceStatus of allTrainingAttendanceStatus; track newAttendanceStatus) {
+              <mat-option (click)="setAttendanceStatusSelectedPersons(newAttendanceStatus)">
+                {{ newAttendanceStatus[localEnumField] }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-template tableWrapperColumn="status" let-participationCard="row">
+        <mat-select
+          [value]="participationCard.trainingCard.attendanceStatus?.[localEnumField]"
+          (click)="$event.stopPropagation()"
+          [disabled]="isStatusDisable(participationCard)"
+        >
+          @for (trainingAttendanceStatus of allTrainingAttendanceStatus; track trainingAttendanceStatus) {
+            <mat-option
+              [value]="trainingAttendanceStatus[localEnumField]"
+              (click)="participationCard.trainingCard.attendanceStatus = trainingAttendanceStatus"
+            >
+              {{ trainingAttendanceStatus[localEnumField] }}
+            </mat-option>
+          }
+        </mat-select>
+      </ng-template>
+
+      @for (moduleCol of moduleColumns; track moduleCol) {
+        <ng-template [tableWrapperColumnHeader]="moduleCol.matColumnDef" let-participationCard="row">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="toggleAllParticipationCardsOnModule($event, moduleCol.trainingModuleId)"
+            [checked]="isAllAttended(moduleCol.trainingModuleId)"
+            [indeterminate]="isIndeterminate(moduleCol.trainingModuleId)"
+            [disabled]="isModuleDisabled(moduleCol.moduleStartDate)"
+          >
+          </mat-checkbox>
+          <span>{{ moduleCol.colTitle }}</span>
+        </ng-template>
+      }
+
+      @for (moduleCol of moduleColumns; track moduleCol) {
+        <ng-template [tableWrapperColumn]="moduleCol.matColumnDef" let-participationCard="row">
+          @if (checkParticipantCardHaveThisModule(participationCard, moduleCol.trainingModuleId)) {
+            <mat-checkbox
+              (change)="changeStatus(participationCard, moduleCol.trainingModuleId)"
+              (click)="$event.stopPropagation()"
+              [checked]="isAttended(participationCard, moduleCol.trainingModuleId)"
+              [disabled]="isModuleDisabled(moduleCol.moduleStartDate)"
+            >
+            </mat-checkbox>
+          }
+        </ng-template>
+      }
+
+      <ng-template tableWrapperColumn="exam" let-participationCard="row">
+        @if (isTrainingCompleted(participationCard)) {
+          <span (click)="openExamResultsTable(participationCard)" class="link-btn">
+            {{ getExamColValue(participationCard) }}
+          </span>
+        }
+      </ng-template>
+
+      <ng-template tableWrapperColumn="certificate" let-participationCard="row">
+        @if (showCertificateActionBtns(participationCard)) {
+          <div class="icon-col-btns-container">
+            <app-certificate-issue-download-view-btns
+              (click)="$event.stopPropagation()"
+              [participantTrainingCardId]="participationCard.trainingCard.id"
+            >
+            </app-certificate-issue-download-view-btns>
+            <mat-icon
+              class="row-btns edit"
+              openUpdateCertificateDirective
+              [certificateId]="participationCard.trainingCard.certificate.id"
+              [matTooltip]="'participationCardModalUpdateCertificateBtnTooltip' | transloco"
+            >
+              edit
+            </mat-icon>
+            <mat-icon
+              class="row-btns edit"
+              (click)="openSignedCertificatesModal($event, participationCard)"
+              [matTooltip]="'participationCardModalSignedCertificatesBtnTooltip' | transloco"
+            >
+              assignment_turned_in
+            </mat-icon>
+            <mat-icon
+              class="row-btns remove"
+              (click)="removeIssuedCertificate($event, participationCard)"
+              [matTooltip]="'participationCardModalRemoveCertificateBtnTooltip' | transloco"
+            >
+              cancel_presentation
+            </mat-icon>
+          </div>
+        }
+        @if (showEmptyCertificateTemplateError(participationCard)) {
+          <span class="error-message">
+            {{ 'emptyCertificateTemplateErrorMessage' | transloco }}
+          </span>
+        }
+      </ng-template>
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button class="secondaryBtn" (click)="openTrainingNotes()">
+        {{ 'noteBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="primary" (click)="saveParticipationCard()">
+        {{ 'confirmBtn' | transloco }}
+      </button>
+      @if (loadedData?.trainingWithCertificate) {
+        <button
+          mat-raised-button
+          [ngClass]="isCreateCertificateBtnDisabled() ? '' : 'secondaryBtn'"
+          [disabled]="isCreateCertificateBtnDisabled()"
+          (click)="generateCertificateProcess()"
+        >
+          {{ 'participationCardCreateCertificateBtn' | transloco }}
+        </button>
+      }
+      @if (loadedData?.trainingWithCertificate) {
+        <app-download-certificate-by-participant-card-ids
+          [class]="isDownLoadCertificateBtnDisabled() ? '' : 'secondaryBtn'"
+          [disable]="isDownLoadCertificateBtnDisabled()"
+          [titleLocaleKey]="'participationCardLoadCertificateBtn'"
+          [participantTrainingCardIds]="collectSelectedTrainingCardIds()"
+        >
+        </app-download-certificate-by-participant-card-ids>
+      }
+      <button mat-raised-button [ngClass]="'secondaryBtn'" (click)="openGenerateParticipationSheetModal()">
+        {{ 'participationCardLoadParticipationSheetBtn' | transloco }}
+      </button>
+      <button mat-raised-button [ngClass]="'secondaryBtn'" (click)="openAttachmentsModal()">
+        {{ 'attachmentsBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="closeModal()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

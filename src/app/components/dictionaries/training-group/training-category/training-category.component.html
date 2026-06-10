@@ -1,0 +1,16 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'trainingCategoryPageTitle' | transloco }}
+  </span>
+</div>
+
+<div class="tree-table">
+  <app-common-tree
+    [loadDataObs]="trainingCategoryService.listWithoutTrainingTemplates()"
+    [isSelectableTree]="false"
+    [mapCheckCrudBtnShowFuncMap]="getDefaultDictionariesMapCheckCrudBtnShowFuncMapForTree()"
+    [openCreateUpdateModalFunc]="openCreateUpdateModalFunc"
+    [urlService]="urlService"
+  >
+  </app-common-tree>
+</div>

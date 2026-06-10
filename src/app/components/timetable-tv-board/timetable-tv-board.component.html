@@ -1,0 +1,55 @@
+<div class="timetable-display-container">
+  <div class="timetable-display-header">
+    <div class="icon">
+      <img [src]="baseHref + 'assets/images/logo_white2.svg'" />
+    </div>
+    <div class="info">
+      <div class="info-page">
+        <mat-paginator style="visibility: hidden" [pageSize]="DEFAULT_PAGE_SIZE" />
+        <span>
+          {{ 'page' | transloco }}
+          <span class="info-bold">{{ paginator?.pageIndex + 1 }}</span>
+          {{ 'of' | transloco }}
+          <span class="info-bold">{{ paginator?.getNumberOfPages() }}</span>
+        </span>
+      </div>
+      <div class="info-time">
+        <img [src]="baseHref + 'assets/images/clock.svg'" />
+        <span class="info-bold">{{ currentDate | date: 'HH:mm' }}</span>
+      </div>
+      <div class="info-date">
+        <img [src]="baseHref + 'assets/images/calendar.svg'" />
+        <span class="info-bold">{{ currentDate | date: 'dd.MM.yyyy' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="timetable-display-content">
+    <table #table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>{{ 'timetableTvBoardTable.time' | transloco }}</th>
+        <td mat-cell *matCellDef="let displayData">
+          {{ (displayData.startDate | date: 'HH:mm') + ' – ' + (displayData.endDate | date: 'HH:mm') }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="training">
+        <th mat-header-cell *matHeaderCellDef>{{ 'timetableTvBoardTable.training' | transloco }}</th>
+        <td mat-cell *matCellDef="let displayData">{{ displayData.trainingName }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="audience">
+        <th mat-header-cell *matHeaderCellDef>{{ 'timetableTvBoardTable.room' | transloco }}</th>
+        <td mat-cell *matCellDef="let displayData">{{ displayData.rooms?.join(DEFAULT_SEPARATOR) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="trainer">
+        <th mat-header-cell *matHeaderCellDef>{{ 'timetableTvBoardTable.trainer' | transloco }}</th>
+        <td mat-cell *matCellDef="let displayData">{{ displayData.mainTrainers?.join(DEFAULT_SEPARATOR) }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="resizable-modal">
+  <div
+    class="header-container"
+    mat-dialog-title
+    cdkDrag
+    cdkDragBoundary=".cdk-overlay-container"
+    cdkDragRootElement=".cdk-overlay-pane"
+    cdkDragHandle
+  >
+    <ng-content select="[modal-header]"> </ng-content>
+
+    <div class="header-btns-container">
+      @if (!offCollapseModal) {
+        <button mat-icon-button (click)="collapseModal()">
+          <mat-icon>minimize</mat-icon>
+        </button>
+      }
+      <button mat-icon-button (click)="closeBtnAction()">
+        <mat-icon color="warn">close</mat-icon>
+      </button>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+
+  <div class="content-container" mat-dialog-content>
+    @if (loadingModal) {
+      <mat-spinner class="modal-loading-spinner"></mat-spinner>
+    } @else {
+      <ng-content select="[modal-content]"></ng-content>
+    }
+  </div>
+  <mat-divider></mat-divider>
+
+  <div class="footer-container" mat-dialog-actions>
+    @if (!loadingModal) {
+      <ng-content select="[modal-footer]"></ng-content>
+    }
+
+    <div class="resize-handler"></div>
+  </div>
+</div>

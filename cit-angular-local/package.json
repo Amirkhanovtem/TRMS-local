@@ -1,0 +1,33 @@
+{
+  "name": "cit-angular",
+  "version": "2023.1.5488",
+  "description": "CIT for JavaScript (Angular)",
+  "private": true,
+  "peerDependencies": {
+    "@angular/common": ">=12.0.0",
+    "@angular/core": ">=12.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "module": "fesm2015/cit-angular.mjs",
+  "es2020": "fesm2020/cit-angular.mjs",
+  "esm2020": "esm2020/cit-angular.mjs",
+  "fesm2020": "fesm2020/cit-angular.mjs",
+  "fesm2015": "fesm2015/cit-angular.mjs",
+  "typings": "cit-angular.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./cit-angular.d.ts",
+      "esm2020": "./esm2020/cit-angular.mjs",
+      "es2020": "./fesm2020/cit-angular.mjs",
+      "es2015": "./fesm2015/cit-angular.mjs",
+      "node": "./fesm2015/cit-angular.mjs",
+      "default": "./fesm2020/cit-angular.mjs"
+    }
+  },
+  "sideEffects": false
+}

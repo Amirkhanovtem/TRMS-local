@@ -1,0 +1,15 @@
+.time-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .time-picker-field {
+    width: 80px;
+  }
+
+  .time-separator {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 22px;
+  }
+}

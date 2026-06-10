@@ -1,0 +1,28 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "plugins": ["stylelint-scss"],
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["use", "include", "mixin", "if", "else", "for", "each", "function", "return"]
+      }
+    ],
+    "no-invalid-position-at-import-rule": null,
+    "font-family-no-missing-generic-family-keyword": null,
+    "scss/at-rule-no-unknown": null,
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["ng-deep"]
+      }
+    ],
+    "selector-class-pattern": [
+      "^[a-z]([a-z0-9-]*[a-z0-9])?$|^mdc-|^[a-z0-9]+(?:-[a-z0-9]+)*(?:__[a-z0-9]+(?:-[a-z0-9]+)*)?(?:--[a-z0-9]+(?:-[a-z0-9]+)*)?$",
+      {
+        "message": "Expected class selector to be kebab-case, BEM, or match the pattern for Angular Material classes (mdc-)."
+      }
+    ],
+    "scss/double-slash-comment-whitespace-inside": "always"
+  }
+}

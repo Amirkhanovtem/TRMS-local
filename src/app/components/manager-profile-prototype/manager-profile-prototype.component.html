@@ -1,0 +1,394 @@
+<div class="manager-profile-prototype">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <button class="brand" type="button" (click)="switchPage('self')">
+        <strong>Learning Journey</strong>
+        <span>Manager experience</span>
+      </button>
+
+      <nav class="nav" aria-label="Навигация руководителя">
+        <button type="button" [class.active]="activePage === 'self'" (click)="switchPage('self')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /><path d="M9 21v-7h6v7" /></svg>
+          Мой профиль
+        </button>
+        <button type="button" [class.active]="activePage === 'team'" (click)="switchPage('team')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-8 0v2" /><circle cx="12" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /></svg>
+          Мои сотрудники
+        </button>
+        <button type="button" [class.active]="activePage === 'requests'" (click)="switchPage('requests')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" /><path d="M8 8h8" /><path d="M8 12h8" /><path d="M8 16h5" /></svg>
+          Запросы на обучение
+        </button>
+        <button type="button" [class.active]="activePage === 'dashboards'" (click)="switchPage('dashboards')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18" /><path d="M7 15v-5" /><path d="M12 15V7" /><path d="M17 15v-9" /></svg>
+          Дэшборды
+        </button>
+        <button type="button" [class.active]="activePage === 'reports'" (click)="switchPage('reports')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z" /><path d="M14 2v6h6" /><path d="M9 13h7" /><path d="M9 17h7" /></svg>
+          Отчеты
+        </button>
+      </nav>
+
+      <button class="sidebar-profile" type="button" (click)="openModal('managerProfile', $event)">
+        <div class="avatar">ТА</div>
+        <div>
+          <strong>Темирлан Амирханов</strong>
+          <span>Supervisor Training Systems</span>
+        </div>
+      </button>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <h1>Профиль руководителя</h1>
+          <p>{{ subtitles[activePage] }}</p>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" type="button" title="Уведомления" (click)="openModal('notifications', $event)">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" /><path d="M10 21h4" /></svg>
+          </button>
+          <button class="icon-button" type="button" title="AI" (click)="openModal('aiAssistant', $event)">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M8 17 12 3l4 14" /><path d="m7 17 5 4 5-4" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="page" [class.active]="activePage === 'self'">
+        <div class="grid-4">
+          <section class="panel profile-card" (click)="openModal('managerProfile', $event)">
+            <div class="panel-pad profile-large">
+              <div class="avatar-large">ТА</div>
+              <div>
+                <h2>Темирлан Амирханов</h2>
+                <p>Supervisor Training Systems · Training Academy · Almaty</p>
+              </div>
+            </div>
+          </section>
+          <section class="panel stat" (click)="openModal('managerProfile', $event)"><small>Прямое подчинение</small><strong>4</strong><span>Training Academy</span></section>
+          <section class="panel stat" (click)="openModal('selfMatrix', $event)"><small>Матрица позиции</small><strong>68%</strong><span>Supervisor Training Systems</span></section>
+          <section class="panel stat" (click)="openModal('managerLearningPlan', $event)"><small>Осталось пройти</small><strong>4</strong><span>Manager Development Plan</span></section>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel journey-pass" (click)="openModal('managerLearningPlan', $event)">
+            <div class="panel-pad pass-content">
+              <div>
+                <small>Next learning journey</small>
+                <h2>Manager Development Plan</h2>
+              </div>
+              <div class="pass-badge">4<br />Steps</div>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Часы обучения</h2><p>План и фактическая активность.</p></div></div>
+            <div class="panel-pad hours-content">
+              <div class="ring"><strong>68%</strong></div>
+              <div>
+                <strong>До полного внедрения осталось 4 тренинга</strong>
+                <p class="muted-copy">Прогресс считается по матрице позиции и истории прохождения.</p>
+                <div class="bar-row"><span>Онлайн</span><div class="bar"><span style="width:75%"></span></div><span>18 ч</span></div>
+                <div class="bar-row"><span>Оффлайн</span><div class="bar"><span class="coral" style="width:100%"></span></div><span>24 ч</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head"><div><h2>Рекомендованные тренинги</h2><p>Источник рекомендации показан цветом.</p></div></div>
+          <div class="panel-pad grid-3">
+            <button class="recommend-card" type="button"><span class="source"></span><div><strong>Learning Experience Design</strong><span>Коллеги · 8 рекомендаций</span></div><span class="pill">Коллеги</span></button>
+            <button class="recommend-card" type="button"><span class="source position"></span><div><strong>Digital Learning Strategy</strong><span>Для позиции · обязательный трек</span></div><span class="pill blue">Позиция</span></button>
+            <button class="recommend-card" type="button"><span class="source manager"></span><div><strong>Academy Budget Planning</strong><span>Руководитель · приоритет Q3</span></div><span class="pill warn">Руководитель</span></button>
+          </div>
+        </section>
+      </section>
+
+      <section class="page" [class.active]="activePage === 'team'">
+        <div class="grid-4">
+          <section class="panel stat"><small>Прямое подчинение</small><strong>4</strong><span>Training Academy</span></section>
+          <section class="panel stat"><small>Риск просрочки</small><strong>3</strong><span>Сертификаты и обязательные курсы</span></section>
+          <section class="panel stat"><small>Средний прогресс</small><strong>74%</strong><span>Матрица позиции</span></section>
+          <section class="panel stat"><small>Зачислено менеджером</small><strong>9</strong><span>За последние 30 дней</span></section>
+        </div>
+
+        <div class="wide-layout">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Мои сотрудники</h2><p>Прямое подчинение.</p></div></div>
+            <div class="panel-pad">
+              <div class="field"><label>Поиск</label><input class="control" [(ngModel)]="employeeSearch" placeholder="ФИО, позиция, grade" /></div>
+              @for (employee of filteredEmployees; track employee.name) {
+                <button class="employee-row" type="button" [class.active]="selectedEmployee === employee" (click)="selectEmployee(employee)">
+                  <div class="row-icon">{{ employee.initials }}</div>
+                  <div><strong>{{ employee.name }}</strong><span>{{ employee.position }} · {{ employee.grade }}</span></div>
+                  <span class="pill" [class.warn]="employee.progress < 80" [class.bad]="employee.progress < 60">{{ employee.progress }}%</span>
+                </button>
+              }
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>{{ selectedEmployee.name }}</h2><p>{{ selectedEmployee.position }} · Training Academy · {{ selectedEmployee.grade }}</p></div>
+              <span class="pill" [class.warn]="selectedEmployee.progress < 80" [class.bad]="selectedEmployee.progress < 60">{{ selectedEmployee.progress }}%</span>
+            </div>
+            <div class="panel-pad">
+              <div class="detail-grid">
+                <div class="detail"><small>Position</small><strong>{{ selectedEmployee.position }}</strong></div>
+                <div class="detail"><small>Grade</small><strong>{{ selectedEmployee.grade }}</strong></div>
+                <div class="detail"><small>Hours</small><strong>{{ selectedEmployee.hours }} ч</strong></div>
+                <div class="detail"><small>Progress</small><strong>{{ selectedEmployee.progress }}%</strong></div>
+              </div>
+              <div class="button-row">
+                <button class="primary" type="button" (click)="openModal('recommendTraining', $event)">Порекомендовать тренинг</button>
+                <button class="secondary" type="button" (click)="openModal('enrollEmployee', $event)">Зачислить на тренинг</button>
+                <button class="ghost" type="button" (click)="openEmployeeHome()">Открыть профиль</button>
+              </div>
+              <div class="grid-2">
+                <section class="panel nested-panel">
+                  <div class="panel-head"><div><h2>Тренинги</h2><p>История и план.</p></div></div>
+                  <div class="panel-pad">
+                    @for (training of selectedEmployee.trainings; track training[0]) {
+                      <div class="training-row"><strong>{{ training[0] }}</strong><span>{{ training[1] }}</span><span>{{ training[2] }}</span><span class="pill">{{ training[3] }}</span></div>
+                    }
+                  </div>
+                </section>
+                <section class="panel nested-panel">
+                  <div class="panel-head"><div><h2>Сертификаты</h2><p>Сроки действия.</p></div></div>
+                  <div class="panel-pad">
+                    @for (certificate of selectedEmployee.certificates; track certificate[0]) {
+                      <div class="training-row"><strong>{{ certificate[0] }}</strong><span>{{ certificate[1] }}</span><span>{{ certificate[2] }}</span><span class="pill" [class.bad]="certificate[1] === 'Expired'" [class.warn]="certificate[1] === 'Expires soon'">{{ certificate[1] }}</span></div>
+                    }
+                  </div>
+                </section>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page manager-requests-page" [class.active]="activePage === 'requests'">
+        <div class="grid-4 compact-stats">
+          <button class="panel stat compact-stat" type="button" [class.selected]="requestStatusFilter === 'all'" (click)="setRequestStatusFilter('all')"><small>Все заявки</small><strong>{{ requests.length }}</strong><span>Мои запросы</span></button>
+          <button class="panel stat compact-stat" type="button" [class.selected]="requestStatusFilter === 'review'" (click)="setRequestStatusFilter('review')"><small>На рассмотрении</small><strong>{{ openRequestCount }}</strong><span>Ожидают Академию</span></button>
+          <button class="panel stat compact-stat" type="button" [class.selected]="requestStatusFilter === 'clarify'" (click)="setRequestStatusFilter('clarify')"><small>Уточнение</small><strong>{{ clarifyRequestCount }}</strong><span>Нужен ответ</span></button>
+          <button class="panel stat compact-stat" type="button" [class.selected]="requestStatusFilter === 'approved'" (click)="setRequestStatusFilter('approved')"><small>Подтверждено</small><strong>{{ approvedRequestCount }}</strong><span>У планера</span></button>
+        </div>
+
+        <div class="manager-request-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>Новый запрос на обучение</h2><p>Выберите департамент, затем тренинг из справочника TRMS.</p></div>
+              <div class="panel-head-actions">
+                <span class="pill" [class.warn]="!requestFormReady">{{ requestFormProgress }}%</span>
+                <button class="collapse-button" type="button" (click)="toggleManagerRequestSection('newRequest')">{{ managerRequestSections.newRequest ? 'Свернуть' : 'Раскрыть' }}</button>
+              </div>
+            </div>
+            @if (managerRequestSections.newRequest) {
+              <div class="panel-pad request-builder">
+                <div class="request-step">
+                  <div class="step-head"><span>1</span><div><strong>Тренинг</strong><small>Список зависит от департамента</small></div></div>
+                  <div class="field">
+                    <label>Департамент</label>
+                    <select class="control" [(ngModel)]="requestForm.department" (ngModelChange)="onRequestDepartmentChange()">
+                      @for (department of departmentOptions; track department) {
+                        <option [ngValue]="department">{{ department }}</option>
+                      }
+                    </select>
+                  </div>
+
+                  @if (requestForm.department !== 'Другое') {
+                    <div class="field">
+                      <label>Тренинги</label>
+                      <select class="control training-picker" multiple size="6" [(ngModel)]="requestForm.selectedTrainingTemplateIds">
+                        @for (training of filteredTrainingOptions; track training.id) {
+                          <option [ngValue]="training.id">{{ training.name }}</option>
+                        }
+                      </select>
+                    </div>
+                  } @else {
+                    <div class="field">
+                      <label>Название предполагаемого тренинга</label>
+                      <input class="control" [(ngModel)]="requestForm.customTrainingTitle" placeholder="Например: Advanced facilitation for supervisors" />
+                    </div>
+                  }
+
+                  <div class="selected-tags">
+                    @for (training of selectedTrainingNames; track training) {
+                      <span class="chip active">{{ training }}</span>
+                    }
+                    @if (!selectedTrainingNames.length) {
+                      <span class="chip">Тренинг не выбран</span>
+                    }
+                  </div>
+                </div>
+
+                <div class="request-step">
+                  <div class="step-head"><span>2</span><div><strong>Параметры</strong><small>Сроки, формат, аудитория</small></div></div>
+                  <div class="grid-2">
+                    <div class="field"><label>Дата с</label><input class="control" type="date" [(ngModel)]="requestForm.periodFrom" /></div>
+                    <div class="field"><label>Дата до</label><input class="control" type="date" [(ngModel)]="requestForm.periodTo" /></div>
+                  </div>
+                  <div class="grid-2">
+                    <div class="field"><label>Тип</label><select class="control" [(ngModel)]="requestForm.format"><option>Класс</option><option>Онлайн</option><option>Смешанный</option><option>Внешний поставщик</option></select></div>
+                    <div class="field"><label>Приоритет</label><select class="control" [(ngModel)]="requestForm.priority"><option>High</option><option>Medium</option><option>Low</option></select></div>
+                  </div>
+                  <div class="grid-2">
+                    <div class="field"><label>Людей</label><input class="control" type="number" min="1" [(ngModel)]="requestForm.peopleCount" /></div>
+                    <div class="field"><label>Бюджет</label><select class="control" [(ngModel)]="requestForm.budget"><option>Есть</option><option>Нет</option><option>Нужно найти поставщика</option></select></div>
+                  </div>
+                  <div class="field"><label>Город</label><select class="control" [(ngModel)]="requestForm.city"><option>Almaty</option><option>Astana</option></select></div>
+                </div>
+
+                <div class="request-step preview-step">
+                  <div class="step-head"><span>3</span><div><strong>Предпросмотр</strong><small>Что увидит Академия</small></div></div>
+                  <div class="request-preview">
+                    <strong>{{ requestDraftTitle }}</strong>
+                    <span>{{ requestForm.peopleCount }} чел. · {{ requestForm.city }} · {{ requestForm.periodFrom }} - {{ requestForm.periodTo }}</span>
+                    <div class="preview-grid">
+                      <span class="pill blue">{{ requestForm.department }}</span>
+                      <span class="pill">{{ requestForm.format }}</span>
+                      <span class="pill warn">{{ requestForm.priority }}</span>
+                      <span class="pill">{{ requestForm.budget }}</span>
+                    </div>
+                  </div>
+                  <div class="field"><label>Обоснование</label><textarea class="control" [(ngModel)]="requestForm.justification"></textarea></div>
+                  <div class="button-row">
+                    <button class="primary" type="button" [disabled]="!requestFormReady" (click)="submitRequest()">Отправить заявку</button>
+                    <button class="ghost" type="button" (click)="resetRequestForm()">Очистить</button>
+                  </div>
+                </div>
+              </div>
+            }
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>Статусы заявок</h2><p>Кто рассматривает, приоритет и результат планирования.</p></div>
+              <button class="collapse-button" type="button" (click)="toggleManagerRequestSection('statuses')">{{ managerRequestSections.statuses ? 'Свернуть' : 'Раскрыть' }}</button>
+            </div>
+            @if (managerRequestSections.statuses) {
+              <div class="panel-pad">
+                <div class="grid-2">
+                  <div class="field"><label>Поиск</label><input class="control" [(ngModel)]="requestSearch" placeholder="Тренинг, статус, город" /></div>
+                  <div class="field"><label>Статус</label><select class="control" [(ngModel)]="requestStatusFilter"><option value="all">Все</option><option value="review">На рассмотрении</option><option value="clarify">Требуется уточнение</option><option value="approved">Подтверждено</option><option value="rejected">Отказ</option></select></div>
+                </div>
+                <div class="request-list">
+                  @for (request of filteredManagerRequests; track request.id) {
+                    <button class="request-row" type="button" [class.active]="selectedManagerRequest?.id === request.id" (click)="selectManagerRequest(request)">
+                      <div>
+                        <strong>{{ request.title }}</strong>
+                        <span>{{ statusLabel(request.statusKey) }}: {{ request.owner }} · {{ requestPeriod(request) }}</span>
+                        <small>{{ request.department }} · {{ request.format }}</small>
+                      </div>
+                      <div class="status-stack">
+                        <span [class]="planningPillClass(request)">{{ planningLabel(request) }}</span>
+                        <span [class]="statusPillClass(request.statusKey)">{{ request.priority }}</span>
+                      </div>
+                    </button>
+                  }
+                  @if (!filteredManagerRequests.length) {
+                    <div class="empty-state"><strong>Заявки не найдены</strong><span>Измените фильтр или создайте новый запрос.</span></div>
+                  }
+                </div>
+              </div>
+            }
+          </section>
+        </div>
+
+        <section class="panel manager-chat-panel">
+          <div class="panel-head">
+            <div><h2>Чат по заявке</h2><p>Коммуникация внутри TRMS вместо переписки по почте.</p></div>
+            <div class="panel-head-actions">
+              <span class="pill warn">{{ selectedManagerRequest?.title || 'Заявка не выбрана' }}</span>
+              <button class="collapse-button" type="button" (click)="toggleManagerRequestSection('chat')">{{ managerRequestSections.chat ? 'Свернуть' : 'Раскрыть' }}</button>
+            </div>
+          </div>
+          @if (managerRequestSections.chat) {
+            <div class="panel-pad">
+              @if (selectedManagerRequest) {
+                <div class="detail-grid">
+                  <div class="detail"><small>Тренинги</small><strong>{{ requestTrainingList(selectedManagerRequest) }}</strong></div>
+                  <div class="detail"><small>Период</small><strong>{{ requestPeriod(selectedManagerRequest) }}</strong></div>
+                  <div class="detail"><small>Формат</small><strong>{{ selectedManagerRequest.format }}</strong></div>
+                  <div class="detail"><small>Бюджет</small><strong>{{ selectedManagerRequest.budget }}</strong></div>
+                  <div class="detail"><small>Планирование</small><strong>{{ planningLabel(selectedManagerRequest) }}</strong></div>
+                  <div class="detail"><small>Итог планера</small><strong>{{ planningSummary(selectedManagerRequest) }}</strong></div>
+                </div>
+              }
+              <div class="chat-list">
+                @for (message of selectedManagerRequestMessages; track message.date + message.author) {
+                  <div class="chat-row"><div class="row-icon">{{ message.author === 'Training Academy' ? 'TA' : 'ТА' }}</div><div><strong>{{ message.author }}</strong><span>{{ message.message }} · {{ message.date }}</span></div></div>
+                }
+              </div>
+              <div class="chat-compose">
+                <input class="control" [(ngModel)]="chatText" placeholder="Написать уточнение..." />
+                <button class="primary" type="button" (click)="sendChat()">Отправить в чат</button>
+              </div>
+            </div>
+          }
+        </section>
+      </section>
+
+      <section class="page" [class.active]="activePage === 'dashboards'">
+        <div class="grid-4">
+          <section class="panel stat"><small>Тренингов</small><strong>186</strong><span>Offline + online</span></section>
+          <section class="panel stat"><small>Часов обучения</small><strong>4 820</strong><span>По зоне ответственности</span></section>
+          <section class="panel stat"><small>Участников</small><strong>1 146</strong><span>Назначения и посещения</span></section>
+          <section class="panel stat"><small>Тренеров</small><strong>34</strong><span>Internal + external</span></section>
+        </div>
+        <section class="panel powerbi">
+          <div class="panel-pad">
+            <div>
+              <h2>Power BI dashboard placeholder</h2>
+              <p>Сюда можно встроить Power BI: training summary, profile, certificates, attended/completed trainings, trainers, cost center, subdivision, position, grade, gender, age and online platform reports.</p>
+            </div>
+            <div class="button-row">
+              <button class="primary" type="button" (click)="openModal('powerBiFilters', $event)">Настроить фильтры</button>
+              <button class="secondary" type="button" (click)="openModal('onlineOfflineReports', $event)">Связка online/offline</button>
+              <button class="ghost" type="button" (click)="openModal('dataSources', $event)">Источники данных</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="page" [class.active]="activePage === 'reports'">
+        <section class="panel">
+          <div class="panel-head"><div><h2>Отчеты</h2><p>Табличные выгрузки по online/offline обучению.</p></div><button class="primary" type="button" (click)="exportReport()">Export selected</button></div>
+          <div class="panel-pad">
+            <div class="tabs">
+              @for (filter of ['Все', 'Оффлайн TRMS', 'Онлайн платформа', 'Мои сотрудники', 'Вся база']; track filter) {
+                <button class="tab" type="button" [class.active]="reportFilter === filter" (click)="reportFilter = filter; showToast('Фильтр отчетов: ' + filter)">{{ filter }}</button>
+              }
+            </div>
+            <button class="report-row" type="button" (click)="openModal('trainingSummary', $event)"><strong>Training summary report</strong><span>Person, position, cost center</span><span>Offline + certificates</span><span class="text-button">Export</span></button>
+            <button class="report-row" type="button" (click)="openModal('onlineSummary', $event)"><strong>Online learning completion</strong><span>LMS courses, scores</span><span>Online platform</span><span class="text-button">Export</span></button>
+            <button class="report-row" type="button" (click)="openModal('certificateExpiry', $event)"><strong>Certificate expiry report</strong><span>Expire date, template</span><span>TRMS certificates</span><span class="text-button">Export</span></button>
+            <button class="report-row" type="button" (click)="openModal('trainerLoad', $event)"><strong>Trainer workload report</strong><span>Main trainer, events</span><span>Trainer analytics</span><span class="text-button">Export</span></button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" [class.open]="modalOpen" (click)="closeModal()">
+    <section class="modal" (click)="$event.stopPropagation()">
+      <header class="modal-head">
+        <div>
+          <small>{{ selectedModal.kicker }}</small>
+          <h2>{{ selectedModal.title }}</h2>
+        </div>
+        <button class="text-button" type="button" (click)="closeModal()">Закрыть</button>
+      </header>
+      <div class="modal-body">
+        <div class="detail-grid">
+          @for (detail of selectedModal.details; track detail[0]) {
+            <div class="detail"><small>{{ detail[0] }}</small><strong>{{ detail[1] }}</strong></div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" [class.open]="toastText">{{ toastText }}</div>
+</div>

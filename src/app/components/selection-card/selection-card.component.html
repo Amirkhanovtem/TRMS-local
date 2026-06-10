@@ -1,0 +1,38 @@
+<mat-card class="selection-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>
+      <h3>{{ titleKey() | transloco }}</h3>
+      <mat-divider />
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <h4>{{ 'active' | transloco }}</h4>
+    <mat-list>
+      @for (activeData of activeData(); track $index) {
+        <mat-list-item class="active" [class.selected]="activeData.isSelected" (click)="onSelection(activeData)">
+          <span matListItemTitle>{{ activeData.visualData }}</span>
+          @if (showActionButton()) {
+            <button mat-icon-button (click)="changeActive($event, activeData, 'deactivate')">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-list-item>
+      }
+    </mat-list>
+
+    <mat-divider />
+    <h4>{{ 'notActive' | transloco }}</h4>
+    <mat-list>
+      @for (deactivatedData of deactivatedData(); track $index) {
+        <mat-list-item>
+          <span matListItemTitle>{{ deactivatedData.visualData }}</span>
+          @if (showActionButton()) {
+            <button mat-icon-button (click)="changeActive($event, deactivatedData, 'activate')">
+              <mat-icon>add</mat-icon>
+            </button>
+          }
+        </mat-list-item>
+      }
+    </mat-list>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,131 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('certificateTemplateGroupModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('certificateTemplateGroupModalPageViewTitle' | transloco)
+            : ('certificateTemplateGroupModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateGroupNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateTemplateGroupNameColTable' | transloco"
+              [(ngModel)]="certificateTemplateGroup.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateGroupCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'certificateTemplateGroupCodeColTable' | transloco"
+              [(ngModel)]="certificateTemplateGroup.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'certificateTemplateGroupDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'certificateTemplateGroupDescriptionColTable' | transloco"
+              [(ngModel)]="certificateTemplateGroup.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   CERTIFICATE TEMPLATE   -->
+        <div class="modal-input-field expansion">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="mat-expansion-bold-title">
+                  {{ 'certificateTemplateGroupCertificateTemplatesColTable' | transloco }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-certificate-template-group-certificate-template-table
+                [isView]="dialogParams?.isView"
+                [certificateTemplateGroup]="certificateTemplateGroup"
+              >
+              </app-certificate-template-group-certificate-template-table>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="blockBtn"
+          (click)="createOrSaveCertificateTemplateGroup()"
+        >
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

@@ -1,0 +1,65 @@
+<div class="trms_gantt_resource_tooltip" [style.background-color]="backColor()">
+  <p title="{{ name }}">
+    <span class="trms_gantt_tooltip_label"> {{ 'ganttResourceTooltipName' | transloco }}: </span>
+    <span>
+      {{ name }}
+    </span>
+  </p>
+
+  @if (isRoomResource()) {
+    <div>
+      <p title="{{ roomCapacity }}">
+        <span class="trms_gantt_tooltip_label"> {{ 'ganttRoomResourceTooltipCapacity' | transloco }}: </span>
+        <span>
+          {{ roomCapacity }}
+        </span>
+      </p>
+      <p title="{{ roomStatus }}">
+        <span class="trms_gantt_tooltip_label"> {{ 'ganttRoomResourceTooltipStatus' | transloco }}: </span>
+        <span>
+          {{ roomStatus }}
+        </span>
+      </p>
+      <p title="{{ builtInEquipmentNames }}">
+        <span class="trms_gantt_tooltip_label"> {{ 'ganttRoomResourceTooltipBuiltInEquipment' | transloco }}: </span>
+        <span>
+          {{ builtInEquipmentNames }}
+        </span>
+      </p>
+    </div>
+  }
+
+  @if (isTrainerResource()) {
+    <div>
+      <p title="{{ personalNumber }}">
+        <span class="trms_gantt_tooltip_label"> {{ 'ganttTrainerResourceTooltipPersonalNumber' | transloco }}: </span>
+        <span>
+          {{ personalNumber }}
+        </span>
+      </p>
+      <p title="{{ trainerStatus }}">
+        <span class="trms_gantt_tooltip_label"> {{ 'ganttTrainerResourceTooltipStatus' | transloco }}: </span>
+        <span>
+          {{ trainerStatus }}
+        </span>
+      </p>
+    </div>
+  }
+
+  @if (isEquipmentResource()) {
+    <div>
+      <p title="{{ equipmentQuantity }}">
+        <span class="trms_gantt_tooltip_label"> {{ 'ganttEquipmentResourceTooltipQuantity' | transloco }}: </span>
+        <span>
+          {{ equipmentQuantity }}
+        </span>
+      </p>
+      <p title="{{ equipmentType }}">
+        <span class="trms_gantt_tooltip_label"> {{ 'ganttEquipmentResourceTooltipType' | transloco }}: </span>
+        <span>
+          {{ equipmentType }}
+        </span>
+      </p>
+    </div>
+  }
+</div>

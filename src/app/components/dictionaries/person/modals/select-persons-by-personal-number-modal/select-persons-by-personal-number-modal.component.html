@@ -1,0 +1,70 @@
+<app-common-modal #modal [width]="'35vw'" [height]="'65vh'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'addPersonsByPersonalNumberModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="input-fields-container">
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          <span class="splitter-input-container">
+            {{ 'addPersonsByPersonalNumberModalSplitterLabel' | transloco }}
+            «<input class="splitter-input" [(ngModel)]="splitter" />»
+            <mat-icon class="info-icon" [matTooltip]="'selectedPersonByPersonalNumberInfo' | transloco">
+              info
+            </mat-icon>
+          </span>
+        </p>
+
+        <div class="text-area-btn-container">
+          <mat-form-field>
+            <mat-label>{{ 'addPersonsByPersonalNumberModalPersonalNumberTextAreaLabel' | transloco }}</mat-label>
+            <textarea
+              matInput
+              class="personal-number-text-area"
+              (keydown.enter)="collectPersonsByPersonalNumber()"
+              [(ngModel)]="inputText"
+            >
+            </textarea>
+          </mat-form-field>
+
+          <div
+            class="accept-btn"
+            [matTooltip]="'addBtn' | transloco"
+            [matTooltipPosition]="'right'"
+            (click)="collectPersonsByPersonalNumber()"
+          >
+            <mat-icon color="primary">keyboard_arrow_right</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">{{ 'resultLabel' | transloco }}:</p>
+
+        <mat-chip-set>
+          @for (personalNumberPerson of personalNumberPersonMap | keyvalue; track personalNumberPerson) {
+            <mat-chip [className]="personalNumberPerson.value ? 'valid-chip' : 'invalid-chip'">
+              <span>
+                {{ getChipLabel(personalNumberPerson) }}
+              </span>
+              <button matChipRemove (click)="removeSelectedPersonalNumber(personalNumberPerson.key)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          }
+        </mat-chip-set>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="primary" (click)="confirmSelectedPersonalNumber()">
+        {{ 'confirmBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

@@ -1,0 +1,38 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'personPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-person-table-with-hierarchy-filter #personTableWithHierarchyFilter>
+  <app-table-wrapper table #tableWrapper [tableId]="'personDictionaryTable'" [displayedColumns]="displayedColumns">
+    <ng-container table-buttons>
+      <app-crud-btns
+        [viewComponent]="createUpdateComponent"
+        [createUpdateComponent]="createUpdateComponent"
+        [parentSelection]="tableWrapper.selection"
+        [service]="personTableWithHierarchyFilter.personService"
+        (loadData)="personTableWithHierarchyFilter.loadPersons()"
+      >
+      </app-crud-btns>
+      @if (checkBtnEnable('personTrainings')) {
+        <button
+          mat-raised-button
+          [disabled]="!tableWrapper.isOneRowSelected()"
+          (click)="openPersonAttendedTrainingsModal()"
+        >
+          {{ 'personTrainingsBtn' | transloco }}
+        </button>
+      }
+      @if (checkBtnEnable('personCertificatesBtn')) {
+        <button
+          mat-raised-button
+          [disabled]="!tableWrapper.isOneRowSelected()"
+          (click)="openPersonIssuedCertificatesModal()"
+        >
+          {{ 'personCertificatesBtn' | transloco }}
+        </button>
+      }
+    </ng-container>
+  </app-table-wrapper>
+</app-person-table-with-hierarchy-filter>

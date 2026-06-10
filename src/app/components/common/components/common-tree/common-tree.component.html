@@ -1,0 +1,90 @@
+<div class="tree-top-bar-container">
+  @if (checkSingleAddBtn()) {
+    <app-tree-node-btns
+      [node]="null"
+      [isSingleAddBtn]="true"
+      [urlService]="urlService"
+      [openCreateUpdateModalFunc]="openCreateUpdateModalFunc"
+      [mapCheckCrudBtnShowFuncMap]="mapCheckCrudBtnShowFuncMap"
+      (updateTreeData)="loadData()"
+    >
+    </app-tree-node-btns>
+  }
+
+  <ng-content select="[tree-btns]"></ng-content>
+
+  <app-search (applySearch)="filterTree()"></app-search>
+</div>
+
+@if (dataSource?.data?.length > 0) {
+  <div class="mat-elevation-z8 tree-container">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodePadding
+        [style.display]="node.hide ? 'none' : ''"
+        (mouseenter)="node.showBtns = true"
+        (mouseleave)="node.showBtns = false"
+      >
+        <!-- use a disabled button to provide padding for tree leaf -->
+        <button mat-icon-button disabled></button>
+        @if (isSelectableTree) {
+          <mat-checkbox
+            class="checklist-leaf-node"
+            [disabled]="isDisabled(node)"
+            [checked]="checkNodeLeaf(node)"
+            (change)="changeNodeLeafHandler(node)"
+          >
+          </mat-checkbox>
+        }
+        @if (node.unextendable) {
+          <mat-icon class="unextended-icon">radio_button_checked</mat-icon>
+        }
+        {{ node.name }}
+        <app-tree-node-btns
+          [node]="node"
+          [hidden]="!checkBtnsShow(node)"
+          [urlService]="urlService"
+          [openCreateUpdateModalFunc]="openCreateUpdateModalFunc"
+          [mapCheckCrudBtnShowFuncMap]="mapCheckCrudBtnShowFuncMap"
+          (updateTreeData)="loadData()"
+        >
+        </app-tree-node-btns>
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-tree-node
+        *matTreeNodeDef="let node; when: hasChild"
+        matTreeNodePadding
+        [style.display]="node.hide ? 'none' : ''"
+        (mouseenter)="node.showBtns = true"
+        (mouseleave)="node.showBtns = false"
+      >
+        <button mat-icon-button matTreeNodeToggle>
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+          </mat-icon>
+        </button>
+        @if (isSelectableTree) {
+          <mat-checkbox
+            [disabled]="isDisabled(node)"
+            [checked]="checkNode(node)"
+            [indeterminate]="checkIndeterminate(node)"
+            (change)="changeNodeHandler(node)"
+          >
+          </mat-checkbox>
+        }
+        {{ node.name }}
+        <app-tree-node-btns
+          [node]="node"
+          [hidden]="!checkBtnsShow(node)"
+          [urlService]="urlService"
+          [openCreateUpdateModalFunc]="openCreateUpdateModalFunc"
+          [mapCheckCrudBtnShowFuncMap]="mapCheckCrudBtnShowFuncMap"
+          (updateTreeData)="loadData()"
+        >
+        </app-tree-node-btns>
+      </mat-tree-node>
+    </mat-tree>
+  </div>
+}

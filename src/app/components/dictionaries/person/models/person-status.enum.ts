@@ -1,0 +1,6 @@
+export enum PersonStatusEnum {
+  ACTIVE = 'ACTIVE',
+  TERMINATED = 'TERMINATED',
+  SUSPENDED = 'SUSPENDED',
+  CANDIDATE = 'CANDIDATE',
+}

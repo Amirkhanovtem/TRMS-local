@@ -1,0 +1,338 @@
+<div class="new-release-page">
+  <section class="new-shell">
+    <div class="new-header">
+      <div>
+        <p class="eyebrow">Future releases</p>
+        <h1>NEW: Learning Journey</h1>
+        <p class="header-copy">
+          Рабочая зона для прототипов: профиль сотрудника, кабинет менеджера, заявки, планирование, прогнозирование,
+          отчеты и мобильные сценарии.
+        </p>
+      </div>
+      <div class="header-kpis">
+        <div><strong>68%</strong><span>внедрение</span></div>
+        <div><strong>4</strong><span>обязательных тренинга</span></div>
+        <div><strong>42 ч</strong><span>обучения</span></div>
+      </div>
+    </div>
+
+    <div class="tabs-row">
+      @for (tab of tabs; track tab.id) {
+        <button type="button" [class.active]="activeTab === tab.id" (click)="setTab(tab.id)">
+          <mat-icon>{{ tab.icon }}</mat-icon>
+          <span>{{ tab.title }}</span>
+        </button>
+      }
+    </div>
+
+    @if (activeTab === 'employee') {
+      <div class="grid two">
+        <article class="panel profile-panel">
+          <div class="profile-top">
+            <div class="avatar">ТА</div>
+            <div>
+              <h2>{{ employee.name }}</h2>
+              <p>{{ employee.position }}</p>
+              <span>{{ employee.department }}</span>
+            </div>
+          </div>
+          <div class="profile-metrics">
+            <div><strong>{{ employee.progress }}%</strong><span>Learning progress</span></div>
+            <div><strong>{{ employee.hours }}</strong><span>Часы обучения</span></div>
+            <div><strong>{{ employee.certificates }}</strong><span>Сертификаты</span></div>
+          </div>
+          <div class="quick-actions">
+            <button>История обучения</button>
+            <button>Сертификаты</button>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Next Learning Journey</h2>
+            <span>учебный план нового сотрудника</span>
+          </div>
+          <div class="journey">
+            @for (item of employee.trainings; track item.title) {
+              <div class="journey-item" [class]="item.color">
+                <span class="dot"></span>
+                <div>
+                  <strong>{{ item.title }}</strong>
+                  <p>{{ item.format }} · {{ item.date }}</p>
+                </div>
+                <em>{{ item.status }}</em>
+              </div>
+            }
+          </div>
+        </article>
+      </div>
+
+      <div class="grid two">
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Employee Way</h2>
+            <button class="icon-button"><mat-icon>filter_alt</mat-icon></button>
+          </div>
+          <div class="year-tree">
+            @for (item of employee.trainings; track item.title) {
+              <div class="tree-node" [class]="item.color">
+                <span></span>
+                <div>
+                  <strong>{{ item.title }}</strong>
+                  <p>{{ item.status }} · {{ item.date }}</p>
+                </div>
+              </div>
+            }
+          </div>
+          <button class="ghost">Посмотреть все обучение</button>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Рекомендованные тренинги</h2>
+            <button class="icon-button"><mat-icon>tune</mat-icon></button>
+          </div>
+          <div class="recommend-list">
+            @for (training of recommendedTrainings; track training.title) {
+              <button class="recommend-card" [class]="training.color">
+                <strong>{{ training.title }}</strong>
+                <span>{{ training.source }}</span>
+              </button>
+            }
+          </div>
+        </article>
+      </div>
+    }
+
+    @if (activeTab === 'manager') {
+      <div class="grid manager-grid">
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Мои сотрудники</h2>
+            <span>прямое подчинение</span>
+          </div>
+          <div class="employee-list">
+            @for (item of employees; track item.name; let i = $index) {
+              <button [class.active]="selectedEmployeeIndex === i" (click)="selectedEmployeeIndex = i">
+                <span>{{ item.name }}</span>
+                <em>{{ item.progress }}%</em>
+              </button>
+            }
+          </div>
+        </article>
+
+        <article class="panel employee-detail">
+          <div class="profile-top compact">
+            <div class="avatar">{{ selectedEmployee().name.slice(0, 1) }}</div>
+            <div>
+              <h2>{{ selectedEmployee().name }}</h2>
+              <p>{{ selectedEmployee().position }}</p>
+              <span>{{ selectedEmployee().department }}</span>
+            </div>
+          </div>
+          <div class="profile-metrics">
+            <div><strong>{{ selectedEmployee().progress }}%</strong><span>прогресс</span></div>
+            <div><strong>{{ selectedEmployee().hours }}</strong><span>часы</span></div>
+            <div><strong>{{ selectedEmployee().certificates }}</strong><span>сертификаты</span></div>
+          </div>
+          <div class="manager-actions">
+            <button (click)="recommendSelectedEmployee('Advanced Communication')">Порекомендовать тренинг</button>
+            <button (click)="enrollSelectedEmployee('Orientation Day')">Зачислить на тренинг</button>
+          </div>
+          <div class="mini-table">
+            @for (training of selectedEmployee().trainings; track training.title) {
+              <div>
+                <span>{{ training.title }}</span>
+                <em>{{ training.status }}</em>
+              </div>
+            }
+          </div>
+        </article>
+      </div>
+    }
+
+    @if (activeTab === 'requests') {
+      <div class="grid requests-grid">
+        <article class="panel request-form">
+          <div class="panel-title">
+            <h2>Новая заявка на обучение</h2>
+            <span>для Training Academy</span>
+          </div>
+          <label>Тренинг или учебный план<input value="Leadership Essentials" /></label>
+          <label>Примерные даты<input value="15.07.2026 - 30.08.2026" /></label>
+          <label>Для кого<input value="Training Academy, 18 человек" /></label>
+          <label>Обоснование<textarea>Нужно закрыть gap по управленческим навыкам.</textarea></label>
+          <div class="chips">
+            <span>Бюджет: есть</span>
+            <span>Поставщик: нужна помощь</span>
+            <span>Приоритет: высокий</span>
+          </div>
+          <button class="primary">Создать заявку</button>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Обратная сторона заявок</h2>
+            <span>роль администратора / менеджера обучения</span>
+          </div>
+          <div class="request-list">
+            @for (request of requests; track request.id) {
+              <div class="request-card">
+                <div>
+                  <strong>{{ request.id }} · {{ request.title }}</strong>
+                  <p>{{ request.requester }} · {{ request.audience }} · {{ request.people }} чел.</p>
+                  <span>{{ request.note }}</span>
+                </div>
+                <div class="status-tools">
+                  <em>{{ request.status }}</em>
+                  <select #statusSelect [value]="request.status" (change)="setRequestStatus(request, $any(statusSelect.value))">
+                    <option>На рассмотрении</option>
+                    <option>В работе</option>
+                    <option>Требуется уточнение</option>
+                    <option>Подтверждено</option>
+                    <option>Отказ</option>
+                  </select>
+                </div>
+              </div>
+            }
+          </div>
+        </article>
+      </div>
+    }
+
+    @if (activeTab === 'planning') {
+      <div class="grid two">
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Request для планера</h2>
+            <span>после подтверждения заявки</span>
+          </div>
+          <div class="mode-switch">
+            <button [class.active]="requestMode === 'manual'" (click)="requestMode = 'manual'">Вручную</button>
+            <button [class.active]="requestMode === 'auto'" (click)="createAutoPlan()">Авто-планирование</button>
+          </div>
+          <div class="planning-card">
+            <strong>Safety Culture Workshop</strong>
+            <p>Система берет данные из заявки: 32 участника, 2 группы, Almaty, classroom.</p>
+            <ul>
+              <li>Аудитория: St 311 · свободна</li>
+              <li>Тренер: Main trainer · доступен</li>
+              <li>Ноутбуки: 18 из 18 · доступны</li>
+            </ul>
+          </div>
+          <button class="primary">Создать тренинги на календаре</button>
+        </article>
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Без заявки</h2>
+            <span>создать тренинг / учебный план</span>
+          </div>
+          <label>Учебный план<select><option>Orientation Program</option><option>Leadership Essentials</option></select></label>
+          <label>Количество групп<input value="4" /></label>
+          <label>Ресурсы<select><option>Аудитория + тренер + ноутбуки</option></select></label>
+          <button class="primary">Подобрать ресурсы</button>
+        </article>
+      </div>
+    }
+
+    @if (activeTab === 'forecast') {
+      <div class="grid two">
+        <article class="panel forecast-panel">
+          <div class="panel-title">
+            <h2>Прогнозирование потребности</h2>
+            <span>следующий год</span>
+          </div>
+          <div class="forecast-bars">
+            <div><span>Аудитории</span><strong>84%</strong><i style="width: 84%"></i></div>
+            <div><span>Тренеры</span><strong>71%</strong><i style="width: 71%"></i></div>
+            <div><span>Оборудование</span><strong>92%</strong><i style="width: 92%"></i></div>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Рекомендации системы</h2>
+            <span>если ресурсов не хватает</span>
+          </div>
+          <div class="insight-list">
+            <div class="ok">Перенести 2 группы на август: ресурсы хватает.</div>
+            <div class="warn">Для Line Training не хватает 1 сертифицированного тренера.</div>
+            <div class="bad">Для класса на 32 человека нет подходящей аудитории в Almaty 15-20 июля.</div>
+          </div>
+        </article>
+      </div>
+    }
+
+    @if (activeTab === 'reports') {
+      <article class="panel">
+        <div class="panel-title">
+          <h2>Отчеты и Power BI</h2>
+          <span>онлайн + офлайн обучение</span>
+        </div>
+        <div class="report-grid">
+          <button>Тренинги по департаментам</button>
+          <button>Часы по позициям</button>
+          <button>Разбивка по грейдам</button>
+          <button>Возраст / пол / город</button>
+          <button>Отчет по тренерам</button>
+          <button>Отчет по участникам</button>
+          <button>Онлайн обучение</button>
+          <button>Офлайн обучение</button>
+        </div>
+        <div class="table-preview">
+          <div><strong>Сотрудник</strong><strong>Онлайн</strong><strong>Офлайн</strong><strong>Статус</strong></div>
+          <div><span>Темирлан Амирханов</span><span>18 ч</span><span>12 ч</span><span>В норме</span></div>
+          <div><span>Шерхан Жунусбай</span><span>9 ч</span><span>20 ч</span><span>Нужен план</span></div>
+          <div><span>Фатима Алекперзаде</span><span>26 ч</span><span>14 ч</span><span>В норме</span></div>
+        </div>
+      </article>
+    }
+
+    @if (activeTab === 'mobile') {
+      <div class="mobile-layout">
+        <div class="phone-frame">
+          <div class="phone-top">10:36 <span>4G · 76%</span></div>
+          <div class="phone-header">Learning Journey <mat-icon>notifications</mat-icon></div>
+          <div class="phone-body">
+            @if (selectedMobileScreen === 'home') {
+              <h3>Мой профиль</h3>
+              <div class="mobile-card dark">Темирлан Амирханов<br /><span>Training Academy, Almaty</span></div>
+              <div class="mobile-card">Next Learning Journey · 4 тренинга</div>
+              <div class="mobile-actions"><button>История</button><button>Сертификаты</button></div>
+            }
+            @if (selectedMobileScreen === 'showcase') {
+              <h3>Витрина</h3>
+              <label>Тренинги<input value="International Taxation..." /></label>
+              <label>Города<input value="Астана, Алматы" /></label>
+              <label>Даты<input value="05.06.2026 - 30.08.2026" /></label>
+              <button class="mobile-primary">Показать тренинги</button>
+            }
+            @if (selectedMobileScreen === 'forum') {
+              <h3>Форум</h3>
+              <div class="podium"><span>2</span><strong>1</strong><span>3</span></div>
+              <div class="mobile-card">FAQ по обучению · 24 ответа · 18 лайков</div>
+              <div class="mobile-card">Как записаться на тренинг · 16 ответов</div>
+            }
+            @if (selectedMobileScreen === 'history') {
+              <h3>История</h3>
+              <div class="donut">68%</div>
+              <div class="mobile-card">Security Awareness 2026 · Passed</div>
+              <div class="mobile-card">Boeing 787 Refresher · In progress</div>
+            }
+          </div>
+          <div class="phone-nav">
+            <button [class.active]="selectedMobileScreen === 'home'" (click)="selectedMobileScreen = 'home'">Home</button>
+            <button [class.active]="selectedMobileScreen === 'showcase'" (click)="selectedMobileScreen = 'showcase'">Витрина</button>
+            <button [class.active]="selectedMobileScreen === 'forum'" (click)="selectedMobileScreen = 'forum'">Форум</button>
+            <button [class.active]="selectedMobileScreen === 'history'" (click)="selectedMobileScreen = 'history'">История</button>
+          </div>
+        </div>
+        <article class="panel mobile-notes">
+          <h2>Мобильные сценарии</h2>
+          <p>Внутри iPhone-мокапа кликаются нижние меню: Home, Витрина, Форум и История.</p>
+          <p>AI-ассистент предполагается как маленькая плавающая кнопка справа внизу экрана.</p>
+          <button class="ai-bubble">AI</button>
+        </article>
+      </div>
+    }
+  </section>
+</div>

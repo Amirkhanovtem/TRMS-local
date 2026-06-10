@@ -1,0 +1,20 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'syllabusTrainingTable'"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableContainerClass]="'expansion-table'"
+  (rowDbClickFunc)="openCreateUpdateOrViewTrainingView($event)"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="name" let-training="row">
+    <div class="row-with-action-btns event-table-row">
+      <span>
+        {{ training.name }}
+      </span>
+      <div class="row-with-action-btns-container">
+        <mat-icon [ngClass]="checkTraining(training) ? 'check-icon' : 'invalid-icon'">check_circle</mat-icon>
+      </div>
+    </div>
+  </ng-template>
+</app-table-wrapper>

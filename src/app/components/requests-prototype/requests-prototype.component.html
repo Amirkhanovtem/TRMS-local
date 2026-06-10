@@ -1,0 +1,189 @@
+<div class="requests-prototype requests-admin-page">
+  <header class="page-title">
+    <div>
+      <h1>Заявки на обучение</h1>
+      <p>Академия обучения рассматривает заявки руководителей, уведомляет инициатора и передает подтвержденную потребность планеру.</p>
+    </div>
+    <button class="trms-btn green" type="button" (click)="openModal('requestRules', $event)">Правила процесса</button>
+  </header>
+
+  <div class="stat-grid">
+    <button class="stat-card" type="button" [class.active]="requestStatusFilter === 'review'" (click)="setStatusFilter('review'); requestSections.review = true">
+      <small>Новые заявки</small>
+      <strong>{{ requestNewCount }}</strong>
+      <span class="muted">Требуют рассмотрения Академией обучения</span>
+    </button>
+    <button class="stat-card" type="button" [class.active]="requestStatusFilter === 'approved'" (click)="setStatusFilter('approved'); requestSections.review = true">
+      <small>Подтверждено для планирования</small>
+      <strong>{{ approvedCount }}</strong>
+      <span class="muted">Очередь планера на эту неделю</span>
+    </button>
+    <button class="stat-card" type="button" [class.active]="activeRequest?.planningStatus === 'completed'" (click)="requestSections.notifications = true">
+      <small>Запланировано планером</small>
+      <strong>{{ plannedCount }}</strong>
+      <span class="muted">Инициатор и менеджер видят итог по тренингам</span>
+    </button>
+    <button class="stat-card" type="button" [class.active]="requestStatusFilter === 'clarify'" (click)="setStatusFilter('clarify'); requestSections.chat = true">
+      <small>Требуется уточнение</small>
+      <strong>{{ clarifyCount }}</strong>
+      <span class="muted">Уточнения в чате вместо почты</span>
+    </button>
+  </div>
+
+  <div class="planner-stack">
+    <section class="panel planner-section">
+      <button class="panel-head section-toggle" type="button" (click)="toggleRequestSection('review')">
+        <div>
+          <h2>Рассмотрение Академией обучения</h2>
+          <p>Список заявок, фильтры, приоритеты и смена статуса. Смена статуса отправляет уведомление инициатору.</p>
+        </div>
+        <span class="pill">{{ requestSections.review ? 'Свернуть' : 'Раскрыть' }}</span>
+      </button>
+
+      @if (requestSections.review) {
+        <div class="panel-pad">
+          <div class="filter-bar">
+            <input class="control" [(ngModel)]="requestSearch" placeholder="Поиск по заявке, инициатору, городу" />
+            <select class="control" [(ngModel)]="requestStatusFilter">
+              <option value="all">Все статусы</option>
+              <option value="new">Новая</option>
+              <option value="review">На рассмотрении</option>
+              <option value="clarify">Требуется уточнение</option>
+              <option value="approved">Подтверждено</option>
+              <option value="rejected">Отказ</option>
+            </select>
+            <select class="control" [(ngModel)]="priorityFilter">
+              <option value="all">Все приоритеты</option>
+              @for (priority of uniquePriorities; track priority) {
+                <option [value]="priority">{{ priority }}</option>
+              }
+            </select>
+            <button class="trms-btn" type="button" (click)="clearFilters()">Сбросить</button>
+          </div>
+
+          <div class="request-list">
+            @for (request of filteredRequests; track request.id) {
+              <div class="request-row academy-request-row" role="button" tabindex="0" [class.active]="activeRequest?.id === request.id" (click)="selectRequest(request)" (keydown.enter)="selectRequest(request)">
+                <div><strong>{{ request.title }}</strong><span>{{ requestMeta(request) }}</span></div>
+                <span>{{ requestInitiator(request) }}</span>
+                <div class="status-stack">
+                  <span [class]="statusClass(request)">{{ statusLabel(request) }}</span>
+                  <span [class]="planningClass(request)">{{ planningLabel(request) }}</span>
+                </div>
+                <button class="text-button" type="button" (click)="openModal(request.id, $event)">Открыть</button>
+              </div>
+            }
+          </div>
+
+          @if (!filteredRequests.length) {
+            <div class="empty-state"><strong>Заявки не найдены</strong><span>Очистите фильтры или измените поиск.</span></div>
+          }
+
+          <div class="status-actions" aria-label="Request statuses">
+            <button class="trms-btn green" type="button" (click)="setRequestStatus('approved')">Взять в работу</button>
+            <button class="trms-btn" type="button" (click)="setRequestStatus('review')">На рассмотрении</button>
+            <button class="trms-btn" type="button" (click)="setRequestStatus('clarify'); requestSections.chat = true">Требуется уточнение</button>
+            <button class="trms-btn" type="button" (click)="setRequestStatus('rejected')">Отказать</button>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="panel planner-section">
+      <button class="panel-head section-toggle" type="button" (click)="toggleRequestSection('notifications')">
+        <div>
+          <h2>Уведомления инициатору</h2>
+          <p>Что увидит руководитель после смены статуса заявки и после действий планера.</p>
+        </div>
+        <span class="pill">{{ requestSections.notifications ? 'Свернуть' : 'Раскрыть' }}</span>
+      </button>
+
+      @if (requestSections.notifications) {
+        <div class="panel-pad">
+          <div class="flow">
+            <div class="flow-step" [class.warn]="activeRequest?.statusKey === 'review' || activeRequest?.statusKey === 'clarify'" [class.bad]="activeRequest?.statusKey === 'rejected'">
+              <strong>{{ notification.title }}</strong>
+              <span>{{ notification.text }}</span>
+            </div>
+
+            @if (activeRequest) {
+              <div class="request-summary">
+                <div class="detail"><span>Тренинги</span><strong>{{ requestTrainingList(activeRequest) }}</strong></div>
+                <div class="detail"><span>Период</span><strong>{{ activeRequest.periodFrom }} - {{ activeRequest.periodTo }}</strong></div>
+                <div class="detail"><span>Формат</span><strong>{{ activeRequest.format }}</strong></div>
+                <div class="detail"><span>Людей</span><strong>{{ activeRequest.peopleCount }}</strong></div>
+                <div class="detail"><span>Планирование</span><strong>{{ planningLabel(activeRequest) }}</strong></div>
+                <div class="detail"><span>Итог планера</span><strong>{{ activeRequest.plannerSummary || 'Пока нет итогового статуса от планера' }}</strong></div>
+              </div>
+            }
+
+            <div class="flow-step warn"><strong>Уточнение</strong><span>Инициатор получает вопрос в чате и список недостающих данных.</span></div>
+            <div class="flow-step"><strong>Подтверждено</strong><span>Инициатор видит, что потребность передана в очередь планера.</span></div>
+            <div class="flow-step" [class.warn]="activeRequest?.planningStatus === 'drafts'" [class.blue]="activeRequest?.planningStatus === 'calendar'">
+              <strong>Планер</strong>
+              <span>{{ activeRequest ? planningText(activeRequest) : 'После подтверждения планер сформирует группы и передаст события в календарь.' }}</span>
+            </div>
+            <div class="flow-step bad"><strong>Отказ</strong><span>Инициатор получает причину отказа и альтернативную рекомендацию.</span></div>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="panel planner-section">
+      <button class="panel-head section-toggle" type="button" (click)="toggleRequestSection('chat')">
+        <div>
+          <h2>Чат по заявке</h2>
+          <p>Коммуникация по выбранной заявке внутри TRMS без переписки по почте.</p>
+        </div>
+        <span class="pill">{{ requestSections.chat ? 'Свернуть' : 'Раскрыть' }}</span>
+      </button>
+
+      @if (requestSections.chat) {
+        <div class="panel-pad">
+          <div class="chat-context">
+            <div>
+              <strong>{{ activeRequest?.title || 'Заявка не выбрана' }}</strong>
+              <span>{{ activeRequest ? requestMeta(activeRequest) : 'Выберите заявку в блоке рассмотрения' }}</span>
+            </div>
+            @if (activeRequest) {
+              <span [class]="statusClass(activeRequest)">{{ statusLabel(activeRequest) }}</span>
+            }
+          </div>
+
+          <div class="chat-thread">
+            @for (message of activeRequestMessages; track message.date + message.author) {
+              <div class="request-row chat-message">
+                <div><strong>{{ message.author }}</strong><span>{{ message.message }} · {{ message.date }}</span></div>
+              </div>
+            }
+            @if (!activeRequestMessages.length) {
+              <div class="empty-state"><strong>Сообщений пока нет</strong><span>Напишите уточнение или комментарий по выбранной заявке.</span></div>
+            }
+          </div>
+
+          <div class="chat-compose">
+            <input class="control" [(ngModel)]="chatText" placeholder="Написать сообщение для уточнения" />
+            <button class="trms-btn green" type="button" (click)="sendChat()">Отправить</button>
+          </div>
+        </div>
+      }
+    </section>
+  </div>
+
+  <div class="modal-backdrop" [class.open]="modalOpen" (click)="closeModal()">
+    <section class="modal" (click)="$event.stopPropagation()">
+      <header class="modal-head">
+        <h2>{{ selectedModal.title }}</h2>
+        <button class="modal-close" type="button" (click)="closeModal()">Закрыть</button>
+      </header>
+      <div class="modal-body">
+        <div class="detail"><span>Контекст</span><strong>{{ selectedModal.subtitle }}</strong></div>
+        @for (detail of selectedModal.details; track detail[0]) {
+          <div class="detail"><span>{{ detail[0] }}</span><strong>{{ detail[1] }}</strong></div>
+        }
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" [class.open]="toastText">{{ toastText }}</div>
+</div>

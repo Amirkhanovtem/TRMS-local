@@ -1,0 +1,21 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'trainingTemplatePageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'trainingTemplateDictionaryTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="trainingTemplateService"
+      (loadData)="loadTrainingTemplates()"
+    >
+    </app-crud-btns>
+    <button mat-raised-button color="accent" [disabled]="!table?.isOneRowSelected()" (click)="openNotifications()">
+      {{ 'navBarBtnNotifications' | transloco }}
+    </button>
+  </ng-container>
+</app-table-wrapper>

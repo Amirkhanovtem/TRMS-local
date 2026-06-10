@@ -1,0 +1,44 @@
+@if (title) {
+  <div class="title-container">
+    <span class="page-title">
+      {{ title | transloco }}
+    </span>
+  </div>
+}
+
+<app-notification-template-selection-table
+  [tableId]="'notificationTemplateSelectionTable'"
+  [dataSourceObs]="dataSourceObs"
+>
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="selection"
+      [service]="notificationTemplateService"
+      [checkShowCrudBtnFunc]="getMapCheckCrudBtnShowFuncMap()"
+      (loadData)="loadNotificationTemplates()"
+    >
+    </app-crud-btns>
+    @if (checkBtnEnable('activate')) {
+      <button
+        mat-raised-button
+        [ngClass]="isActivateBtnDisable() ? '' : 'secondaryBtn'"
+        [disabled]="isActivateBtnDisable()"
+        (click)="changeNotificationTemplateActiveStatus(true)"
+      >
+        {{ 'activateBtn' | transloco }}
+      </button>
+    }
+    @if (checkBtnEnable('deactivate')) {
+      <button
+        mat-raised-button
+        color="warn"
+        [disabled]="isDeactivateBtnDisable()"
+        (click)="changeNotificationTemplateActiveStatus(false)"
+      >
+        {{ 'deactivateBtn' | transloco }}
+      </button>
+    }
+  </ng-container>
+</app-notification-template-selection-table>

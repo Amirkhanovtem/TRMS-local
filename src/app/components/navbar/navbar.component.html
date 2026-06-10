@@ -1,0 +1,329 @@
+@if (!hideHeader) {
+  <mat-toolbar color="accent">
+    <div class="logo-container" routerLink="gant" routerLinkActive="active-link">
+      <i class="arrow-logo"></i>
+      <i class="name-logo"></i>
+    </div>
+
+    <button
+      mat-icon-button
+      class="navigation-menu-button"
+      [matMenuTriggerFor]="mainNavigation"
+      aria-label="Открыть меню навигации"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #mainNavigation="matMenu" class="main-navigation-menu">
+      @if (hasRoleForCalendar()) {
+        <button mat-menu-item routerLink="gant" routerLinkActive="active-link">
+          <mat-icon>calendar_today</mat-icon>
+          <span>{{ 'navBarBtnCalendar' | transloco }}</span>
+        </button>
+      }
+
+      <button mat-menu-item routerLink="self-enrollment" routerLinkActive="active-link">
+        <mat-icon>how_to_reg</mat-icon>
+        <span>{{ 'selfEnrollmentPage' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item routerLink="new" routerLinkActive="active-link">
+        <mat-icon>auto_awesome</mat-icon>
+        <span>NEW</span>
+      </button>
+
+      <button mat-menu-item routerLink="employee-profile-prototype" routerLinkActive="active-link">
+        <mat-icon>badge</mat-icon>
+        <span>Профиль сотрудник</span>
+      </button>
+
+      <button mat-menu-item routerLink="manager-profile-prototype" routerLinkActive="active-link">
+        <mat-icon>supervisor_account</mat-icon>
+        <span>Профиль руководителя</span>
+      </button>
+
+      <button mat-menu-item routerLink="requests-prototype" routerLinkActive="active-link">
+        <mat-icon>assignment</mat-icon>
+        <span>Заявки</span>
+      </button>
+
+      <button mat-menu-item routerLink="planner-requests-prototype" routerLinkActive="active-link">
+        <mat-icon>event_note</mat-icon>
+        <span>Заявки Планер</span>
+      </button>
+
+      @if (hasRoleForProfile()) {
+        <button mat-menu-item routerLink="profile-page" routerLinkActive="active-link">
+          <mat-icon>person</mat-icon>
+          <span>{{ 'navBarBtnProfile' | transloco }}</span>
+        </button>
+      }
+
+      @if (hasRoleForDictionary()) {
+        <button mat-menu-item [matMenuTriggerFor]="dictionaries" [ngClass]="getMatMenuTriggerClass(dictionaries)">
+          <mat-icon>menu_book</mat-icon>
+          <span>{{ 'navBarBtnDirectories' | transloco }}</span>
+        </button>
+      }
+
+      @if (hasRoleForReports()) {
+        <button
+          mat-menu-item
+          [matMenuTriggerFor]="completedSyllabusesAndTrainings"
+          [ngClass]="getMatMenuTriggerClass(completedSyllabusesAndTrainings)"
+        >
+          <mat-icon>bar_chart</mat-icon>
+          <span>{{ 'navBarBtnReports' | transloco }}</span>
+        </button>
+      }
+
+      @if (hasRoleForPlanerPanel()) {
+        <button mat-menu-item [matMenuTriggerFor]="planerPanel" [ngClass]="getMatMenuTriggerClass(planerPanel)">
+          <mat-icon>display_settings</mat-icon>
+          <span>{{ 'navBarBtnPlanerPanel' | transloco }}</span>
+        </button>
+      }
+
+      @if (hasRoleForAdminPanel()) {
+        <button mat-menu-item [matMenuTriggerFor]="adminPanel" [ngClass]="getMatMenuTriggerClass(adminPanel)">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>{{ 'navBarBtnAdminPanel' | transloco }}</span>
+        </button>
+      }
+
+      <button mat-menu-item (click)="keycloakService.logout()">
+        <mat-icon>logout</mat-icon>
+        <span>{{ 'navBarBtnLogout' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #dictionaries="matMenu">
+      <button mat-menu-item [matMenuTriggerFor]="equipmentMenu" [ngClass]="getMatMenuTriggerClass(equipmentMenu)">
+        <mat-icon>phonelink</mat-icon>
+        <span>{{ 'navBarBtnEquipments' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item [matMenuTriggerFor]="locationMenu" [ngClass]="getMatMenuTriggerClass(locationMenu)">
+        <mat-icon>location_on</mat-icon>
+        <span>{{ 'navBarBtnLocations' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item [matMenuTriggerFor]="employeesMenu" [ngClass]="getMatMenuTriggerClass(employeesMenu)">
+        <mat-icon>person</mat-icon>
+        <span>{{ 'navBarBtnEmployees' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item [matMenuTriggerFor]="trainingMenu" [ngClass]="getMatMenuTriggerClass(trainingMenu)">
+        <mat-icon>view_carousel</mat-icon>
+        <span>{{ 'navBarBtnTraining' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item [matMenuTriggerFor]="certificateMenu" [ngClass]="getMatMenuTriggerClass(certificateMenu)">
+        <mat-icon>subtitles</mat-icon>
+        <span>{{ 'navBarBtnCertificates' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item routerLink="exam-template" routerLinkActive="active-link">
+        <mat-icon>spellcheck</mat-icon>
+        <span>{{ 'navBarBtnExam' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item routerLink="notification-template" routerLinkActive="active-link">
+        <mat-icon>mail_outline</mat-icon>
+        <span>{{ 'navBarBtnNotifications' | transloco }}</span>
+      </button>
+
+      <button mat-menu-item [matMenuTriggerFor]="otherMenu" [ngClass]="getMatMenuTriggerClass(otherMenu)">
+        <mat-icon>list_alt</mat-icon>
+        <span>{{ 'navBarBtnOther' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #equipmentMenu="matMenu">
+      <button mat-menu-item routerLink="equipment" routerLinkActive="active-link">
+        <mat-icon>phonelink</mat-icon>
+        <span>{{ 'navBarBtnEquipments' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="equipment-categories" routerLinkActive="active-link">
+        <mat-icon>category</mat-icon>
+        <span>{{ 'navBarBtnEquipmentCategory' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #locationMenu="matMenu">
+      <button mat-menu-item routerLink="location" routerLinkActive="active-link">
+        <mat-icon>location_on</mat-icon>
+        <span>{{ 'navBarBtnLocations' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="room" routerLinkActive="active-link">
+        <mat-icon>meeting_room</mat-icon>
+        <span>{{ 'navBarBtnRooms' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #employeesMenu="matMenu">
+      <button mat-menu-item routerLink="person" routerLinkActive="active-link">
+        <mat-icon>person</mat-icon>
+        <span>{{ 'navBarBtnPersons' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="trainer" routerLinkActive="active-link">
+        <mat-icon>record_voice_over</mat-icon>
+        <span>{{ 'navBarBtnTrainer' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="trainer-category" routerLinkActive="active-link">
+        <mat-icon>category</mat-icon>
+        <span>{{ 'navBarBtnTrainerCategory' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #trainingMenu="matMenu">
+      <button mat-menu-item routerLink="training-template" routerLinkActive="active-link">
+        <mat-icon>view_carousel</mat-icon>
+        <span>{{ 'navBarBtnTrainings' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="syllabus-template" routerLinkActive="active-link">
+        <mat-icon>local_library</mat-icon>
+        <span>{{ 'navBarBtnSyllabus' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="training-type" routerLinkActive="active-link">
+        <mat-icon>text_fields</mat-icon>
+        <span>{{ 'navBarBtnTrainingType' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="training-category" routerLinkActive="active-link">
+        <mat-icon>category</mat-icon>
+        <span>{{ 'navBarBtnTrainingCategories' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #certificateMenu="matMenu">
+      <button mat-menu-item routerLink="certificate-template" routerLinkActive="active-link">
+        <mat-icon>subtitles</mat-icon>
+        <span>{{ 'navBarBtnCertificates' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="certificate-template-group" routerLinkActive="active-link">
+        <mat-icon>vertical_split</mat-icon>
+        <span>{{ 'navBarBtnCertificateTemplateGroups' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #otherMenu="matMenu">
+      <button mat-menu-item routerLink="city" routerLinkActive="active-link">
+        <mat-icon>location_city</mat-icon>
+        <span>{{ 'navBarBtnCity' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="position" routerLinkActive="active-link">
+        <mat-icon>assignment_ind</mat-icon>
+        <span>{{ 'navBarBtnPosition' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="company" routerLinkActive="active-link">
+        <mat-icon>business</mat-icon>
+        <span>{{ 'navBarBtnCompany' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="cost-center" routerLinkActive="active-link">
+        <mat-icon>donut_large</mat-icon>
+        <span>{{ 'navBarBtnCostCenter' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="subdivision" routerLinkActive="active-link">
+        <mat-icon>work</mat-icon>
+        <span>{{ 'navBarBtnSubdivision' | transloco }}</span>
+      </button>
+      @if (hasRoleForAdminPanel()) {
+        <button mat-menu-item routerLink="timetable-display" routerLinkActive="active-link">
+          <mat-icon>desktop_mac</mat-icon>
+          <span>{{ 'navBarBtnTimetableDisplay' | transloco }}</span>
+        </button>
+      }
+    </mat-menu>
+
+    <mat-menu #completedSyllabusesAndTrainings="matMenu">
+      <button mat-menu-item routerLink="completed-trainings" routerLinkActive="active-link">
+        <mat-icon>done</mat-icon>
+        <span>{{ 'navBarBtnCompletedTrainings' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="completed-syllabuses" routerLinkActive="active-link">
+        <mat-icon>done_all</mat-icon>
+        <span>{{ 'navBarBtnCompletedSyllabuses' | transloco }}</span>
+      </button>
+      @if (hasRoleForCertificateIssue()) {
+        <button mat-menu-item routerLink="certificate-issue" routerLinkActive="active-link">
+          <mat-icon>subtitles</mat-icon>
+          <span>{{ 'navBarBtnCertificateIssue' | transloco }}</span>
+        </button>
+      }
+      <button mat-menu-item routerLink="training-summary-report" routerLinkActive="active-link">
+        <mat-icon>book</mat-icon>
+        <span>{{ 'navBarBtnTrainingSummaryReport' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #planerPanel="matMenu">
+      <button
+        mat-menu-item
+        [matMenuTriggerFor]="resourceUnavailabilityMenu"
+        [ngClass]="getMatMenuTriggerClass(resourceUnavailabilityMenu)"
+      >
+        <mat-icon>phonelink_off</mat-icon>
+        <span>{{ 'navBarBtnResourceUnavailability' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="trainee-cart" routerLinkActive="active-link">
+        <mat-icon>recent_actors</mat-icon>
+        <span>{{ 'navBarBtnTraineeCart' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #resourceUnavailabilityMenu="matMenu">
+      <button mat-menu-item routerLinkActive="active-link" (click)="openCreateUnavailabilityResourceModal()">
+        <mat-icon>add</mat-icon>
+        <span>{{ 'navBarBtnAddResourceUnavailability' | transloco }}</span>
+      </button>
+      @if (hasRoleForAdminPanel()) {
+        <button mat-menu-item routerLink="unavailability-resources-label" routerLinkActive="active-link">
+          <mat-icon>change_history</mat-icon>
+          <span>{{ 'navBarBtnResourceUnavailabilityLabel' | transloco }}</span>
+        </button>
+      }
+      <button mat-menu-item routerLink="unavailability-resources-period" routerLinkActive="active-link">
+        <mat-icon>list</mat-icon>
+        <span>{{ 'navBarBtnResourceUnavailabilityList' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #adminPanel="matMenu">
+      <button mat-menu-item routerLink="sent-notification" routerLinkActive="active-link">
+        <mat-icon>email</mat-icon>
+        <span>{{ 'navBarBtnSentNotification' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="historical-data" routerLinkActive="active-link">
+        <mat-icon>history</mat-icon>
+        <span>{{ 'navBarBtnHistoricalData' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="aims-integration-info" routerLinkActive="active-link">
+        <mat-icon>cloud_download</mat-icon>
+        <span>{{ 'navBarBtnIntegration' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLinkActive="active-link" openAuditTable>
+        <mat-icon>chrome_reader_mode</mat-icon>
+        <span>{{ 'auditBtn' | transloco }}</span>
+      </button>
+      <button mat-menu-item [matMenuTriggerFor]="tagMenu" [ngClass]="getMatMenuTriggerClass(tagMenu)">
+        <mat-icon>label</mat-icon>
+        <span>{{ 'navBarBtnTagPanel' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #tagMenu="matMenu">
+      <button mat-menu-item routerLink="tag-role" routerLinkActive="active-link">
+        <mat-icon>assignment_ind</mat-icon>
+        <span>{{ 'navBarBtnTagRole' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="tag-person-linker" routerLinkActive="active-link">
+        <mat-icon>supervisor_account</mat-icon>
+        <span>{{ 'navBarBtnTagPerson' | transloco }}</span>
+      </button>
+      <button mat-menu-item routerLink="tag-resource-linker" routerLinkActive="active-link">
+        <mat-icon>more</mat-icon>
+        <span>{{ 'navBarBtnTagResource' | transloco }}</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+}

@@ -1,0 +1,24 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'trainingSummaryReportPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'trainingSummaryReportTable'"
+  [displayedColumns]="displayedColumns"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="certificate" let-trainingSummary="row">
+    @if (trainingSummary.certificateId) {
+      <div class="icon-col-btns-container">
+        <app-certificate-issue-download-view-btns
+          (click)="$event.stopPropagation()"
+          [participantTrainingCardId]="trainingSummary.participantTrainingCardId"
+        >
+        </app-certificate-issue-download-view-btns>
+      </div>
+    }
+  </ng-template>
+</app-table-wrapper>

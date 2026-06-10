@@ -1,0 +1,59 @@
+.new-certificate-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  flex-grow: 1;
+
+  .new-certificate-input-container {
+    display: flex;
+    flex-direction: column;
+
+    .new-certificate-input-label {
+      margin-bottom: 5px;
+    }
+  }
+
+  .new-certificate-input-group-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+
+    .new-certificate-input-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 200px;
+
+      &.serial-number-code {
+        min-width: max-content;
+      }
+
+      .new-certificate-input-label {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+.certificate-input {
+  width: 25%;
+}
+
+.divider-container {
+  margin-bottom: 20px;
+
+  &.new-cert-divider {
+    margin-top: 50px;
+
+    .divider-container-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+  }
+
+  span {
+    font-weight: bold;
+  }
+}

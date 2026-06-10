@@ -1,0 +1,49 @@
+@use 'src/assets/styles/global-vars' as gv;
+
+.modal-container {
+  width: 750px;
+  padding: 55px;
+}
+
+.event-modal-tree-selection-top-bar-container {
+  .mat-button-toggle-checked {
+    color: gv.$trms-green-500;
+  }
+}
+
+.event-modal-tree-selection-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  ::ng-deep.tree-container {
+    max-height: calc(100% - 100px);
+  }
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 550;
+}
+
+.creating-event-modal-mat-select {
+  width: 100%;
+}
+
+.creating-event-modal-btn-container {
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    width: 45%;
+  }
+}
+
+::ng-deep {
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      background-color: white;
+      border-radius: 5px;
+    }
+  }
+}

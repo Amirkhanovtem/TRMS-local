@@ -1,0 +1,32 @@
+<div>
+  <mat-accordion class="accordion">
+    <!--   ROOMS   -->
+    <mat-expansion-panel class="expansion" expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title class="mat-expansion-bold-title">
+          {{ 'timetableDisplaySettingsModalSelectedRooms' | transloco }}
+          <button mat-icon-button color="primary" (click)="openRoomSelectionModal($event)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div>
+        <div cdkDropList class="list-container" (cdkDropListDropped)="drop($event)">
+          @for (displayRoom of getSortedTimetableDisplayRooms(); track displayRoom; let i = $index) {
+            <div class="item-box" cdkDrag>
+              <div class="item-box-custom-placeholder" *cdkDragPlaceholder></div>
+              <span class="index">{{ i + 1 }}</span>
+              {{ displayRoom.room.name }}
+            </div>
+          }
+
+          @if (getSortedTimetableDisplayRooms().length === 0) {
+            <div class="not-found-message-tr">
+              <h4>{{ 'searchNotFoundMessage' | transloco }}</h4>
+            </div>
+          }
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

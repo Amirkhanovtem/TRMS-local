@@ -1,0 +1,5 @@
+export enum GanttResourceGroupType {
+  ROOM_GROUP = 'ROOM_GROUP',
+  TRAINER_GROUP = 'TRAINER_GROUP',
+  EQUIPMENT_GROUP = 'EQUIPMENT_GROUP',
+}

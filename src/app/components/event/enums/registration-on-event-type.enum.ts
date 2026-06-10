@@ -1,0 +1,6 @@
+export enum RegistrationOnEventType {
+  NOT_REGISTERED = 'NOT_REGISTERED',
+  MANDATORY = 'MANDATORY',
+  IN_PROCESS = 'IN_PROCESS',
+  SELF_ENROLLED = 'SELF_ENROLLED',
+}

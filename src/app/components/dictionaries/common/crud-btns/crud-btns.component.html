@@ -1,0 +1,29 @@
+@if (checkShowBtn('create')) {
+  <button mat-raised-button color="primary" [disabled]="checkBtnDisable('create')" (click)="openCreateModal()">
+    {{ 'createBtn' | transloco }}
+  </button>
+}
+@if (checkShowBtn('edit')) {
+  <button mat-raised-button color="accent" [disabled]="checkBtnDisable('edit')" (click)="openUpdateModal()">
+    {{ 'editBtn' | transloco }}
+  </button>
+}
+@if (checkShowBtn('delete')) {
+  <button mat-raised-button color="warn" [disabled]="checkBtnDisable('delete')" (click)="openDeleteModal()">
+    {{ 'deleteBtn' | transloco }}
+  </button>
+}
+@if (checkShowBtn('view')) {
+  <button mat-raised-button color="accent" [disabled]="checkBtnDisable('view')" (click)="openViewModal()">
+    {{ 'viewBtn' | transloco }}
+  </button>
+}
+<button
+  mat-raised-button
+  color="accent"
+  [disabled]="checkBtnDisable('audit')"
+  openAuditTable
+  [entityId]="getSingleSelectedId()"
+>
+  {{ 'auditBtn' | transloco }}
+</button>

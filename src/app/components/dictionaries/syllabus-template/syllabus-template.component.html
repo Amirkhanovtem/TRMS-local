@@ -1,0 +1,18 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'syllabusTemplatePageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'syllabusTemplateDictionaryTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="syllabusTemplateService"
+      (loadData)="loadSyllabusTemplates()"
+    >
+    </app-crud-btns>
+  </ng-container>
+</app-table-wrapper>

@@ -1,0 +1,13 @@
+.tag-person-linker-container {
+  display: flex;
+  height: 80vh;
+  flex-direction: column;
+
+  .cards-container {
+    display: flex;
+    gap: 20px;
+    height: 85%;
+    width: 100%;
+    justify-content: space-around;
+  }
+}

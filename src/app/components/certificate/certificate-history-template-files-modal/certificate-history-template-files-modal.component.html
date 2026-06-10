@@ -1,0 +1,68 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        (dialogParams?.isTemplate ? 'certificateTemplateHistoryFileModalTitle' : 'certificateHistoryFileModalTitle')
+          | transloco: { 'certificateName': dialogParams.certificate.name }
+      }}
+    </h1>
+  </ng-container>
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'certificateHistoryTemplateFile'"
+      [displayedColumns]="displayedColumns"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+      [tableColTemplateList]="tableColTemplateList"
+    >
+      <ng-container table-buttons>
+        @if (dialogParams?.changeableActive) {
+          <button
+            mat-raised-button
+            [ngClass]="setActiveBtnDisable() ? '' : 'secondaryBtn'"
+            [disabled]="setActiveBtnDisable()"
+            (click)="setActive()"
+          >
+            {{ 'certificateTemplateHistorySetActiveBtn' | transloco }}
+          </button>
+        }
+        <app-crud-btns
+          [parentSelection]="tableWrapper.selection"
+          [service]="certificateHistoryTemplateFilesService"
+          [checkShowCrudBtnFunc]="getMapCheckCrudBtnShowFuncMap()"
+          [mapCheckCrudBtnDisableFunc]="getMapCheckCrudBtnDisableFuncMap()"
+          (loadData)="loadCertificateTemplateHistoricalFiles()"
+        >
+        </app-crud-btns>
+      </ng-container>
+
+      <ng-template tableWrapperColumn="file" let-certificateTemplateHistoryFile="row">
+        @if (certificateTemplateHistoryFile?.fileStorage?.id) {
+          <span class="link-btn" (click)="loadAttachedFile(certificateTemplateHistoryFile?.fileStorage, $event)">
+            {{ certificateTemplateHistoryFile?.fileStorage?.name }}
+          </span>
+        }
+      </ng-template>
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+      @if (dialogParams?.loadFileAble) {
+        <button mat-raised-button color="primary" (click)="uploadFileBtnComponent.openFileInput()">
+          {{ 'certificateTemplateHistoryUploadFileBtn' | transloco }}
+          <app-common-upload-file-btn
+            #uploadFileBtnComponent
+            (fileSelectedHandler)="uploadFile($event)"
+            [invalidFormatMessageKey]="'validatorsInvalidWordFileFormat'"
+            [acceptFormats]="getAllowedFileFormats()"
+          >
+          </app-common-upload-file-btn>
+        </button>
+      }
+    </div>
+  </ng-container>
+</app-common-modal>

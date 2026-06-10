@@ -1,0 +1,42 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'traineeCartPageTitle' | transloco }}
+  </span>
+</div>
+
+<mat-drawer-container class="trainee-cart-drawer-container" autosize>
+  <mat-drawer #drawer class="drawer-sidenav" mode="side">
+    <app-trainee-cart-training-template />
+  </mat-drawer>
+
+  <div [ngStyle]="{ 'margin-left.px': drawer.opened ? 10 : 0 }">
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'traineeCartTable'"
+      [tableColTemplateList]="tableColTemplateList"
+      [tableContainerClass]="''"
+      [displayedColumns]="displayedColumns"
+    >
+      <ng-container table-buttons>
+        <button mat-icon-button (click)="drawer.toggle()">
+          <mat-icon>{{ drawer.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
+        </button>
+      </ng-container>
+
+      @for (trainingTemplate of trainingTemplates; track trainingTemplate) {
+        <ng-template [tableWrapperColumn]="trainingTemplate.id" let-traineeCart="row">
+          <span
+            class="certificate-status"
+            [ngClass]="traineeCart.certificateVisualInfoByTrainingTemplateMap.get(trainingTemplate.id)?.state"
+          >
+            {{ traineeCart.certificateVisualInfoByTrainingTemplateMap.get(trainingTemplate.id)?.cellValue }}
+          </span>
+        </ng-template>
+      }
+    </app-table-wrapper>
+  </div>
+</mat-drawer-container>
+
+@if (clickedTrainingTemplate) {
+  <app-trainee-cart-detail-table></app-trainee-cart-detail-table>
+}

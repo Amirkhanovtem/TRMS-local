@@ -1,0 +1,8 @@
+.create-update-node-modal-container {
+  width: 400px;
+  max-width: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  justify-content: space-between;
+}

@@ -1,0 +1,18 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'equipmentCategoryPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'equipmentCategoryDictionaryTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="equipmentCategoryService"
+      (loadData)="loadEquipmentCategories()"
+    >
+    </app-crud-btns>
+  </ng-container>
+</app-table-wrapper>

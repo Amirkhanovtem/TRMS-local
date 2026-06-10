@@ -1,0 +1,430 @@
+﻿<div class="employee-profile-prototype">
+  <div class="app">
+    <aside class="sidebar">
+      <button class="brand" type="button" (click)="switchPage('home')">
+        <strong>Learning Journey</strong>
+        <span>Desktop employee experience</span>
+      </button>
+
+      <nav class="nav" aria-label="Навигация">
+        <button type="button" [class.active]="activePage === 'home'" (click)="switchPage('home')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /><path d="M9 21v-7h6v7" /></svg>
+          Home
+        </button>
+        <button type="button" [class.active]="activePage === 'store'" (click)="switchPage('store')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M6 2h12l2 7H4z" /><path d="M5 9v11h14V9" /><path d="M9 13h6" /></svg>
+          Витрина
+        </button>
+        <button type="button" [class.active]="activePage === 'forum'" (click)="switchPage('forum')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 5h16v10H7l-3 3z" /><path d="M8 9h8" /><path d="M8 12h5" /></svg>
+          Форум
+        </button>
+        <button type="button" [class.active]="activePage === 'rewards'" (click)="switchPage('rewards')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8" /><path d="M12 17v4" /><path d="M7 4h10v5a5 5 0 0 1-10 0z" /><path d="M5 5H3v2a4 4 0 0 0 4 4" /><path d="M19 5h2v2a4 4 0 0 1-4 4" /></svg>
+          Мои награды
+        </button>
+        <button type="button" [class.active]="activePage === 'history'" (click)="switchPage('history')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 4v5h5" /><path d="M12 7v6l4 2" /></svg>
+          История
+        </button>
+      </nav>
+
+      <button class="sidebar-profile" type="button" (click)="openModal('profileDetails', $event)">
+        <div class="avatar">ТА</div>
+        <div>
+          <strong>Темирлан Амирханов</strong>
+          <span>Supervisor Training Systems</span>
+        </div>
+      </button>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <h1>Learning Journey</h1>
+          <p>{{ subtitles[activePage] }}</p>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" type="button" title="Уведомления" (click)="openModal('notifications', $event)">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" /><path d="M10 21h4" /></svg>
+          </button>
+          <button class="icon-button" type="button" title="AI" (click)="openModal('aiAssistant', $event)">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M8 17 12 3l4 14" /><path d="m7 17 5 4 5-4" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="page" [class.active]="activePage === 'home'">
+        <div class="grid-3">
+          <section class="panel profile-card" (click)="openModal('profileDetails', $event)">
+            <div class="panel-pad profile-large">
+              <div class="avatar-large">ТА</div>
+              <div>
+                <h2>Темирлан Амирханов</h2>
+                <p>Supervisor Training Systems · Training Academy · Almaty</p>
+              </div>
+            </div>
+          </section>
+          <section class="panel stat" (click)="switchPage('history')"><small>Часы обучения</small><strong>42</strong></section>
+          <section class="panel stat" (click)="openModal('learningPlan', $event)"><small>Осталось пройти</small><strong>4</strong></section>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel journey-pass" (click)="openModal('learningPlan', $event)">
+            <div class="panel-pad pass-content">
+              <div>
+                <small>Next learning journey</small>
+                <h2>New Employee Orientation Plan</h2>
+              </div>
+              <div class="pass-badge">4<br />Steps</div>
+            </div>
+          </section>
+
+          <section class="panel" (click)="openModal('hoursDetails', $event)">
+            <div class="panel-head">
+              <div>
+                <h2>Часы обучения</h2>
+                <p>План и фактическая активность.</p>
+              </div>
+            </div>
+            <div class="panel-pad hours-content">
+              <div class="ring"><strong>68%</strong></div>
+              <div>
+                <strong>До полного внедрения осталось 4 тренинга</strong>
+                <p class="muted-copy">Прогресс считается по матрице позиции и истории прохождения.</p>
+                <div class="bar-row"><span>Онлайн</span><div class="bar"><span style="width:75%"></span></div><span>18 ч</span></div>
+                <div class="bar-row"><span>Оффлайн</span><div class="bar"><span class="offline" style="width:100%"></span></div><span>24 ч</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>Employee Way</h2><p>Тренинги за текущий год.</p></div>
+              <button class="text-button" type="button" (click)="openModal('employeeFilter', $event)">Фильтр</button>
+            </div>
+            <div class="panel-pad employee-tree">
+              <div class="tree-line"></div>
+              <button class="tree-node" type="button" (click)="openModal('wayOrientation', $event)">
+                <span class="dot"></span><div><strong>Orientation Program</strong><span>Январь · онлайн</span></div><span class="pill">Пройден</span>
+              </button>
+              <button class="tree-node" type="button" (click)="openModal('waySecurity', $event)">
+                <span class="dot"></span><div><strong>Aviation Security</strong><span>Февраль · класс</span></div><span class="pill">Пройден</span>
+              </button>
+              <button class="tree-node" type="button" (click)="openModal('wayLine', $event)">
+                <span class="dot progress"></span><div><strong>Line Training</strong><span>Июнь · текущий чекпоинт</span></div><span class="pill warn">В процессе</span>
+              </button>
+              <button class="tree-node" type="button" (click)="openModal('wayHuman', $event)">
+                <span class="dot locked"></span><div><strong>Human Factors Initial</strong><span>Июль · следующий шаг</span></div><span class="pill muted">Не начато</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div><h2>Мой путь по позиции</h2><p>Supervisor Training Systems</p></div>
+              <span class="pill warn">68%</span>
+            </div>
+            <div class="panel-pad">
+              <button class="position-row" type="button" (click)="openModal('positionLeadership', $event)">
+                <div class="row-icon">1</div><div><strong>Leadership Curriculum</strong><span>2 из 3 модулей закрыты</span></div><span class="pill warn">В процессе</span>
+              </button>
+              <button class="position-row" type="button" (click)="openModal('positionDigital', $event)">
+                <div class="row-icon">2</div><div><strong>Digital Learning Strategy</strong><span>Следующий рекомендуемый тренинг</span></div><span class="pill muted">Не начато</span>
+              </button>
+              <button class="position-row" type="button" (click)="openModal('positionGovernance', $event)">
+                <div class="row-icon">3</div><div><strong>Academy Governance</strong><span>Требование позиции выполнено</span></div><span class="pill">Пройдено</span>
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div><h2>Рекомендованные тренинги</h2><p>Цвет показывает источник рекомендации.</p></div>
+            <button class="text-button" type="button" (click)="openModal('recommendFilter', $event)">Фильтр</button>
+          </div>
+          <div class="panel-pad grid-3">
+            <button class="recommend-card" type="button" (click)="openModal('recExperience', $event)">
+              <span class="source"></span><div><strong>Learning Experience Design</strong><span>Коллеги · 8 рекомендаций</span></div><span class="pill">Коллеги</span>
+            </button>
+            <button class="recommend-card" type="button" (click)="openModal('recDigital', $event)">
+              <span class="source position"></span><div><strong>Digital Learning Strategy</strong><span>Для позиции · обязательный трек</span></div><span class="pill">Позиция</span>
+            </button>
+            <button class="recommend-card" type="button" (click)="openModal('recBudget', $event)">
+              <span class="source manager"></span><div><strong>Academy Budget Planning</strong><span>Руководитель · приоритет Q3</span></div><span class="pill warn">Руководитель</span>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <section class="page" [class.active]="activePage === 'store'">
+        <div class="store-layout">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Витрина тренингов</h2><p>Заполните фильтры последовательно для поиска тренингов.</p></div></div>
+            <div class="panel-pad form-grid">
+              <div class="field"><label>Тренинги</label><select class="control" [(ngModel)]="storeFilter.training"><option value="">Тренинги</option><option>ERP training for Special Assistance Team Volunteers</option><option>International Taxation for Business Initiators</option></select></div>
+              <div class="field"><label>Города</label><select class="control" [(ngModel)]="storeFilter.city"><option value="">Города</option><option>Алматы</option><option>Астана, Алматы</option></select></div>
+              <div class="grid-2">
+                <div class="field"><label>Дата с</label><input class="control" type="date" [(ngModel)]="storeFilter.from" /></div>
+                <div class="field"><label>Дата до</label><input class="control" type="date" [(ngModel)]="storeFilter.to" /></div>
+              </div>
+              <button class="primary" type="button" (click)="showTrainings()">Показать тренинги</button>
+              <button class="secondary" type="button" (click)="clearTrainings()">Очистить</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>Результаты</h2><p>Доступные сессии по выбранным фильтрам.</p></div></div>
+            <div class="panel-pad">
+              <article class="session-card panel" (click)="openModal('storeErp', $event)">
+                <h2>ERP training for Special Assistance Team Volunteers</h2>
+                <div class="session-box">
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><path d="M3 10h18" /><rect x="3" y="4" width="18" height="18" rx="2" /></svg><span>23.06.2026</span><span class="pill">4 места</span></div>
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z" /><circle cx="12" cy="10" r="3" /></svg><span>Алматы, Кульджинский тракт, 4в корпус Ю, St 311</span></div>
+                </div>
+                <button class="primary enroll" type="button" (click)="enroll('storeErp', $event)">{{ enrolled['storeErp'] ? 'Участие принято' : 'Принять участие' }}</button>
+              </article>
+
+              <article class="session-card panel" (click)="openModal('storeTax', $event)">
+                <h2>International Taxation for Business Initiators</h2>
+                <div class="session-box">
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><path d="M3 10h18" /><rect x="3" y="4" width="18" height="18" rx="2" /></svg><span>19.06.2026</span><span class="pill">8 мест</span></div>
+                  <div class="session-row"><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z" /><circle cx="12" cy="10" r="3" /></svg><span>Алматы, Достык 38, KD London</span></div>
+                </div>
+                <button class="primary enroll" type="button" (click)="enroll('storeTax', $event)">{{ enrolled['storeTax'] ? 'Участие принято' : 'Принять участие' }}</button>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" [class.active]="activePage === 'forum'">
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Top 3 обсуждения</h2><p>Самые активные темы.</p></div></div>
+            <div class="panel-pad podium">
+              <button class="podium-card second" type="button" (click)="openModal('topicCertificate', $event)"><div class="rank">2</div><strong>Где скачать сертификат после теста?</strong><span>17 ответов</span><span class="text-button like" (click)="like($event)">Like 12</span></button>
+              <button class="podium-card first" type="button" (click)="openModal('topicOrientation', $event)"><div class="rank">1</div><strong>Как быстро закрыть Orientation Program?</strong><span>24 ответа</span><span class="text-button like" (click)="like($event)">Like 18</span></button>
+              <button class="podium-card third" type="button" (click)="openModal('topicIt', $event)"><div class="rank">3</div><strong>IT безопасность: тест не открылся</strong><span>14 ответов</span><span class="text-button like" (click)="like($event)">Like 9</span></button>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Написать коллегам</h2><p>Создайте обсуждение или задайте вопрос.</p></div></div>
+            <div class="panel-pad composer">
+              <textarea [(ngModel)]="forumText" placeholder="Коллеги, кто уже проходил Orientation Program онлайн?"></textarea>
+              <button class="primary" type="button" (click)="sendTopic()">Отправить</button>
+            </div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="panel-head"><div><h2>Обсуждения</h2><p>Ветки сотрудников и тренеров.</p></div><button class="text-button" type="button" (click)="createTopic()">Новая тема</button></div>
+          <div class="panel-pad">
+            @for (discussion of discussions; track discussion.modalKey) {
+              <button class="forum-row" type="button" (click)="openModal(discussion.modalKey, $event)">
+                <div class="row-icon">?</div>
+                <div><strong>{{ discussion.title }}</strong><span>{{ discussion.subtitle }}</span></div>
+                <span class="text-button like" (click)="like($event, discussion)">Like {{ discussion.likes }}</span>
+              </button>
+            }
+          </div>
+        </section>
+      </section>
+            <section class="page" [class.active]="activePage === 'rewards'">
+        <section class="reward-hero" [class.sky]="selectedRewardBanner === 'sky'" [class.gold]="selectedRewardBanner === 'gold'">
+          <div class="reward-copy">
+            <small>Мои награды</small>
+            <h2>Темирлан Амирханов</h2>
+            <p>{{ customRewardField }}</p>
+            <div class="reward-hero-tags">
+              <span>Reward Shop</span>
+              <span>Бейджи</span>
+              <span>Ачивки</span>
+            </div>
+          </div>
+          <div class="reward-illustration" aria-hidden="true">
+            <div class="trophy-cup"></div>
+            <div class="trophy-base"></div>
+            <div class="coin coin-one"></div>
+            <div class="coin coin-two"></div>
+            <div class="coin coin-three"></div>
+          </div>
+          <div class="reward-points">
+            <strong>1 240</strong>
+            <span>баллов доступно</span>
+          </div>
+        </section>
+
+        <div class="grid-3 reward-achievements">
+          @for (achievement of achievements; track achievement.title; let index = $index) {
+            <button class="achievement-card" type="button" (click)="openRewardDetails(achievement.title, 'Ачивка', achievement.note, $event)">
+              <span class="achievement-visual" [class.visual-green]="index === 0" [class.visual-blue]="index === 1" [class.visual-gold]="index === 2">
+                <span>{{ achievement.value }}</span>
+              </span>
+              <span>{{ achievement.title }}</span>
+              <small>{{ achievement.note }}</small>
+            </button>
+          }
+        </div>
+
+        <div class="grid-2 rewards-main">
+          <section class="panel reward-shop-panel">
+            <div class="panel-head">
+              <div><h2>Reward Shop</h2><p>Награды, которые сотрудник купил за баллы.</p></div>
+            </div>
+            <div class="panel-pad reward-list">
+              @for (reward of rewardPurchases; track reward.title; let index = $index) {
+                <button class="reward-row" type="button" (click)="openRewardDetails(reward.title, 'Reward Shop', reward.status, $event)">
+                  <div class="reward-picture" [class.picture-ticket]="index === 0" [class.picture-mug]="index === 1" [class.picture-coupon]="index === 2">
+                    <span class="picture-shine"></span>
+                    <span class="picture-mark">{{ index + 1 }}</span>
+                  </div>
+                  <div>
+                    <strong>{{ reward.title }}</strong>
+                    <span>{{ reward.date }} · {{ reward.cost }}</span>
+                  </div>
+                  <span class="pill">{{ reward.status }}</span>
+                </button>
+              }
+            </div>
+          </section>
+
+          <section class="panel badge-panel">
+            <div class="panel-head">
+              <div><h2>Бейджи</h2><p>Видимые достижения в профиле сотрудника.</p></div>
+            </div>
+            <div class="panel-pad badge-grid">
+              @for (badge of rewardBadges; track badge.title; let index = $index) {
+                <button class="badge-card" type="button" (click)="openRewardDetails(badge.title, 'Бейдж', badge.level, $event)">
+                  <div class="badge-illustration" [class.badge-silver]="badge.level === 'Silver'" [class.badge-safety]="index === 2">
+                    <div class="badge-medal">{{ badge.level[0] }}</div>
+                    <span class="badge-ribbon"></span>
+                  </div>
+                  <strong>{{ badge.title }}</strong>
+                  <span>{{ badge.subtitle }}</span>
+                  <small>{{ badge.level }}</small>
+                </button>
+              }
+            </div>
+          </section>
+        </div>
+
+        <section class="panel reward-settings">
+          <div class="panel-head">
+            <div><h2>Настройки витрины профиля</h2><p>Баннер и кастомное поле, которые сотрудник видит под своими данными.</p></div>
+          </div>
+          <div class="panel-pad reward-settings-layout">
+            <div class="profile-banner-preview" [class.sky]="selectedRewardBanner === 'sky'" [class.gold]="selectedRewardBanner === 'gold'">
+              <div class="preview-avatar">ТА</div>
+              <div>
+                <strong>Темирлан Амирханов</strong>
+                <span>Supervisor Training Systems</span>
+                <p>{{ customRewardField }}</p>
+              </div>
+            </div>
+            <div class="reward-settings-grid">
+              <div class="field">
+                <label>Баннер профиля</label>
+                <div class="banner-options">
+                  @for (banner of rewardBanners; track banner.id) {
+                    <button class="banner-option" type="button" [class.active]="selectedRewardBanner === banner.id" (click)="selectedRewardBanner = banner.id">
+                      <span class="banner-swatch" [class.sky]="banner.id === 'sky'" [class.gold]="banner.id === 'gold'"></span>
+                      {{ banner.title }}
+                    </button>
+                  }
+                </div>
+              </div>
+              <div class="field">
+                <label>Кастомное поле</label>
+                <textarea class="control" rows="4" [(ngModel)]="customRewardField"></textarea>
+              </div>
+              <button class="primary" type="button" (click)="saveRewardProfile()">Сохранить профиль наград</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+
+
+      <section class="page" [class.active]="activePage === 'history'">
+        <section class="panel" (click)="openModal('hoursDetails', $event)">
+          <div class="panel-head"><div><h2>Часы обучения</h2><p>План и фактическая активность.</p></div></div>
+          <div class="panel-pad hours-content">
+            <div class="ring"><strong>68%</strong></div>
+            <div>
+              <strong>До полного внедрения осталось 4 тренинга</strong>
+              <p class="muted-copy">Система считает прогресс по обязательной матрице позиции и истории прохождения.</p>
+              <div class="bar-row"><span>Онлайн</span><div class="bar"><span style="width:75%"></span></div><span>18 ч</span></div>
+              <div class="bar-row"><span>Оффлайн</span><div class="bar"><span class="offline" style="width:100%"></span></div><span>24 ч</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><div><h2>Education</h2><p>Курсы, статусы и подробности.</p></div></div>
+          <div class="panel-pad">
+            <div class="tabs">
+              <button class="tab" type="button" [class.active]="courseFilter === 'all'" (click)="courseFilter = 'all'">All courses (141)</button>
+              <button class="tab" type="button" [class.active]="courseFilter === 'progress'" (click)="courseFilter = 'progress'">In progress (34)</button>
+              <button class="tab" type="button" [class.active]="courseFilter === 'planned'" (click)="courseFilter = 'planned'">Planned (12)</button>
+              <button class="tab" type="button" [class.active]="courseFilter === 'completed'" (click)="courseFilter = 'completed'">Completed (95)</button>
+              <button class="tab" type="button" [class.active]="courseMode === 'online'" (click)="courseMode = courseMode === 'online' ? 'all' : 'online'">Online</button>
+              <button class="tab" type="button" [class.active]="courseMode === 'offline'" (click)="courseMode = courseMode === 'offline' ? 'all' : 'offline'">Offline</button>
+            </div>
+            @for (course of courses; track course.title) {
+              <button class="course-row" type="button" [class.hidden]="!isCourseVisible(course)" (click)="openModal(course.modalKey, $event)">
+                <strong>{{ course.title }}</strong>
+                <span>{{ course.mode }}</span>
+                <span>{{ course.statusText }}</span>
+                <span>{{ course.result }}</span>
+              </button>
+            }
+          </div>
+        </section>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Последние обучения</h2><p>Недавние записи.</p></div></div>
+            <div class="panel-pad">
+              <button class="list-row" type="button" (click)="openModal('recentHeart', $event)"><div class="row-icon">✓</div><div><strong>HEART Basics</strong><span>28 мая · оффлайн · 8 ч</span></div><span class="pill">Пройдено</span></button>
+              <button class="list-row" type="button" (click)="openModal('recentSafety', $event)"><div class="row-icon">✓</div><div><strong>Safety & Emergency</strong><span>23 мая · онлайн · тест 91%</span></div><span class="pill">3 ч</span></button>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h2>Сертификаты</h2><p>Активные сертификаты.</p></div></div>
+            <div class="panel-pad">
+              <button class="list-row" type="button" (click)="openModal('certHeart', $event)"><div class="row-icon">C</div><div><strong>HEART Basics</strong><span>Активен до 28.05.2027</span></div><span class="pill">Active</span></button>
+              <button class="list-row" type="button" (click)="openModal('certSafety', $event)"><div class="row-icon">C</div><div><strong>Safety & Emergency</strong><span>Активен до 23.05.2027</span></div><span class="pill">Active</span></button>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" [class.open]="modalOpen" (click)="closeModal()">
+    <section class="modal" (click)="$event.stopPropagation()">
+      <header class="modal-head">
+        <div>
+          <small>{{ selectedModal.kicker }}</small>
+          <h2>{{ selectedModal.title }}</h2>
+        </div>
+        <button class="text-button" type="button" (click)="closeModal()">Закрыть</button>
+      </header>
+      <div class="modal-body">
+        <div class="detail-grid">
+          @for (detail of selectedModal.details; track detail[0]) {
+            <div class="detail"><small>{{ detail[0] }}</small><strong>{{ detail[1] }}</strong></div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" [class.open]="toastText">{{ toastText }}</div>
+</div>
+
+
+

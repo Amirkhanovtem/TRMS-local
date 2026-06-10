@@ -1,0 +1,31 @@
+a {
+  color: #5d5a88;
+  font-size: 0.9vw;
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  font-weight: 500;
+}
+
+// Mobile breakpoint
+$mobile-breakpoint: 768px;
+
+// Mobile styles for navbar buttons
+@media (max-width: $mobile-breakpoint) {
+  a {
+    font-size: 14px; // Same size as headings
+    font-weight: 400; // Same weight as headings
+    padding: 0.8em 1em;
+  }
+}
+
+i {
+  background: url('../../../assets/images/arrow-down.png');
+  height: 6px;
+  width: 12px;
+  margin-left: 10px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

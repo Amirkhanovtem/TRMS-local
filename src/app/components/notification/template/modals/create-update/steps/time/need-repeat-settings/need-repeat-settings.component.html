@@ -1,0 +1,179 @@
+<!--   NEED REPEAT SENDING   -->
+<div class="modal-input-field">
+  <mat-slide-toggle
+    [color]="'primary'"
+    [(ngModel)]="parent.notificationTemplate.isRepeatable"
+    (change)="changeNeedRepeatHandler()"
+    [disabled]="parent.dialogParams?.isView"
+  >
+    {{ 'notificationNeedRepeatMessage' | transloco }}
+  </mat-slide-toggle>
+</div>
+
+@if (parent.notificationTemplate.isRepeatable) {
+  <div>
+    <!--   NEED REPEAT SENDING SETTINGS   -->
+    <div class="modal-input-field">
+      <mat-divider></mat-divider>
+      <div class="multi-input-fields-container">
+        <!--   REPEAT COUNT   -->
+        <div class="input-fields-group-container">
+          <span>
+            {{ 'notificationRepeatCountLabel' | transloco }}
+          </span>
+          <div class="input-field">
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                type="text"
+                appAllowNumbersOnlyDirective
+                min="1"
+                required
+                [formControl]="repeatCountControl"
+                [placeholder]="'notificationOffsetCount' | transloco"
+                [(ngModel)]="parent.notificationTemplate.repeatCount"
+                [readonly]="parent.dialogParams?.isView"
+              />
+            </mat-form-field>
+            <div class="error-message max-width-error-message">
+              @if (parent.isFieldEmpty('repeatCount')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+              @if (parent.isFieldLessThenZero('repeatCount')) {
+                <span>
+                  {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+        <!--   REPEAT TIME SENDING   -->
+        <div class="input-fields-group-container">
+          <span>
+            {{ ('notificationTime' | transloco) + ':' }}
+          </span>
+          <div class="input-field">
+            <mat-form-field appearance="outline">
+              <mat-select
+                required
+                [formControl]="repeatSendingTimeControl"
+                [placeholder]="'notificationTime' | transloco"
+                [(ngModel)]="parent.notificationTemplate.repeatSendingTime"
+              >
+                @for (timeList of commonDateTimeService.workTimesList; track timeList) {
+                  <mat-option [value]="timeList" [disabled]="parent.dialogParams?.isView">
+                    {{ timeList }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="error-message max-width-error-message">
+              @if (parent.isFieldEmpty('repeatSendingTime')) {
+                <span>
+                  {{ 'validatorsEmptyFieldMessage' | transloco }}
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--   REPEAT TYPE   -->
+    <div class="modal-input-field">
+      <p class="modal-input-field-title">
+        {{ 'notificationRepeatType' | transloco }}
+      </p>
+      <mat-form-field appearance="outline">
+        <mat-select
+          required
+          [formControl]="repeatTypeControl"
+          [placeholder]="'notificationRepeatType' | transloco"
+          [(ngModel)]="parent.notificationTemplate.repeatType"
+          [compareWith]="compareWithFn"
+        >
+          @for (repeatType of allRepeatType; track repeatType) {
+            <mat-option
+              [value]="repeatType"
+              [disabled]="parent.dialogParams?.isView"
+              (click)="changeRepeatTypeHandler()"
+            >
+              {{ repeatType[localEnumField] }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <div class="error-message">
+        @if (parent.isFieldEmpty('repeatType')) {
+          <span>
+            {{ 'validatorsEmptyFieldMessage' | transloco }}
+          </span>
+        }
+      </div>
+    </div>
+    <!--   REPEAT DAY DELAY INPUT  -->
+    @if (isRepeatTypePerDay()) {
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'notificationRepeatDayPeriod' | transloco }}
+        </p>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            type="text"
+            appAllowNumbersOnlyDirective
+            min="1"
+            required
+            [formControl]="repeatDayPeriodControl"
+            [placeholder]="'notificationRepeatDayPeriod' | transloco"
+            [(ngModel)]="parent.notificationTemplate.repeatDayPeriod"
+            [readonly]="parent.dialogParams?.isView"
+          />
+        </mat-form-field>
+        <div class="error-message">
+          @if (parent.isFieldEmpty('repeatDayPeriod')) {
+            <span>
+              {{ 'validatorsEmptyFieldMessage' | transloco }}
+            </span>
+          }
+          @if (parent.isFieldLessThenZero('repeatDayPeriod')) {
+            <span>
+              {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+            </span>
+          }
+        </div>
+      </div>
+    }
+    <!--   REPEAT DAY OF WEEK   -->
+    @if (isRepeatTypeDayOfWeek()) {
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'notificationRepeatDayOfWeek' | transloco }}
+        </p>
+        <mat-form-field appearance="outline">
+          <mat-select
+            multiple
+            required
+            [formControl]="repeatDayOfWeekControl"
+            [placeholder]="'notificationRepeatDayOfWeek' | transloco"
+            [(ngModel)]="parent.notificationTemplate.repeatDayOfWeek"
+          >
+            @for (dayOfWeek of commonDateTimeService.dayOfWeekList; track dayOfWeek) {
+              <mat-option [value]="dayOfWeek.id" [disabled]="parent.dialogParams?.isView">
+                {{ dayOfWeek[localEnumField] }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <div class="error-message">
+          @if (parent.isFieldEmpty('repeatDayOfWeek')) {
+            <span>
+              {{ 'validatorsEmptyFieldMessage' | transloco }}
+            </span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+}

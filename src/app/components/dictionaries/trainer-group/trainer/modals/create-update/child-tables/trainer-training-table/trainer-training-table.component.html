@@ -1,0 +1,16 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'TrainerTrainingTable'"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableContainerClass]="'expansion-table'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="parentEvent" let-trainerTraining="row">
+    @if (trainerTraining.parentEvent?.id) {
+      <span class="link-btn" (click)="openParentEvent(trainerTraining.parentEvent, $event)">
+        {{ 'openBtn' | transloco }}
+      </span>
+    }
+  </ng-template>
+</app-table-wrapper>

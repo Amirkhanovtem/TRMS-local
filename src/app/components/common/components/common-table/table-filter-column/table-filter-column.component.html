@@ -1,0 +1,48 @@
+<div class="table-header-with-mat-select-container">
+  <mat-icon (click)="openColFilter($event)">filter_list</mat-icon>
+
+  <div class="col-filter-selection-container">
+    <mat-form-field appearance="outline">
+      <mat-select #colFilter (closed)="closeFilterHandler()" multiple>
+        <div class="filter-top-container">
+          <div class="expansion-search-input-field filter-search">
+            <app-search (input)="keyDownHandler()" (keydown.space)="$event.stopPropagation()" [offLabel]="true">
+            </app-search>
+          </div>
+
+          <hr />
+        </div>
+
+        <cdk-virtual-scroll-viewport
+          itemSize="15"
+          [ngStyle]="{ 'height.px': allFilterValues.length * 48 }"
+          (scroll)="scrollHandler()"
+        >
+          <mat-option
+            *cdkVirtualFor="let value of viewFilterValues"
+            (click)="selectionHandler(value)"
+            [matTooltip]="value"
+            [matTooltipShowDelay]="1000"
+            [value]="value"
+          >
+            <span class="filter-option-value-container">
+              {{ value }}
+            </span>
+          </mat-option>
+        </cdk-virtual-scroll-viewport>
+
+        <div class="filter-bottom-container">
+          <hr />
+          <div class="filter-btn-container">
+            <button mat-raised-button class="secondaryBtn" (click)="checkAll()">
+              {{ 'checkAllBtn' | transloco }}
+            </button>
+            <button mat-raised-button color="primary" (click)="confirmFilter()">
+              {{ 'okBtn' | transloco }}
+            </button>
+          </div>
+        </div>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

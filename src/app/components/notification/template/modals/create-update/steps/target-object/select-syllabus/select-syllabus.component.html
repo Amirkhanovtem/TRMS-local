@@ -1,0 +1,29 @@
+<div class="modal-input-field">
+  <p class="modal-input-field-title">
+    {{ 'notificationTemplateSelectSyllabusTemplate' | transloco }}
+  </p>
+
+  <mat-form-field appearance="outline">
+    <mat-select
+      multiple
+      [placeholder]="'notificationTemplateSelectSyllabusTemplate' | transloco"
+      [(ngModel)]="parent.notificationTemplate.targetObjects"
+      [compareWith]="compareWithFn"
+      [attr.disabled]="parent.dialogParams?.isView"
+    >
+      @for (syllabusTemplate of allSyllabusTemplates; track syllabusTemplate) {
+        <mat-option [value]="syllabusTemplate">
+          {{ syllabusTemplate.name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <div class="error-message">
+    @if (parent.isFieldEmpty('mainTargetAudience')) {
+      <span>
+        {{ 'validatorsEmptyFieldMessage' | transloco }}
+      </span>
+    }
+  </div>
+</div>

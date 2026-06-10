@@ -1,0 +1,43 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'auditInfoModalTittle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'auditInfoModalTable'"
+      [displayedColumns]="displayedColumns"
+      [tableColTemplateList]="tableColTemplateList"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+    >
+      <ng-template tableWrapperColumn="valueOld" let-auditInfo="row">
+        <span
+          [ngClass]="isRefEntity(auditInfo.valueOld) ? 'link-btn' : ''"
+          (click)="isRefEntity(auditInfo.valueOld) ? openAuditForRefEntity(auditInfo.valueOld) : null"
+        >
+          {{ isRefEntity(auditInfo.valueOld) ? ('showBtn' | transloco) : auditInfo.valueOld }}
+        </span>
+      </ng-template>
+
+      <ng-template tableWrapperColumn="valueNew" let-auditInfo="row">
+        <span
+          [ngClass]="isRefEntity(auditInfo.valueNew) ? 'link-btn' : ''"
+          (click)="isRefEntity(auditInfo.valueNew) ? openAuditForRefEntity(auditInfo.valueNew) : null"
+        >
+          {{ isRefEntity(auditInfo.valueNew) ? ('showBtn' | transloco) : auditInfo.valueNew }}
+        </span>
+      </ng-template>
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

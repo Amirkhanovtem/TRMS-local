@@ -1,0 +1,11 @@
+@use 'src/assets/styles/global-vars' as gv;
+
+.target-item {
+  border: 1px solid #9e9e9e;
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+  &.notification-sent {
+    border-color: gv.$trms-green-500;
+  }
+}

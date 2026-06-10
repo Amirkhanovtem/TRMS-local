@@ -1,0 +1,30 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ dialogParams.title }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div cdkDropList class="order-list-container" (cdkDropListDropped)="drop($event)">
+      @for (object of orderedObjectsList; track object; let i = $index) {
+        <div class="order-box" cdkDrag>
+          <div class="order-custom-placeholder" *cdkDragPlaceholder></div>
+          <span class="index">{{ i + 1 }}</span>
+          {{ object.name }}
+        </div>
+      }
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="primary" (click)="save()">
+        {{ 'saveBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

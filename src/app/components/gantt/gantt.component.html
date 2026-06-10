@@ -1,0 +1,95 @@
+<div>
+  @if (showPlannerHandoffSummary && calendarHandoff?.drafts?.length) {
+    <section class="planner-handoff">
+      <div class="handoff-summary">
+        <div>
+          <strong>Пакет планирования: {{ calendarHandoff.request.title }}</strong>
+          <span>{{ calendarHandoff.drafts.length }} событий · {{ handoffGroupCount }} групп · {{ handoffDateRange }} · {{ handoffRoomSummary }}</span>
+        </div>
+        <button class="handoff-close" type="button" (click)="hidePlannerHandoff()">Скрыть</button>
+      </div>
+    </section>
+  }
+
+  <mat-icon class="hideBtnsContainerBtn" (click)="hideBtnContainer = !hideBtnContainer">
+    {{ hideBtnContainer ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}
+  </mat-icon>
+
+  <div class="gant-actions-btn-container" [style.display]="hideBtnContainer ? 'none' : ''">
+    <div class="btns-container">
+      @if (currentUserCanCreateEvent()) {
+        <button mat-raised-button color="primary" (click)="ganttClickService.openCreateEventModal(null)">
+          <mat-icon>create</mat-icon>
+          <span>
+            {{ 'gantCreateEventButton' | transloco }}
+          </span>
+        </button>
+      }
+      <button mat-raised-button class="ganttViewRangeBtn" (click)="ganttViewRangeService.openGanttViewRangeModal()">
+        <mat-icon>calendar_view_day</mat-icon>
+        <span>
+          {{ 'ganttOpenSetCalendarDisplay' | transloco }}
+        </span>
+      </button>
+      <button mat-raised-button class="ganttViewRangeBtn" (click)="openGanttFilterSelectionModal()">
+        <mat-icon>filter_list</mat-icon>
+        <span>
+          {{ 'ganttFilterButton' | transloco }}
+        </span>
+      </button>
+      <button mat-raised-button class="to-current-date-btn" (click)="ganttScrollService.scrollToDate()">
+        <mat-icon>my_location</mat-icon>
+        <span>
+          {{ 'ganttScrollToCurrentDate' | transloco }}
+        </span>
+      </button>
+      <button mat-raised-button class="gantt-update-btn" (click)="ganttLoadService.loadEvents()">
+        <mat-icon>refresh</mat-icon>
+        <span>
+          {{ 'refreshBtn' | transloco }}
+        </span>
+      </button>
+      <button mat-raised-button class="gantt-update-btn" (click)="markEventsByAllowing()">
+        <mat-icon>edit_square</mat-icon>
+        <span>
+          {{ (markerEventsByAllowing ? 'showAllEventsBtn' : 'showAllowedEventBtn') | transloco }}
+        </span>
+      </button>
+    </div>
+
+    <div class="gant-actions-btn-container-right">
+      @if (currentUserCanViewDraft()) {
+        <mat-button-toggle-group>
+          <mat-button-toggle [checked]="!checkedDraft" (click)="switchEventsDisplay(false)">
+            <span [class.check-icon]="!checkedDraft">
+              {{ 'gantDraftToggleEvent' | transloco }}
+            </span>
+          </mat-button-toggle>
+          <mat-button-toggle [checked]="checkedDraft" (click)="switchEventsDisplay(true)">
+            <span [class.check-icon]="checkedDraft">
+              {{ 'gantDraftToggleDraft' | transloco }}
+            </span>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      }
+    </div>
+  </div>
+
+  <div
+    class="cit-scheduler-parent"
+    #citSchedulerParent
+    [style.height.px]="ganttRenderService.getGanttHeight(citSchedulerParent)"
+  >
+    <cit-scheduler [config]="config" #scheduler></cit-scheduler>
+    @if (movedEvents?.size > 0) {
+      <div class="move-event-btns-container">
+        <button mat-fab color="primary" (click)="ganttMoveEventService.confirmMoveEvent()">
+          <mat-icon>done</mat-icon>
+        </button>
+        <button mat-fab color="warn" (click)="ganttLoadService.loadEvents()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+</div>

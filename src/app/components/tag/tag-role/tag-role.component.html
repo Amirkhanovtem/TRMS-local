@@ -1,0 +1,18 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'tagRole.pageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'tagRoleTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="tagRoleService"
+      (loadData)="loadTagRoles()"
+    >
+    </app-crud-btns>
+  </ng-container>
+</app-table-wrapper>

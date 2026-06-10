@@ -1,0 +1,17 @@
+.error-table-modal-container {
+  width: 1200px;
+  height: 760px;
+  max-width: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  padding: 35px;
+  justify-content: space-between;
+}
+
+.error-table-error-span-container {
+  white-space: break-spaces;
+}
+
+.error-table-error-header {
+  font-weight: bold;
+}

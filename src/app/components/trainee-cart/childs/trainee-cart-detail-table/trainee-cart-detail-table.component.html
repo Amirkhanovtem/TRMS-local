@@ -1,0 +1,25 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'traineeCartDetailPageTitle' | transloco: { 'trainingTemplateName': selectedTrainingTemplate?.name } }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'traineeCartDetailTable'"
+  [tableColTemplateList]="tableColTemplateList"
+  [tableContainerClass]="''"
+  [displayedColumns]="displayedColumns"
+>
+  <ng-template [tableWrapperColumn]="'plannedTraining'" let-traineeCartDetail="row">
+    <a [href]="getTrainingUrl(traineeCartDetail.plannedTraining?.sessionCode)" target="_blank">
+      {{ tableWrapper.getVisualValue(traineeCartDetail, 'plannedTraining') }}
+    </a>
+  </ng-template>
+
+  <ng-template tableWrapperColumn="certificateStatus" let-traineeCartDetail="row">
+    <span class="certificate-status" [ngClass]="traineeCartDetail.certificateVisualInfo.state">
+      {{ table.getVisualValue(traineeCartDetail, 'certificateStatus') }}
+    </span>
+  </ng-template>
+</app-table-wrapper>

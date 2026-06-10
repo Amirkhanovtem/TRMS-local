@@ -1,0 +1,339 @@
+.training-cards-container {
+  padding: 16px 0;
+}
+
+// Filters Section
+.filters-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.filters-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-field {
+  min-width: 200px;
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}
+
+.certificate-filter {
+  margin-left: 8px;
+
+  ::ng-deep .mat-checkbox-label {
+    font-size: 14px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: #999;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+// Year grouping
+.years-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.year-group {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fafafa;
+}
+
+.year-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  .expand-icon {
+    color: #666;
+    transition: transform 0.2s ease;
+  }
+
+  .year-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .year-count {
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.training-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background-color: white;
+}
+
+.training-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    transform: translateY(-2px);
+  }
+
+  &.status-completed {
+    border-left: 4px solid #4caf50;
+  }
+
+  &.status-in-progress {
+    border-left: 4px solid #2196f3;
+  }
+
+  &.status-planned {
+    border-left: 4px solid #ff9800;
+  }
+}
+
+.card-header {
+  padding: 16px 20px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .training-icon {
+    color: #666;
+  }
+
+  .training-name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+  }
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.info-section {
+  margin-bottom: 16px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #666;
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #999;
+  }
+}
+
+.status-section {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .status-label {
+    font-size: 13px;
+    color: #666;
+  }
+
+  .status-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+  }
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.status-completed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.status-in-progress {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+
+  &.status-planned {
+    background-color: #fff3e0;
+    color: #ef6c00;
+  }
+}
+
+.card-footer {
+  border-top: 1px solid #e0e0e0;
+  background-color: #fafafa;
+
+  &.has-certificate {
+    background-color: #f1f8e9;
+  }
+}
+
+.certificate-section {
+  padding: 16px 20px;
+}
+
+.certificate-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  mat-icon {
+    color: #ffc107;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .certificate-title {
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+.certificate-info {
+  margin-bottom: 12px;
+}
+
+.certificate-detail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+
+  .detail-label {
+    color: #666;
+  }
+
+  .detail-value {
+    color: #333;
+    font-weight: 500;
+
+    &.cert-active {
+      color: #4caf50;
+    }
+
+    &.cert-expired {
+      color: #f44336;
+    }
+
+    &.cert-expiring {
+      color: #ff9800;
+    }
+  }
+}
+
+.certificate-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.no-certificate {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #999;
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// Responsive design
+@media (width <= 768px) {
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-field {
+    width: 100%;
+  }
+
+  .training-cards-grid {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .status-section {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

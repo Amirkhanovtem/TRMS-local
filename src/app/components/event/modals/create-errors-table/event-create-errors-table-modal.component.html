@@ -1,0 +1,42 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'eventCreateErrorsTableModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="modal-table-search-input-container">
+      <app-search (applySearch)="filterDataSource()"></app-search>
+    </div>
+
+    <div class="input-fields-container">
+      @for (errorGroup of getEntries(); track errorGroup) {
+        <div>
+          <h3>{{ errorGroup[0] }}</h3>
+          <mat-list>
+            @for (resourceCheckErrorCause of errorGroup[1]; track resourceCheckErrorCause) {
+              <div>
+                <mat-list-item>
+                  <div class="error-table-error-span-container">
+                    <span class="error-table-error-header">{{ resourceCheckErrorCause.name + ': ' }}</span>
+                    <span>{{ resourceCheckErrorCause.message }}</span>
+                  </div>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+              </div>
+            }
+          </mat-list>
+        </div>
+      }
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

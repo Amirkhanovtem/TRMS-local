@@ -1,0 +1,9 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'equipmentChildDictionaryTable'"
+  [tableContainerClass]="'expansion-table'"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  (rowDbClickFunc)="equipmentOpenViewModal($event)"
+>
+</app-table-wrapper>

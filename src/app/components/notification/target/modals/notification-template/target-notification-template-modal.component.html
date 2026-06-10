@@ -1,0 +1,59 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'eventNotificationTemplatesModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-notification-template-selection-table
+      [tableId]="'notificationTemplateByTargetSelectionTable'"
+      [dataSourceObs]="dialogParams.dataSourceObs"
+    >
+      <ng-container table-buttons>
+        <button
+          mat-raised-button
+          color="accent"
+          [disabled]="!isOneRowSelected()"
+          (click)="openConcreteNotificationModal()"
+        >
+          {{ 'editBtn' | transloco }}
+        </button>
+        <button
+          mat-raised-button
+          [ngClass]="isActivateBtnDisable() ? '' : 'secondaryBtn'"
+          [disabled]="isActivateBtnDisable()"
+          (click)="changeNotificationTemplateActiveStatus(true)"
+        >
+          {{ 'activateBtn' | transloco }}
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          [disabled]="isDeactivateBtnDisable()"
+          (click)="changeNotificationTemplateActiveStatus(false)"
+        >
+          {{ 'deactivateBtn' | transloco }}
+        </button>
+      </ng-container>
+    </app-notification-template-selection-table>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (dialogParams.sendingForm) {
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="isSendBtnDisabled()"
+          (click)="sendSelectedNotificationByTraining()"
+        >
+          {{ 'sendBtn' | transloco }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

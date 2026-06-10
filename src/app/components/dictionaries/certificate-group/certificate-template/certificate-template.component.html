@@ -1,0 +1,50 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'certificateTemplatePageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'certificateTemplateDictionaryTable'"
+  [displayedColumns]="displayedColumns"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-container table-buttons>
+    <app-crud-btns
+      #crudBtnsComponent
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="certificateTemplateService"
+      (loadData)="loadCertificateTemplates()"
+    >
+    </app-crud-btns>
+
+    @if (crudBtnsComponent.checkShowBtn('edit')) {
+      <button
+        mat-raised-button
+        [ngClass]="tableWrapper.isNonSelected() ? '' : 'secondaryBtn'"
+        [disabled]="tableWrapper.isNonSelected()"
+        (click)="uploadFileBtnComponent.openFileInput()"
+      >
+        {{ 'updateFileGeneratedCertificateBtns' | transloco }}
+        <app-common-upload-file-btn
+          #uploadFileBtnComponent
+          (fileSelectedHandler)="changeCertificateFileByCertificateTemplate($event)"
+          [invalidFormatMessageKey]="'validatorsInvalidWordFileFormat'"
+          [acceptFormats]="getAllowedFileFormats()"
+        >
+        </app-common-upload-file-btn>
+      </button>
+    }
+  </ng-container>
+
+  <ng-template tableWrapperColumn="template" let-certificateTemplate="row">
+    @if (certificateTemplate?.fileStorage?.id) {
+      <mat-icon class="attached-file-icon" (click)="loadAttachedFile(certificateTemplate?.fileStorage, $event)">
+        attach_file
+      </mat-icon>
+    }
+  </ng-template>
+</app-table-wrapper>

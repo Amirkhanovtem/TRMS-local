@@ -1,0 +1,18 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'costCenterPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'costCenterDictionaryTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="costCenterService"
+      (loadData)="loadCostCenters()"
+    >
+    </app-crud-btns>
+  </ng-container>
+</app-table-wrapper>

@@ -1,0 +1,22 @@
+.center-field {
+  width: 50%;
+  margin-inline: auto;
+}
+
+.group-field-container {
+  display: flex;
+  justify-content: space-between;
+
+  .modal-input-field {
+    flex-grow: 1;
+    width: min-content;
+    min-width: 0;
+    margin-inline: 1%;
+  }
+
+  &.certificate-fields-container {
+    .modal-input-field {
+      flex-grow: 1;
+    }
+  }
+}

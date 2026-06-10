@@ -1,0 +1,57 @@
+<app-common-modal #modal [loadingModal]="true">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        (this.dialogParams.isView ? 'viewModuleModalPageTitle' : 'moduleModalPageTitle')
+          | transloco: { 'name': module.name || dialogParams?.model?.name }
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <mat-stepper class="modal-top-fixed-stepper" #matStepper>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{
+              dialogParams.isView
+                ? ('creatingEventModalViewResource' | transloco)
+                : ('creatingEventModalChooseResource' | transloco)
+            }}
+          </ng-template>
+          <app-module-resource-step [parent]="this"></app-module-resource-step>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{
+              dialogParams.isView
+                ? ('creatingEventModalViewPersonTrainers' | transloco)
+                : ('creatingEventModalChoosePersonTrainers' | transloco)
+            }}
+          </ng-template>
+          <app-module-person-trainer-step [parent]="this"></app-module-person-trainer-step>
+        </mat-step>
+      </mat-stepper>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div class="create-event-btns-container">
+      <div>
+        @if (!dialogParams?.isView) {
+          <button mat-raised-button class="secondaryBtn" (click)="checkResources()">
+            {{ 'checkBtn' | transloco }}
+          </button>
+        }
+        @if (!dialogParams.isCreate) {
+          <button mat-raised-button color="accent" openAuditTable [entityId]="module.id">
+            {{ 'auditBtn' | transloco }}
+          </button>
+        }
+      </div>
+      <button mat-raised-button (click)="save()" color="primary">
+        {{ 'saveBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

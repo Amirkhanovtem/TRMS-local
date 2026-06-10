@@ -1,0 +1,33 @@
+<div class="time-picker-container">
+  <mat-form-field appearance="outline" class="time-picker-field">
+    <mat-select
+      [formControl]="hourControl"
+      [ngClass]="invalid ? 'invalid-selected-time' : ''"
+      placeholder="HH"
+      (selectionChange)="onHourChange($event.value)"
+      [disabled]="disabled"
+    >
+      @for (h of commonDateTimeService.hoursList; track h) {
+        <mat-option [value]="h">
+          {{ h | pad }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <span class="time-separator">:</span>
+  <mat-form-field appearance="outline" class="time-picker-field">
+    <mat-select
+      [formControl]="minuteControl"
+      [ngClass]="invalid ? 'invalid-selected-time' : ''"
+      placeholder="MM"
+      (selectionChange)="onMinuteChange($event.value)"
+      [disabled]="disabled"
+    >
+      @for (m of commonDateTimeService.minutesList; track m) {
+        <mat-option [value]="m">
+          {{ m | pad }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>

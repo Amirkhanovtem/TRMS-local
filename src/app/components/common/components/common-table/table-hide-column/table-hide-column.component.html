@@ -1,0 +1,15 @@
+<div class="hide-col-selector-container">
+  <mat-icon (click)="cols.open()" [matTooltip]="'hideColumnBtn' | transloco"> view_column </mat-icon>
+
+  <div class="table-header-mat-select-container">
+    <mat-form-field appearance="outline">
+      <mat-select #cols multiple [value]="getSelected()">
+        @for (col of table?.displayedColumns; track col) {
+          <mat-option [value]="col" (click)="changeHidden(col)">
+            {{ col?.colTitleLocKey | transloco }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

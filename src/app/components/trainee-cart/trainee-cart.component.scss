@@ -1,0 +1,33 @@
+.trainee-cart-drawer-container {
+  background: none;
+
+  .drawer-sidenav {
+    max-width: 20vw;
+    border-radius: 15px;
+  }
+
+  .trainee-cart-training-template-col-header {
+    text-decoration: underline;
+
+    &:hover {
+      color: #e1d4d4;
+    }
+  }
+}
+
+::ng-deep {
+  .certificate-status {
+    &.INFINITE,
+    &.ACTIVE {
+      color: #71ae4f;
+    }
+
+    &.NOT_ISSUED {
+      color: #f7ac59;
+    }
+
+    &.EXPIRED {
+      color: #fd3520;
+    }
+  }
+}

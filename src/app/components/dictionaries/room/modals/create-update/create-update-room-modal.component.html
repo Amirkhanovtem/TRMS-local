@@ -1,0 +1,239 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('roomModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('roomModalPageViewTitle' | transloco)
+            : ('roomModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'roomNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'roomNameColTable' | transloco"
+              [(ngModel)]="room.name"
+              (input)="updateUniquenessCheckErrorState()"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('name')) {
+              <span>
+                {{ 'roomCreateUpdateModalNotUniqueNameLocation' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'roomDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'roomDescriptionColTable' | transloco"
+              [(ngModel)]="room.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('description')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CAPACITY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'roomCapacityColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="text"
+              [placeholder]="'roomCapacityColTable' | transloco"
+              [(ngModel)]="room.capacity"
+              [readonly]="dialogParams?.isView"
+              formControlName="capacity"
+              required
+              appAllowNumbersOnlyDirective
+              min="0"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('capacity')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldLessThenZero('capacity')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   QUADRATURE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'roomQuadratureColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'roomQuadratureColTable' | transloco"
+              [(ngModel)]="room.quadrature"
+              formControlName="quadrature"
+              required
+              [readonly]="dialogParams?.isView"
+              type="number"
+              min="0"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('quadrature')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldLessThenZero('quadrature')) {
+              <span>
+                {{ 'validatorsLessThenZeroFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   LOCATION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'roomLocationColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'roomLocationColTable' | transloco"
+              [value]="getLocationName(room.location)"
+              (selectionChange)="updateUniquenessCheckErrorState()"
+              [attr.disabled]="dialogParams?.isView"
+              formControlName="location"
+            >
+              @for (location of locations; track location) {
+                <mat-option [value]="getLocationName(location)" (click)="room.location = location">
+                  {{ getLocationName(location) }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('location')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('location')) {
+              <span>
+                {{ 'roomCreateUpdateModalNotUniqueNameLocation' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   STATUS   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'roomStatusColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'roomStatusColTable' | transloco"
+              [(ngModel)]="room.status"
+              [compareWith]="compareWithFn"
+              formControlName="status"
+            >
+              @for (roomStatus of allRoomStatus; track roomStatus) {
+                <mat-option [value]="roomStatus" [disabled]="dialogParams?.isView">
+                  {{ roomStatus[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('status')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   BUILT-IN EQUIPMENTS   -->
+        @if (this.dialogParams?.isUpdate || this.dialogParams?.isView) {
+          <div class="modal-input-field expansion">
+            <mat-accordion class="accordion">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="mat-expansion-bold-title">
+                    {{ 'roomModalPageBuiltInEquipmentTable' | transloco }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-equipment-child-table></app-equipment-child-table>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        }
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveRoom()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

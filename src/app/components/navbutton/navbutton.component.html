@@ -1,0 +1,10 @@
+<a [routerLink]="link" routerLinkActive="active-link">
+  <span>
+    {{ key | transloco }}
+  </span>
+  @if (arrow) {
+    <i></i>
+  }
+
+  <ng-content></ng-content>
+</a>

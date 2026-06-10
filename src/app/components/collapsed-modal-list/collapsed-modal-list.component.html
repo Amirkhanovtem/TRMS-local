@@ -1,0 +1,20 @@
+@if (showCollapsedModalList()) {
+  <div class="collapsed-modals-btn-container">
+    <button mat-fab [matMenuTriggerFor]="menu" [matBadge]="newModal.openDialogs.length">
+      <mat-icon>tab</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      @for (modal of newModal.openDialogs; track modal) {
+        <button
+          class="collapsed-modals-btn"
+          [matTooltip]="modal['modalTitle']"
+          [matTooltipShowDelay]="1000"
+          mat-menu-item
+          (click)="open(modal)"
+        >
+          {{ modal['modalTitle'] }}
+        </button>
+      }
+    </mat-menu>
+  </div>
+}

@@ -1,0 +1,192 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('syllabusTemplateModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('syllabusTemplateModalPageViewTitle' | transloco)
+            : ('syllabusTemplateModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'syllabusTemplateNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'syllabusTemplateNameColTable' | transloco"
+              [(ngModel)]="syllabusTemplate.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'syllabusTemplateCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'syllabusTemplateCodeColTable' | transloco"
+              [(ngModel)]="syllabusTemplate.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'syllabusTemplateDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'syllabusTemplateDescriptionColTable' | transloco"
+              [(ngModel)]="syllabusTemplate.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('description')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   SYLLABUS CATEGORY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'syllabusTemplateCategoryColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'syllabusTemplateCategoryColTable' | transloco"
+              [(ngModel)]="syllabusTemplate.trainingCategory"
+              [compareWith]="compareWithFn"
+              formControlName="syllabusCategory"
+            >
+              @for (trainingCategory of allTrainingCategories; track trainingCategory) {
+                <mat-option [value]="trainingCategory" [disabled]="dialogParams?.isView">
+                  {{ trainingCategory.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('syllabusCategory')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   MODULE COUNT   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'syllabusTemplateModuleCountColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'syllabusTemplateModuleCountColTable' | transloco"
+              [value]="getModuleCount()"
+              [readonly]="true"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('description')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   TRAINING TEMPLATE   -->
+        <div class="modal-input-field expansion">
+          <mat-accordion class="accordion">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="mat-expansion-bold-title">
+                  {{ 'navBarBtnTrainings' | transloco }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-syllabus-template-training-template-table
+                [isView]="dialogParams?.isView"
+                [syllabusTemplate]="syllabusTemplate"
+              ></app-syllabus-template-training-template-table>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button [disabled]="changeOrderBtnDisabled()" (click)="openChangeOrderModal()">
+          {{ 'changeOrderBtn' | transloco }}
+        </button>
+      }
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveSyllabusTemplate()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

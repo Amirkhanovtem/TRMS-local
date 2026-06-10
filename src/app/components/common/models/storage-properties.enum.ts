@@ -1,0 +1,17 @@
+export enum StoragePropertiesEnum {
+  ACCESS_TOKEN = 'access_token',
+  EXPIRES_IN = 'expires_in',
+  REFRESH_EXPIRES_IN = 'refresh_expires_in',
+  REFRESH_TOKEN = 'refresh_token',
+  TOKEN_TYPE = 'token_type',
+  ID_TOKEN = 'id_token',
+  NOT_BEFORE_POLICY = 'not-before-policy',
+  SESSION_STATE = 'session_state',
+  SCOPE = 'scope',
+  GRANTED_SCOPES = 'granted_scopes',
+  ACCESS_TOKEN_STORED_AT = 'access_token_stored_at',
+  EXPIRES_AT = 'expires_at',
+  ID_TOKEN_CLAIMS_OBJ = 'id_token_claims_obj',
+  ID_TOKEN_EXPIRES_AT = 'id_token_expires_at',
+  ID_TOKEN_STORED_AT = 'id_token_stored_at',
+}

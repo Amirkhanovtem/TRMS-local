@@ -1,0 +1,90 @@
+@use 'src/assets/styles/global-vars.scss' as gv;
+
+// vars
+
+// template selectors
+
+// selectors
+.jodit-toolbar__box {
+  &:not(:empty) {
+    &:not(:empty) {
+      background-color: gv.$trms-green-500 !important;
+    }
+  }
+}
+
+.jodit-icon {
+  &:not(.jodit-toolbar-button_close .jodit-icon) {
+    &:not(.jodit-popup__content .jodit-icon) {
+      fill: white !important;
+      stroke: white !important;
+    }
+  }
+}
+
+.jodit-toolbar-button__trigger {
+  fill: white !important;
+  opacity: 0.8 !important;
+}
+
+.jodit-toolbar-button__button {
+  &:hover {
+    &:not([disabled]) {
+      background-color: #9db3a3 !important;
+    }
+  }
+}
+
+.jodit-workplace {
+  & + .jodit-status-bar {
+    &:not(:empty) {
+      background-color: gv.$trms-green-500 !important;
+      color: white !important;
+    }
+  }
+}
+
+jodit-editor {
+  a[href*='https://xdsoft.net/jodit/'] {
+    visibility: hidden;
+    position: fixed;
+  }
+}
+
+// Custom keyword button popup styles
+.jodit-popup {
+  overflow: hidden;
+
+  .jodit-popup__content {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+// Keywords list items
+.jodit-keywords-list {
+  min-width: 200px;
+  a.jodit-ui-button {
+    display: block;
+    padding: 8px 12px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    pointer-events: auto;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// Fix outer popup scrollbar
+.jodit-popup__container {
+  overflow: visible;
+}
+
+.jodit-ui-group,
+.jodit-toolbar-collection {
+  overflow: visible;
+}

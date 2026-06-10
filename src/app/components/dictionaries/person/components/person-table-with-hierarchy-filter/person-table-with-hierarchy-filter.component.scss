@@ -1,0 +1,47 @@
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.person-table-with-hierarchy-filter-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+
+  .drawer-container {
+    flex: 1;
+    display: flex;
+    background: none;
+
+    .drawer {
+      min-width: 400px;
+      max-width: 400px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      app-person-hierarchy-filter {
+        flex: 1;
+        overflow: auto;
+      }
+    }
+
+    ::ng-deep .mat-drawer-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .table-container {
+      &.drawed {
+        margin-left: 10px;
+      }
+
+      ::ng-deep .table-wrapper-component-container {
+        height: calc(100% - 48px);
+      }
+    }
+  }
+}

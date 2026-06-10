@@ -1,0 +1,274 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('equipmentModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('equipmentModalPageViewTitle' | transloco)
+            : ('equipmentModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'equipmentNameColTable' | transloco"
+              [(ngModel)]="equipment.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'equipmentCodeColTable' | transloco"
+              [(ngModel)]="equipment.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--  DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'equipmentDescriptionColTable' | transloco"
+              [(ngModel)]="equipment.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentTypeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'equipmentTypeColTable' | transloco"
+              [value]="equipment.type?.[localEnumField]"
+              formControlName="type"
+            >
+              @for (equipmentType of allEquipmentTypes; track equipmentType) {
+                <mat-option
+                  [value]="equipmentType[localEnumField]"
+                  [disabled]="dialogParams?.isView || dialogParams?.isUpdate"
+                  (click)="changeType(equipmentType)"
+                >
+                  {{ equipmentType[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('type')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   STATUS   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentStatusColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'equipmentStatusColTable' | transloco"
+              [compareWith]="compareWithFn"
+              [(ngModel)]="equipment.status"
+              formControlName="status"
+            >
+              @for (equipmentStatus of allEquipmentStatuses; track equipmentStatus) {
+                <mat-option [value]="equipmentStatus" [disabled]="dialogParams?.isView">
+                  {{ equipmentStatus[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('status')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (controlHasError('status', 'EQUIPMENT_STATUS_CHANGE')) {
+              <span>
+                {{ 'validatorsEquipmentStatusErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   ROOM   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentRoomColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              [required]="equipment?.type?.id === EQUIPMENT_TYPE.BUILT_IN"
+              [placeholder]="'equipmentRoomColTable' | transloco"
+              [compareWith]="compareWithFn"
+              [(ngModel)]="equipment.room"
+              formControlName="room"
+            >
+              @for (room of rooms; track room) {
+                <mat-option
+                  [value]="room"
+                  [disabled]="dialogParams?.isView || equipment?.type?.id !== EQUIPMENT_TYPE.BUILT_IN"
+                >
+                  {{ room.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isNotValidRoom()) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   QUANTITY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentQuantityColTable' | transloco }}
+          </p>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="text"
+              [placeholder]="'equipmentQuantityColTable' | transloco"
+              [(ngModel)]="equipment.quantity"
+              formControlName="quantity"
+              required
+              appAllowNumbersOnlyDirective
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('quantity')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+
+            @if (isFieldOutOfTheRange('quantity')) {
+              <span>
+                {{ fieldOutOfTheRangeErrorMessage(DEFAULT_MIN_NUM_VALUE, DEFAULT_MAX_NUM_VALUE) }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   EQUIPMENT CATEGORY   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'equipmentCategoryColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'equipmentCategoryColTable' | transloco"
+              [(ngModel)]="equipment.equipmentCategory"
+              [compareWith]="compareWithFn"
+              formControlName="equipmentCategory"
+            >
+              @for (equipmentCategory of categories; track equipmentCategory) {
+                <mat-option [disabled]="dialogParams?.isView" [value]="equipmentCategory">
+                  {{ equipmentCategory.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('category')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveEquipment()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

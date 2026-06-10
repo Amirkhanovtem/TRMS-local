@@ -1,0 +1,11 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'sentNotificationPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-sent-notification-selection-table
+  [tableId]="'sentNotificationSelectionTable'"
+  [dataSourceObs]="sentNotificationService.list()"
+>
+</app-sent-notification-selection-table>

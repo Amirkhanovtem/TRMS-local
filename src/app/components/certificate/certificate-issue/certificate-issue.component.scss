@@ -1,0 +1,20 @@
+::ng-deep {
+  .certificate-activity-status-by-expire-date {
+    &.INFINITE,
+    &.ACTIVE {
+      color: #71ae4f;
+    }
+
+    &.SOON_EXPIRED {
+      color: #f7ac59;
+    }
+
+    &.EXPIRED {
+      color: #fd3520;
+    }
+
+    &.DELETED {
+      color: #a9a5a5;
+    }
+  }
+}

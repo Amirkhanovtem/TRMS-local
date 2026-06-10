@@ -1,0 +1,45 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'timetableDisplaySettingsModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <mat-stepper class="modal-top-fixed-stepper">
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>
+          {{ 'timetableDisplaySettingsModalRoomStepTitle' | transloco }}
+        </ng-template>
+        <app-timetable-display-settings-room-step [parent]="this"></app-timetable-display-settings-room-step>
+      </mat-step>
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>
+          {{ 'timetableDisplaySettingsModalTrainingTemplateStepTitle' | transloco }}
+        </ng-template>
+        <app-timetable-display-settings-training-template-step
+          [parent]="this"
+        ></app-timetable-display-settings-training-template-step>
+      </mat-step>
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>
+          {{ 'timetableDisplaySettingsModalVisualStepTitle' | transloco }}
+        </ng-template>
+        <app-timetable-display-settings-visual-step [parent]="this"></app-timetable-display-settings-visual-step>
+      </mat-step>
+    </mat-stepper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" [disabled]="blockBtn" (click)="save()">
+          {{ 'saveBtn' | transloco }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

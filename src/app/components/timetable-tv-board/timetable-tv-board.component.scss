@@ -1,0 +1,102 @@
+* {
+  font-family: ProximaNova;
+  letter-spacing: 0.01rem;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 78px;
+}
+
+.timetable-display {
+  &-header {
+    height: 240px;
+    padding: 0 80px;
+    background: #006351;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #f7f7f7;
+
+    .info {
+      display: flex;
+      align-items: center;
+      gap: 100px;
+
+      & > div {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+
+      &-bold {
+        font-weight: 600;
+      }
+    }
+  }
+
+  &-content {
+    table {
+      padding: 0 40px;
+
+      tr {
+        height: 240px;
+      }
+
+      td {
+        &:first-child {
+          border-top-left-radius: 64px;
+          border-bottom-left-radius: 64px;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: 64px;
+          border-top-right-radius: 64px;
+        }
+      }
+
+      .mdc-data-table__cell,
+      .mdc-data-table__header-cell {
+        border: none;
+      }
+
+      .mat-mdc-row:nth-child(odd) {
+        background-color: #f2f5f4;
+      }
+
+      .mdc-data-table {
+        &__header-cell {
+          color: #464b5a;
+          padding: 0 40px;
+        }
+
+        &__cell {
+          padding: 0 40px;
+          font-weight: 500;
+        }
+      }
+
+      .mat-column {
+        &-time {
+          width: 520px;
+
+          &.mat-mdc-cell {
+            font-size: 68px;
+            font-weight: 600;
+            line-height: 83px;
+          }
+        }
+
+        &-training {
+          width: 990px;
+        }
+
+        &-audience {
+          width: 1260px;
+        }
+
+        &-trainer {
+          width: 990px;
+        }
+      }
+    }
+  }
+}

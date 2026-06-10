@@ -1,0 +1,16 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'certificateTemplateGroupChildTable'"
+  [tableContainerClass]="'expansion-table'"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="actions" let-certificateTemplateGroup="row">
+    <div class="row-with-action-btns-container">
+      <mat-icon class="row-btns view" (click)="certificateTemplateGroupOpenViewModal(certificateTemplateGroup)"
+        >visibility</mat-icon
+      >
+    </div>
+  </ng-template>
+</app-table-wrapper>

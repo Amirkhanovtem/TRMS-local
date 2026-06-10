@@ -1,0 +1,57 @@
+<div>
+  @if (!isView) {
+    <div class="btns-container">
+      <a (click)="openTrainingTemplateModal()" class="link-btn">
+        {{ 'syllabusTemplateModalAddTrainingTemplateBtn' | transloco }}
+      </a>
+    </div>
+  }
+</div>
+
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'syllabusTemplateTrainingTemplateTable'"
+  [displayedColumns]="displayedColumns"
+  [tableContainerClass]="'expansion-table'"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="minBreakTraining" let-trainingTemplate="row">
+    <div class="table-col-input-field">
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          appAllowNumbersOnlyDirective
+          required
+          type="number"
+          [(ngModel)]="trainingTemplate.minBreakTraining"
+          [readonly]="isView"
+        />
+      </mat-form-field>
+    </div>
+  </ng-template>
+
+  <ng-template tableWrapperColumn="maxBreakTraining" let-trainingTemplate="row">
+    <div class="table-col-input-field">
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          appAllowNumbersOnlyDirective
+          required
+          type="number"
+          [(ngModel)]="trainingTemplate.maxBreakTraining"
+          [readonly]="isView"
+        />
+      </mat-form-field>
+    </div>
+  </ng-template>
+
+  <ng-template tableWrapperColumn="actions" let-trainingTemplate="row">
+    <div class="row-with-action-btns-container">
+      <mat-icon class="row-btns view" (click)="trainingTemplateOpenViewModal(trainingTemplate)">visibility</mat-icon>
+      @if (!isView) {
+        <mat-icon class="row-btns remove" (click)="removeTrainingTemplateFromList(trainingTemplate)">clear</mat-icon>
+      }
+    </div>
+  </ng-template>
+</app-table-wrapper>

@@ -1,0 +1,65 @@
+<div class="input-fields-container">
+  <!--   MIN TRAINERS COUNT   -->
+  <div class="modal-info-field-module">
+    <div class="mat-chip-container">
+      <span
+        class="mat-expansion-bold-title"
+        [class.error-message]="!checkTrainersCount()"
+        [class.success-message]="checkTrainersCount()"
+      >
+        {{ getTrainersCountMessage() }}
+      </span>
+    </div>
+  </div>
+
+  <div class="modal-input-field">
+    <mat-accordion class="accordion" multi>
+      <!--   MAIN TRAINER   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'moduleMainTrainerColTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-main-trainer-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventModuleMainTrainerTable'"
+          [trainingTemplateId]="parent.dialogParams?.trainingTemplateId"
+          [modules]="[parent.module]"
+        >
+        </app-creating-event-main-trainer-table>
+      </mat-expansion-panel>
+
+      <!--   LINEAR TRAINER   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'moduleLinearTrainerColTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-linear-trainer-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventModuleLinearTrainerTable'"
+          [trainingTemplateId]="parent.dialogParams?.trainingTemplateId"
+          [modules]="[parent.module]"
+        >
+        </app-creating-event-linear-trainer-table>
+      </mat-expansion-panel>
+
+      <!--   PERSON   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'modulePersonsListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-person-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventModulePersonTable'"
+          [modules]="[parent.module]"
+        >
+        </app-creating-event-person-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

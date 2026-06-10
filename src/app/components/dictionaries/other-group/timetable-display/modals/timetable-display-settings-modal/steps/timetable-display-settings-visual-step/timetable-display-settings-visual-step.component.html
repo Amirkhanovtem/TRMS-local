@@ -1,0 +1,38 @@
+<form [formGroup]="parent.modalForm">
+  <div class="input-fields-container">
+    <!--   PAGE SWITCH INTERVAL   -->
+    <div class="modal-input-field">
+      <p class="modal-input-field-title">
+        {{ 'timetableDisplaySettingsPageSwitchIntervalColName' | transloco }}
+        {{ '(' + ('timetableDisplaySettingsPageSwitchIntervalDuration.second' | transloco) + ')' }}
+      </p>
+
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          required
+          [min]="parent.DEFAULT_MIN_NUM_VALUE"
+          [max]="parent.DEFAULT_MAX_NUM_VALUE"
+          type="number"
+          [placeholder]="'timetableDisplaySettingsPageSwitchIntervalColName' | transloco"
+          [(ngModel)]="parent.timetableDisplaySettings.timetableDisplayVisualSettings.pageSwitchInterval"
+          formControlName="pageSwitchInterval"
+          [readonly]="parent.dialogParams?.isView"
+        />
+      </mat-form-field>
+
+      <div class="error-message">
+        @if (parent.isFieldEmpty('pageSwitchInterval')) {
+          <span>
+            {{ 'validatorsEmptyFieldMessage' | transloco }}
+          </span>
+        }
+        @if (parent.isFieldOutOfTheRange('pageSwitchInterval')) {
+          <span>
+            {{ parent.fieldOutOfTheRangeErrorMessage(parent.DEFAULT_MIN_NUM_VALUE, parent.DEFAULT_MAX_NUM_VALUE) }}
+          </span>
+        }
+      </div>
+    </div>
+  </div>
+</form>

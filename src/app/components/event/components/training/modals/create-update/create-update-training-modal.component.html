@@ -1,0 +1,108 @@
+<app-common-modal #modal [loadingModal]="true">
+  <ng-container modal-header>
+    <div class="header-container">
+      <h1 class="modal-title">
+        {{
+          (this.dialogParams.isView ? 'trainingViewModalPageTitle' : 'trainingModalPageTitle')
+            | transloco: { 'name': training.name || dialogParams?.model?.name }
+        }}
+      </h1>
+      @if (isUpdatingTraining || isViewTraining) {
+        <button
+          mat-icon-button
+          (click)="
+            showSnackBarWithMessage(localization.getLocalTextFromKey('copyTrainingURL.copiedMessage'), 'toast-success')
+          "
+          [cdkCopyToClipboard]="trainingUrl"
+          [matTooltip]="'copyTrainingURL.tooltip' | transloco"
+        >
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      }
+    </div>
+  </ng-container>
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <mat-stepper class="modal-top-fixed-stepper" #matStepper>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{
+              dialogParams.isView
+                ? ('creatingEventModalViewResource' | transloco)
+                : ('creatingEventModalChooseResource' | transloco)
+            }}
+          </ng-template>
+          <app-training-resource-step [parent]="this"></app-training-resource-step>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>
+            {{
+              dialogParams.isView
+                ? ('creatingEventModalViewPersonTrainers' | transloco)
+                : ('creatingEventModalChoosePersonTrainers' | transloco)
+            }}
+          </ng-template>
+          <app-training-person-trainer-step [parent]="this"></app-training-person-trainer-step>
+        </mat-step>
+      </mat-stepper>
+    </form>
+  </ng-container>
+  <ng-container modal-footer>
+    <div class="create-event-btns-container">
+      <div>
+        @if (isCurrentUserCanOpenNotificationTemlates()) {
+          <button mat-raised-button class="secondaryBtn" [matMenuTriggerFor]="notificationMenu">
+            {{ 'navBarBtnNotifications' | transloco }}
+            <mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon>
+          </button>
+        }
+        <mat-menu #notificationMenu="matMenu">
+          <button mat-menu-item (click)="openAllEventNotificationTableModal()">
+            {{ 'eventNotificationTemplatesBtn' | transloco }}
+          </button>
+          <button mat-menu-item (click)="openAllEventSentNotificationTableModal()">
+            {{ 'eventSentNotificationTemplatesBtn' | transloco }}
+          </button>
+        </mat-menu>
+
+        @if (isCurrentUserCanOpenParticipantList()) {
+          <button mat-raised-button color="accent" (click)="openParticipantList()">
+            {{ 'participationCardBtn' | transloco }}
+          </button>
+        }
+        @if (!isCreatingTraining) {
+          <button mat-raised-button color="accent" openAuditTable [entityId]="training.id">
+            {{ 'auditBtn' | transloco }}
+          </button>
+        }
+      </div>
+
+      <div>
+        @if (isUpdatingTraining) {
+          <button mat-raised-button class="delete-btn" (click)="openDeleteConfirmModal()">
+            {{ 'deleteBtn' | transloco }}
+          </button>
+        }
+        @if (isUpdatingTraining || isCreatingTraining) {
+          <button mat-raised-button class="secondaryBtn" (click)="checkResources()">
+            {{ 'checkBtn' | transloco }}
+          </button>
+        }
+        @if (isUpdatingTraining || isCreatingTraining) {
+          <button mat-raised-button color="primary" [matMenuTriggerFor]="save">
+            {{ 'saveBtn' | transloco }}
+            <mat-icon iconPositionEnd>keyboard_arrow_down</mat-icon>
+          </button>
+        }
+        <mat-menu #save="matMenu">
+          <button mat-menu-item (click)="createOrSaveTraining()">
+            {{ 'saveBtn' | transloco }}
+          </button>
+          <button mat-menu-item (click)="createOrSaveTrainingDraft()">
+            {{ 'saveAsDraftBtn' | transloco }}
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </ng-container>
+</app-common-modal>

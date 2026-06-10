@@ -1,0 +1,43 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'reissueCertificatesModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+  <ng-container modal-content>
+    <mat-accordion>
+      @for (reissueCertificate of reissueCertificateModels; track reissueCertificate) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ 'reissueCertificatesPersonFullName' | transloco }}
+              <span class="person-info">{{
+                reissueCertificate.newCertificateBySystem.participantCard.person.fullNameEn
+              }}</span>
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ 'reissueCertificatesPersonalNumberName' | transloco }}
+              <span class="person-info">{{
+                reissueCertificate.newCertificateBySystem.participantCard.person.personalNumber
+              }}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <app-reissue-certificate-selection-certificate [reissueCertificate]="reissueCertificate">
+            </app-reissue-certificate-selection-certificate>
+          </ng-template>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </ng-container>
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button (click)="reissueCertificates()" color="primary">
+        {{ 'confirmBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

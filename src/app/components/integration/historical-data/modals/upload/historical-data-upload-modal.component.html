@@ -1,0 +1,75 @@
+<app-common-modal #modal [width]="'40vw'" [height]="'40vh'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'historicalDataUploadPageTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'historicalDataTypeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline" class="creating-event-modal-mat-select">
+            <mat-select
+              formControlName="type"
+              [value]="historicalDataModel.type"
+              [placeholder]="'historicalDataTypeColTable' | transloco"
+              (click)="$event.stopPropagation()"
+            >
+              @for (type of allTypes; track type) {
+                <mat-option [value]="type" (click)="historicalDataModel.type = type">
+                  {{ type[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('type')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   FILE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'navBarBtnHistoricalData' | transloco }}
+          </p>
+
+          <app-common-input-file
+            #fileInput
+            [model]="historicalDataModel"
+            [allowedFormats]="getAllowedFileFormats()"
+          ></app-common-input-file>
+
+          <div class="error-message">
+            @if (fileInput.invalidFileFormat) {
+              <span>
+                {{ 'validatorsInvalidExcelFileFormat' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div class="creating-event-modal-btn-container">
+      <button mat-raised-button color="primary" (click)="uploadHistoricalData()">
+        {{ 'confirmBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modalComponent.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

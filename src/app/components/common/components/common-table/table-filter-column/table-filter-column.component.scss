@@ -1,0 +1,54 @@
+.filter-bottom-container {
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  background: white;
+  text-align: right;
+}
+
+.filter-btn-container button {
+  margin-bottom: 6px;
+  margin-right: 6px;
+}
+
+.filter-top-container {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  margin: 0 !important;
+  padding-top: 5px !important;
+}
+
+.filter-search {
+  padding-inline: 5px !important;
+  width: 95% !important;
+}
+
+hr {
+  margin: 0 !important;
+}
+
+.filter-btn-container {
+  margin-top: 5px;
+}
+
+.col-filter-selection-container {
+  position: absolute;
+  right: 0;
+  visibility: hidden;
+}
+
+::ng-deep {
+  .mat-mdc-option {
+    .mdc-list-item__primary-text {
+      text-overflow: ellipsis !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+    }
+  }
+
+  .mdc-menu-surface.mat-mdc-select-panel {
+    padding-block: 0 !important;
+  }
+}

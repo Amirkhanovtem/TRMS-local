@@ -1,0 +1,189 @@
+<div class="self-enrollment-events-container">
+  @for (trainingTemplateEvents of trainingTemplateEventsList; track trainingTemplateEvents) {
+    <mat-expansion-panel class="mat-elevation-z">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span>{{ trainingTemplateEvents.trainingTemplate.name }}</span>
+          @if (checkParticipantOnSomeTrainingByTemplate(trainingTemplateEvents)) {
+            <div class="training-template-participant-status">
+              <span>{{ 'selfEnrollmentEventInfo.participantInTrainingTemplate' | transloco }}</span>
+            </div>
+          }
+        </mat-panel-title>
+        @if (trainingTemplateEvents.trainingTemplate.description) {
+          <mat-icon class="description-icon" [matTooltip]="trainingTemplateEvents.trainingTemplate.description">
+            info
+          </mat-icon>
+        }
+      </mat-expansion-panel-header>
+
+      <div class="events" [class.mobile-cards]="isMobileView">
+        <!-- Desktop Table View -->
+        @if (!isMobileView) {
+          <table>
+            <thead>
+              <tr>
+                <th class="date">
+                  {{ 'selfEnrollmentEventInfo.date' | transloco }}
+                </th>
+                <th class="location">
+                  {{ 'selfEnrollmentEventInfo.location' | transloco }}
+                </th>
+                <th class="available-spots">
+                  {{ 'selfEnrollmentEventInfo.availableSpots' | transloco }}
+                </th>
+                <th class="action"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (
+                event of showAllEvents.includes(trainingTemplateEvents.trainingTemplate.id)
+                  ? trainingTemplateEvents.events
+                  : trainingTemplateEvents.events.slice(0, SHORT_EVENTS_COUNT);
+                track event
+              ) {
+                <tr>
+                  <td class="date">{{ event.startDate | date: 'dd.MM.yyyy' }}</td>
+                  <td>
+                    <div class="location-container">
+                      @for (cityWitRooms of event.citiesWithRooms; track cityWitRooms) {
+                        <div class="location-info">
+                          <span class="city">{{ cityWitRooms.city[localEnumField] }}</span>
+                          @for (room of cityWitRooms.rooms; track room) {
+                            <span class="address" [matTooltipShowDelay]="800" [matTooltip]="room | roomAddress">
+                              {{ room | roomAddress }}
+                            </span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <span [ngClass]="event.availableSpots <= WARNING_SPOTS_COUNT ? 'red' : null">
+                      {{
+                        'selfEnrollmentEventInfo.' +
+                          (event.availableSpots > 0 ? 'availableSpotsInfo' : 'noSpotsAvailable')
+                          | transloco: { availableSpotsNumber: event.availableSpots }
+                      }}
+                    </span>
+                  </td>
+                  <td class="action">
+                    @switch (event.registrationOnEventType.id) {
+                      @case (RegistrationOnEventType.NOT_REGISTERED) {
+                        <button mat-raised-button (click)="enroll(event)" color="primary">
+                          {{ 'selfEnrollmentEventAction.takePart' | transloco }}
+                        </button>
+                      }
+                      @case (RegistrationOnEventType.SELF_ENROLLED) {
+                        <button mat-raised-button (click)="unenroll(event)" color="warn">
+                          {{ 'selfEnrollmentEventAction.cancelParticipation' | transloco }}
+                        </button>
+                      }
+                      @case (RegistrationOnEventType.MANDATORY) {
+                        <div class="info">
+                          <span>{{ 'selfEnrollmentEventAction.planerRegisteredMandatory' | transloco }}</span>
+                        </div>
+                      }
+                      @case (RegistrationOnEventType.IN_PROCESS) {
+                        <div class="info">
+                          <span>{{ 'inProcess' | transloco }}</span>
+                        </div>
+                      }
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+
+        <!-- Mobile Cards View -->
+        @if (isMobileView) {
+          <div class="mobile-events-cards">
+            @for (
+              event of showAllEvents.includes(trainingTemplateEvents.trainingTemplate.id)
+                ? trainingTemplateEvents.events
+                : trainingTemplateEvents.events.slice(0, SHORT_EVENTS_COUNT);
+              track event
+            ) {
+              <div class="event-card">
+                <div class="card-header">
+                  <div class="date">
+                    <mat-icon>event</mat-icon>
+                    <span>{{ event.startDate | date: 'dd.MM.yyyy' }}</span>
+                  </div>
+                  <div
+                    class="spots"
+                    [ngClass]="event.availableSpots <= WARNING_SPOTS_COUNT ? 'spots-low' : 'spots-available'"
+                  >
+                    <mat-icon>people</mat-icon>
+                    <span>{{ event.availableSpots > 0 ? event.availableSpots : 0 }}</span>
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  @for (cityWitRooms of event.citiesWithRooms; track cityWitRooms) {
+                    <div class="location-item">
+                      <mat-icon>location_on</mat-icon>
+                      <div class="location-details">
+                        <span class="city">{{ cityWitRooms.city[localEnumField] }}</span>
+                        @for (room of cityWitRooms.rooms; track room) {
+                          <span class="room">{{ room | roomAddress }}</span>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <div class="card-footer">
+                  @switch (event.registrationOnEventType.id) {
+                    @case (RegistrationOnEventType.NOT_REGISTERED) {
+                      <button mat-raised-button (click)="enroll(event)" color="primary" class="full-width">
+                        {{ 'selfEnrollmentEventAction.takePart' | transloco }}
+                      </button>
+                    }
+                    @case (RegistrationOnEventType.SELF_ENROLLED) {
+                      <button mat-raised-button (click)="unenroll(event)" color="warn" class="full-width">
+                        {{ 'selfEnrollmentEventAction.cancelParticipation' | transloco }}
+                      </button>
+                    }
+                    @case (RegistrationOnEventType.MANDATORY) {
+                      <div class="status-info">
+                        <mat-icon>info</mat-icon>
+                        <span>{{ 'selfEnrollmentEventAction.planerRegisteredMandatory' | transloco }}</span>
+                      </div>
+                    }
+                    @case (RegistrationOnEventType.IN_PROCESS) {
+                      <div class="status-info processing">
+                        <mat-icon>hourglass_empty</mat-icon>
+                        <span>{{ 'inProcess' | transloco }}</span>
+                      </div>
+                    }
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <div>
+          @if (
+            !showAllEvents.includes(trainingTemplateEvents.trainingTemplate.id) &&
+            trainingTemplateEvents.events.length > SHORT_EVENTS_COUNT
+          ) {
+            <button
+              mat-raised-button
+              (click)="showAllEvents.push(trainingTemplateEvents.trainingTemplate.id)"
+              class="secondaryBtn"
+            >
+              {{ 'selfEnrollmentEventAction.showAllEvents' | transloco }}
+            </button>
+          }
+        </div>
+      </div>
+    </mat-expansion-panel>
+  }
+  @if (!trainingTemplateEventsList?.length) {
+    <span class="events-empty-message">{{ 'selfEnrollmentEventInfo.eventsListEmpty' | transloco }}</span>
+  }
+</div>

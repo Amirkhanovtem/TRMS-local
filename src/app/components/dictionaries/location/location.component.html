@@ -1,0 +1,18 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'locationPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'locationDictionaryTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="locationService"
+      (loadData)="loadLocations()"
+    >
+    </app-crud-btns>
+  </ng-container>
+</app-table-wrapper>

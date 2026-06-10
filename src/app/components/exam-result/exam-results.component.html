@@ -1,0 +1,58 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'creatingExamResultModalPageTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'examResultsTable'"
+      [displayedColumns]="displayedColumns"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+    >
+      <ng-container table-buttons>
+        @if (checkBtnEnable('add')) {
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="!allowedAddNewAttempt()"
+            (click)="openAddExamResultModal()"
+          >
+            {{ 'addBtn' | transloco }}
+          </button>
+        }
+        @if (checkBtnEnable('edit')) {
+          <button mat-raised-button color="accent" [disabled]="!allowedEditAttempt()" (click)="openUpdateModal()">
+            {{ 'editBtn' | transloco }}
+          </button>
+        }
+        <button
+          mat-raised-button
+          [ngClass]="!allowedAttachments ? '' : 'secondaryBtn'"
+          [disabled]="!allowedAttachments"
+          (click)="openAttachmentsModal()"
+        >
+          {{ 'attachmentsBtn' | transloco }}
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          [disabled]="checkDeleteButtonDisabled()"
+          (click)="openConfirmDeleteAttemptModal()"
+        >
+          {{ 'deleteBtn' | transloco }}
+        </button>
+      </ng-container>
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

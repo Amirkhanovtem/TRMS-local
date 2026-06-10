@@ -1,0 +1,163 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('treeCreateUpdateModalEditTitle' | transloco)
+          : ('treeCreateUpdateModalCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div>
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'treeCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'treeCodeColTable' | transloco"
+              [(ngModel)]="object.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        @if (!dialogParams.isMultiLanguage) {
+          <div>
+            <!--   NAME   -->
+            <div class="modal-input-field">
+              <p class="modal-input-field-title">
+                {{ 'treeNameColTable' | transloco }}
+              </p>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  required
+                  [placeholder]="'treeNameColTable' | transloco"
+                  [(ngModel)]="object.name"
+                  formControlName="name"
+                  [readonly]="dialogParams?.isView"
+                />
+              </mat-form-field>
+              <div class="error-message">
+                @if (isFieldEmpty('name')) {
+                  <span>
+                    {{ 'validatorsEmptyFieldMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (dialogParams.isMultiLanguage) {
+          <div>
+            <!--   NAME RU  -->
+            <div class="modal-input-field">
+              <p class="modal-input-field-title">
+                {{ 'treeNameColTableRu' | transloco }}
+              </p>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  required
+                  [placeholder]="'treeNameColTable' | transloco"
+                  [(ngModel)]="object.nameRu"
+                  formControlName="nameRu"
+                  [readonly]="dialogParams?.isView"
+                />
+              </mat-form-field>
+              <div class="error-message">
+                @if (isFieldEmpty('nameRu')) {
+                  <span>
+                    {{ 'validatorsEmptyFieldMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+            <!--   NAME EN   -->
+            <div class="modal-input-field">
+              <p class="modal-input-field-title">
+                {{ 'treeNameColTableEn' | transloco }}
+              </p>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  required
+                  [placeholder]="'treeNameColTable' | transloco"
+                  [(ngModel)]="object.nameEn"
+                  formControlName="nameEn"
+                  [readonly]="dialogParams?.isView"
+                />
+              </mat-form-field>
+              <div class="error-message">
+                @if (isFieldEmpty('nameEn')) {
+                  <span>
+                    {{ 'validatorsEmptyFieldMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+            <!--   NAME KZ  -->
+            <div class="modal-input-field">
+              <p class="modal-input-field-title">
+                {{ 'treeNameColTableKz' | transloco }}
+              </p>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  required
+                  [placeholder]="'treeNameColTable' | transloco"
+                  [(ngModel)]="object.nameKz"
+                  formControlName="nameKz"
+                  [readonly]="dialogParams?.isView"
+                />
+              </mat-form-field>
+              <div class="error-message">
+                @if (isFieldEmpty('nameKz')) {
+                  <span>
+                    {{ 'validatorsEmptyFieldMessage' | transloco }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSave()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

@@ -1,0 +1,26 @@
+<div class="title-container">
+  <span class="page-title">
+    {{ 'timeTableDisplayPageTitle' | transloco }}
+  </span>
+</div>
+
+<app-table-wrapper #tableWrapper [tableId]="'timetableDisplayDictionaryTable'" [displayedColumns]="displayedColumns">
+  <ng-container table-buttons>
+    <app-crud-btns
+      [viewComponent]="createUpdateComponent"
+      [createUpdateComponent]="createUpdateComponent"
+      [parentSelection]="tableWrapper.selection"
+      [service]="timetableDisplayService"
+      (loadData)="loadTimetableDisplays()"
+    >
+    </app-crud-btns>
+    <button
+      mat-raised-button
+      [ngClass]="!table?.isOneRowSelected() ? '' : 'secondaryBtn'"
+      [disabled]="!table?.isOneRowSelected()"
+      (click)="openTimetableDisplaySettingsModal()"
+    >
+      {{ 'timetableDisplaySettingsBtn' | transloco }}
+    </button>
+  </ng-container>
+</app-table-wrapper>

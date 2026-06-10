@@ -1,0 +1,464 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('trainingTemplateModalPageEditTitle' | transloco)
+          : dialogParams?.isView
+            ? ('trainingTemplateModalPageViewTitle' | transloco)
+            : ('trainingTemplateModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   NAME   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateNameColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'trainingTemplateNameColTable' | transloco"
+              [(ngModel)]="trainingTemplate.name"
+              formControlName="name"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('name')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CODE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateCodeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              required
+              [placeholder]="'trainingTemplateCodeColTable' | transloco"
+              [(ngModel)]="trainingTemplate.code"
+              formControlName="code"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('code')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldNotUnique('code')) {
+              <span>
+                {{ 'validatorsUniqueErrorFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   DESCRIPTION   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateDescriptionColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'trainingTemplateDescriptionColTable' | transloco"
+              [(ngModel)]="trainingTemplate.description"
+              formControlName="description"
+              [readonly]="dialogParams?.isView"
+            />
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   TRAINING TYPE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateTypeColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'trainingTemplateTypeColTable' | transloco"
+              [(ngModel)]="trainingTemplate.trainingType"
+              [compareWith]="compareWithFn"
+              formControlName="trainingType"
+            >
+              <mat-option [value]="null" [disabled]="dialogParams?.isView"> </mat-option>
+
+              @for (trainingType of allTrainingTypes; track trainingType) {
+                <mat-option [value]="trainingType" [disabled]="dialogParams?.isView">
+                  {{ trainingType.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('trainingType')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   CERTIFICATE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateCertificateTemplateColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              multiple
+              [placeholder]="'trainingTemplateCertificateTemplateColTable' | transloco"
+              [(ngModel)]="trainingTemplate.certificateTemplates"
+              [ngModelOptions]="{ standalone: true }"
+              [compareWith]="compareWithFn"
+            >
+              @for (
+                certificateTemplate of allCertificateTemplatesUnattachedTrainingTemplate;
+                track certificateTemplate
+              ) {
+                <mat-option
+                  [value]="certificateTemplate"
+                  [disabled]="checkCertificateTemplateDisabled(certificateTemplate)"
+                >
+                  {{ certificateTemplate?.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <br />
+
+        <!--   TRAINING CATEGORY   -->
+        <div class="modal-input-field">
+          <div class="btns-container">
+            <a (click)="openSelectionTrainingCategory()" class="link-btn">
+              {{ 'addTrainingCategoryBtn' | transloco }}
+            </a>
+          </div>
+        </div>
+
+        <!--   MAIN TRAINER CATEGORY   -->
+        <div class="modal-input-field">
+          <div class="btns-container">
+            <a (click)="openSelectionMainTrainersAndTrainerCategories()" class="link-btn">
+              {{ 'addMainTrainerCategoryBtn' | transloco }}
+            </a>
+          </div>
+        </div>
+
+        <!--   LINEAR TRAINER CATEGORY   -->
+        <div class="modal-input-field">
+          <div class="btns-container">
+            <a (click)="openSelectionLinearTrainersAndTrainerCategories()" class="link-btn">
+              {{ 'addLinearTrainerCategoryBtn' | transloco }}
+            </a>
+          </div>
+        </div>
+
+        <!--   EXAM TEMPLATE   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateExamTemplateColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              [placeholder]="'trainingTemplateExamTemplateColTable' | transloco"
+              [(ngModel)]="trainingTemplate.examTemplate"
+              [compareWith]="compareWithFn"
+              formControlName="examTemplate"
+            >
+              <mat-option [value]="null" [disabled]="dialogParams?.isView"> </mat-option>
+
+              @for (examTemplate of allExamTemplates; track examTemplate) {
+                <mat-option [value]="examTemplate" [disabled]="dialogParams?.isView">
+                  {{ examTemplate?.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   FORMAT   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateFormatColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'trainingTemplateFormatColTable' | transloco"
+              [value]="trainingTemplate.format?.[localEnumField]"
+              formControlName="format"
+            >
+              @for (format of allTrainingTemplateFormats; track format) {
+                <mat-option
+                  [value]="format?.[localEnumField]"
+                  [disabled]="dialogParams?.isView"
+                  (click)="setFormatToTrainingAndModules(format)"
+                >
+                  {{ format?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('format')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   SELECTED FORMATS   -->
+        @if (trainingTemplate.format?.id) {
+          <div class="modal-info-field-training-template">
+            <div class="mat-chip-container">
+              <span class="mat-expansion-bold-title">
+                {{ 'trainingTemplateSelectedFormatsColTable' | transloco }}
+              </span>
+              @for (formatModulesCount of getFormatModulesCountList(); track formatModulesCount) {
+                <p>
+                  {{ formatModulesCount }}
+                </p>
+              }
+            </div>
+          </div>
+        }
+
+        <!--   TEMPLATE STATUS   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateStatusColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              required
+              [placeholder]="'trainingTemplateStatusColTable' | transloco"
+              [(ngModel)]="trainingTemplate.templateStatus"
+              [compareWith]="compareWithFn"
+              formControlName="status"
+            >
+              @for (templateStatus of allTrainingTemplateStatus; track templateStatus) {
+                <mat-option [value]="templateStatus" [disabled]="dialogParams?.isView">
+                  {{ templateStatus?.[localEnumField] }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('status')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   SELF ENROLLMENT SETTINGS     -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'selfEnrollmentSettingColTable' | transloco }}
+            <mat-slide-toggle
+              [color]="'primary'"
+              formControlName="selfEnrollmentEnabled"
+              [(ngModel)]="trainingTemplate.trainingTemplateSelfEnrollmentSettings.isEnabledOpenSelfEnrollment"
+              [disabled]="dialogParams?.isView"
+            >
+            </mat-slide-toggle>
+          </p>
+
+          <div class="input-with-title-container">
+            <span>
+              {{ 'selfEnrollmentSetting.registrationLimitRecommendation' | transloco }}
+            </span>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                type="number"
+                [min]="MIN_REGISTRATION_LIMIT_RECOMMENDATION"
+                [max]="MAX_REGISTRATION_LIMIT_RECOMMENDATION"
+                appAllowNumbersOnlyDirective
+                [(ngModel)]="trainingTemplate.trainingTemplateSelfEnrollmentSettings.defaultRegistrationLimit"
+                formControlName="registrationLimitRecommendation"
+                [placeholder]="'selfEnrollmentSetting.registrationLimitRecommendation' | transloco"
+                [readonly]="
+                  dialogParams?.isView ||
+                  !this.trainingTemplate.trainingTemplateSelfEnrollmentSettings.isEnabledOpenSelfEnrollment
+                "
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="error-message">
+            @if (isFieldEmpty('registrationLimitRecommendation')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (isFieldOutOfTheRange('registrationLimitRecommendation')) {
+              <span>
+                {{
+                  fieldOutOfTheRangeErrorMessage(
+                    MIN_REGISTRATION_LIMIT_RECOMMENDATION,
+                    MAX_REGISTRATION_LIMIT_RECOMMENDATION
+                  )
+                }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   COLOR   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'trainingTemplateColorColTable' | transloco }}
+          </p>
+
+          <input
+            type="color"
+            class="input-color"
+            [disabled]="dialogParams?.isView"
+            [(ngModel)]="trainingTemplate.color"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+
+        <!--   MODULE COUNT   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'syllabusTemplateModuleCountColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [placeholder]="'syllabusTemplateModuleCountColTable' | transloco"
+              [value]="getModuleCount()"
+              [readonly]="true"
+            />
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('description')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+
+        <!--   MAIN TRAINERS COUNT   -->
+        <div class="modal-info-field-training-template">
+          <div class="mat-chip-container">
+            <span class="mat-expansion-bold-title">
+              {{ 'trainingTemplateMinTrainersCountColTable' | transloco }}
+            </span>
+            <p>
+              {{ 'trainingTemplateMinTrainersCountMessage' | transloco }}
+            </p>
+          </div>
+        </div>
+
+        <!--   MODULE TEMPLATE   -->
+        <div class="modal-input-field expansion">
+          <mat-accordion class="accordion">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="mat-expansion-bold-title">
+                  {{ 'trainingTemplateModuleTemplateColTable' | transloco }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-training-template-module-template-table
+                [isView]="dialogParams?.isView"
+                [trainingTemplate]="trainingTemplate"
+              >
+              </app-training-template-module-template-table>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+
+        <!--   SYLLABUS TEMPLATE   -->
+        @if (this.dialogParams?.isUpdate || this.dialogParams?.isView) {
+          <div class="modal-input-field expansion">
+            <mat-accordion class="accordion">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="mat-expansion-bold-title">
+                    {{ 'trainingTemplateSyllabusTemplateColTable' | transloco }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-training-template-syllabus-template-table
+                  [trainingTemplate]="trainingTemplate"
+                ></app-training-template-syllabus-template-table>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        }
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div class="modal-space-between-btns-container">
+      <div>
+        @if (dialogParams?.isView || dialogParams?.isUpdate) {
+          <button mat-raised-button class="secondaryBtn" (click)="openCertificateTemplateHistoryModal()">
+            {{ 'trainingTemplateCertificateTemplateHistoryModalPageTitle' | transloco }}
+          </button>
+        }
+      </div>
+      <div>
+        @if (!dialogParams?.isView) {
+          <button mat-raised-button [disabled]="changeOrderBtnDisabled()" (click)="openChangeOrderModal()">
+            {{ 'changeOrderBtn' | transloco }}
+          </button>
+        }
+        @if (!dialogParams?.isView) {
+          <button mat-raised-button color="primary" (click)="createOrSaveTrainingTemplate()">
+            {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+          </button>
+        }
+        <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+          {{ 'closeBtn' | transloco }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</app-common-modal>

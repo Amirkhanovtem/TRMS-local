@@ -1,0 +1,28 @@
+<app-common-modal #modal [modalSize]="'L'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'creatingEventRoomsTableAddRooms' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <app-table-wrapper
+      #tableWrapper
+      [tableId]="'roomSelectionModalTable'"
+      [displayedColumns]="displayedColumns"
+      [tableContainerClass]="'mat-elevation-z8 modal-table'"
+    >
+    </app-table-wrapper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="warn" (click)="closeModal()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="primary" (click)="saveModal()">
+        {{ 'saveBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

@@ -1,0 +1,99 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{
+        dialogParams?.isUpdate
+          ? ('noteModalPageUpdateTitle' | transloco)
+          : dialogParams?.isView
+            ? ('noteModalPageViewTitle' | transloco)
+            : ('noteModalPageCreateTitle' | transloco)
+      }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <form [formGroup]="modalForm">
+      <div class="input-fields-container">
+        <!--   PARTICIPANT CARD   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'noteTargetColTable' | transloco }}
+          </p>
+
+          <mat-form-field appearance="outline">
+            <mat-select
+              [(ngModel)]="trainingNote.participantTrainingCard"
+              [ngModelOptions]="{ standalone: true }"
+              [compareWith]="compareWithFn"
+              [placeholder]="'navBarBtnTrainings' | transloco"
+            >
+              <mat-option>
+                {{ 'navBarBtnTrainings' | transloco }}
+              </mat-option>
+
+              @for (participantCard of allParticipantCards; track participantCard) {
+                <mat-option [value]="participantCard" [disabled]="dialogParams?.isView">
+                  {{ participantCard.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="error-message"></div>
+        </div>
+
+        <!--   COMMENT   -->
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'noteCommentColTable' | transloco }}
+          </p>
+
+          <mat-form-field>
+            <textarea
+              matInput
+              required
+              formControlName="comment"
+              rows="7"
+              [(ngModel)]="trainingNote.comment"
+              [readonly]="dialogParams?.isView"
+              [placeholder]="'noteCommentColTable' | transloco"
+            >
+            </textarea>
+          </mat-form-field>
+
+          <div class="error-message">
+            @if (isFieldEmpty('comment')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!--   ATTACHMENT   -->
+      <div class="modal-input-field">
+        <p class="modal-input-field-title">
+          {{ 'noteAttachmentColTable' | transloco }}
+        </p>
+
+        <app-common-input-file [model]="trainingNote"></app-common-input-file>
+
+        <div class="error-message"></div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      @if (!dialogParams?.isView) {
+        <button mat-raised-button color="primary" (click)="createOrSaveNote()">
+          {{ dialogParams?.isUpdate ? ('saveBtn' | transloco) : ('createBtn' | transloco) }}
+        </button>
+      }
+      <button mat-raised-button color="warn" (click)="modalComponent.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

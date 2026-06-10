@@ -1,0 +1,29 @@
+@if (iconBtn) {
+  <mat-icon
+    [ngClass]="class"
+    [matMenuTriggerFor]="downloadManyCertFormatMenu"
+    [matTooltip]="titleLocaleKey | transloco"
+  >
+    {{ iconKey }}
+  </mat-icon>
+} @else {
+  <button
+    mat-raised-button
+    color="primary"
+    [ngClass]="class"
+    [disabled]="disable"
+    [matMenuTriggerFor]="downloadManyCertFormatMenu"
+    (click)="$event.stopPropagation()"
+  >
+    {{ titleLocaleKey | transloco }}
+  </button>
+}
+
+<mat-menu #downloadManyCertFormatMenu="matMenu">
+  <button mat-menu-item (click)="downLoadCertificates(PDF_FILE_FORMAT)">
+    <span>{{ 'fileFormatPDF' | transloco }}</span>
+  </button>
+  <button mat-menu-item (click)="downLoadCertificates(DOCX_FILE_FORMAT)">
+    <span>{{ 'fileFormatWORD' | transloco }}</span>
+  </button>
+</mat-menu>

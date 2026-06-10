@@ -1,0 +1,44 @@
+<app-common-modal #modal [width]="'25vw'" [height]="'35vh'">
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'generateCertificateOptionsModal.title' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <div class="input-fields-container">
+      <div class="modal-input-field">
+        <!--   CERTIFICATE TEMPLATE SELECT  -->
+        <p class="modal-input-field-title">
+          {{ 'generateCertificateOptionsModal.certificateTemplate' | transloco }}
+        </p>
+
+        <mat-form-field appearance="outline">
+          <mat-select
+            [placeholder]="'generateCertificateOptionsModal.certificateTemplate' | transloco"
+            [(ngModel)]="selectedCertificateTemplate"
+            [ngModelOptions]="{ standalone: true }"
+            [compareWith]="compareWithFn"
+          >
+            @for (certificateTemplate of allCertificateTemplates; track certificateTemplate) {
+              <mat-option [value]="certificateTemplate">
+                {{ certificateTemplate?.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="primary" (click)="confirm()">
+        {{ 'confirmBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

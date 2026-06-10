@@ -1,0 +1,97 @@
+<app-common-modal #modal>
+  <ng-container modal-header>
+    <h1 class="modal-title">
+      {{ 'ganttFilterSelectModalTitle' | transloco }}
+    </h1>
+  </ng-container>
+
+  <ng-container modal-content>
+    <mat-stepper class="modal-top-fixed-stepper">
+      <mat-step>
+        <ng-template matStepLabel>
+          {{ 'ganttFilterRoomTitle' | transloco }}
+        </ng-template>
+        <div class="input-fields-container">
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'navBarBtnRooms' | transloco }}
+            </p>
+
+            <div class="tree-selection-modal">
+              <app-common-tree
+                #roomTree
+                [isSelectableTree]="true"
+                [treeSelectionType]="treeSelectionType"
+                [loadDataObs]="ganttFilterService.roomHierarchy()"
+                [selectedNodesId]="ganttFilterData.rooms"
+              >
+              </app-common-tree>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>
+          {{ 'ganttFilterTrainerTitle' | transloco }}
+        </ng-template>
+        <div class="input-fields-container">
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'navBarBtnTrainer' | transloco }}
+            </p>
+
+            <div class="tree-selection-modal">
+              <app-common-tree
+                #trainerTree
+                [isSelectableTree]="true"
+                [treeSelectionType]="treeSelectionType"
+                [loadDataObs]="ganttFilterService.trainerHierarchy()"
+                [selectedNodesId]="ganttFilterData.trainers"
+              >
+              </app-common-tree>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>
+          {{ 'ganttFilterEquipmentTitle' | transloco }}
+        </ng-template>
+        <div class="input-fields-container">
+          <div class="modal-input-field">
+            <p class="modal-input-field-title">
+              {{ 'navBarBtnEquipments' | transloco }}
+            </p>
+
+            <div class="tree-selection-modal">
+              <app-common-tree
+                #equipmentTree
+                [isSelectableTree]="true"
+                [treeSelectionType]="treeSelectionType"
+                [loadDataObs]="ganttFilterService.equipmentHierarchy()"
+                [selectedNodesId]="ganttFilterData.equipments"
+              >
+              </app-common-tree>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </ng-container>
+
+  <ng-container modal-footer>
+    <div>
+      <button mat-raised-button color="primary" [disabled]="blockConfirm" (click)="confirm()">
+        {{ 'confirmBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="accent" (click)="clearAll()">
+        {{ 'clearBtn' | transloco }}
+      </button>
+      <button mat-raised-button color="warn" (click)="modal.closeBtnAction()">
+        {{ 'closeBtn' | transloco }}
+      </button>
+    </div>
+  </ng-container>
+</app-common-modal>

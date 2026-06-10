@@ -1,0 +1,20 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'trainingModuleTable'"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableContainerClass]="'expansion-table'"
+  (rowDbClickFunc)="openCreateUpdateOrViewModuleModal($event)"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="name" let-module="row">
+    <div class="row-with-action-btns event-table-row">
+      <span>
+        {{ module.name }}
+      </span>
+      <div class="row-with-action-btns-container">
+        <mat-icon [ngClass]="checkModule(module) ? 'check-icon' : 'invalid-icon'">check_circle</mat-icon>
+      </div>
+    </div>
+  </ng-template>
+</app-table-wrapper>

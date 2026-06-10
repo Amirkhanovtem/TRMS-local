@@ -1,0 +1,16 @@
+<app-table-wrapper
+  #tableWrapper
+  [tableId]="'additionalTargetEmailTable'"
+  [displayedColumns]="displayedColumns"
+  [searchContainerClass]="'expansion-search-input-field'"
+  [tableContainerClass]="'expansion-table'"
+  [tableColTemplateList]="tableColTemplateList"
+>
+  <ng-template tableWrapperColumn="actions" let-additionalEmail="row">
+    <div class="row-with-action-btns-container">
+      @if (!parent.dialogParams?.isView) {
+        <mat-icon class="row-btns remove" (click)="removeEmail(additionalEmail)"> clear </mat-icon>
+      }
+    </div>
+  </ng-template>
+</app-table-wrapper>

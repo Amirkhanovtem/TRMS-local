@@ -1,0 +1,298 @@
+@use 'src/assets/styles/global-vars' as gv;
+
+// vars
+
+// template selectors
+
+// selectors
+.modal-container {
+  width: 54em;
+  height: auto;
+  max-height: 80vh;
+  max-width: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  padding: 35px;
+  justify-content: space-between;
+
+  .mat-horizontal-content-container {
+    padding: 0 !important;
+  }
+}
+
+.link-btn {
+  color: blue;
+  cursor: pointer;
+
+  &:hover {
+    color: darkblue;
+    text-decoration: underline;
+  }
+}
+
+.expansion-table {
+  border: solid 0.5px gainsboro;
+  overflow: auto;
+}
+
+.table-mat-select-col-container {
+  width: 50%;
+
+  .mat-mdc-form-field-infix {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    min-height: 35px !important;
+  }
+}
+
+.mat-expansion-bold-title {
+  font-size: large;
+  font-weight: 550;
+  color: black;
+}
+
+.invalid-selected-time {
+  .mat-mdc-select-value-text {
+    color: gv.$trms-red !important;
+  }
+}
+
+.input-with-title-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal-input-field-title {
+  font-size: large;
+  color: black;
+  margin-bottom: 10px;
+}
+
+.modal-input-field {
+  display: flex;
+  flex-direction: column;
+
+  input {
+    height: 22px;
+  }
+
+  .accordion {
+    margin-block: 20px;
+
+    .expansion {
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
+
+      .modal-input-field {
+        padding-inline: 0;
+      }
+    }
+  }
+}
+
+.modal-table {
+  max-height: calc(100% - 70px);
+  overflow: auto;
+  width: 100%;
+}
+
+.multi-input-fields-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.modal-table-container {
+  margin-inline: 55px;
+  height: 98%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.modal-table-search-input-container {
+  display: flex;
+  margin-bottom: 10px;
+  flex-direction: row-reverse;
+}
+
+.modal-table-accept-btns-container {
+  margin-bottom: 55px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+
+  button {
+    width: 45%;
+  }
+}
+
+.modal-table-single-close-btn-container {
+  margin-bottom: 55px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.input-fields-group-container {
+  margin-block: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  span,
+  .input-field {
+    margin-right: 5px;
+    margin-block: 7px;
+  }
+}
+
+.mat-mdc-optgroup-label {
+  font-weight: bold;
+}
+
+.modal-table-window {
+  width: 1500px;
+  height: 700px;
+  max-width: calc(100% - 20px);
+  margin: auto;
+}
+
+.row-with-action-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.row-with-action-btns-container {
+  display: flex;
+  justify-content: flex-end;
+
+  .row-btns {
+    margin-inline: 12px;
+  }
+}
+
+.icon-col-btns-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding-block: 4px;
+
+  .row-btns {
+    margin-inline: 12px;
+  }
+}
+
+.row-btns {
+  cursor: pointer;
+
+  &.edit {
+    &:hover {
+      color: gv.$trms-green-500;
+    }
+  }
+
+  &.view {
+    &:hover {
+      color: blue;
+    }
+  }
+
+  &.remove {
+    &:hover {
+      color: gv.$trms-red;
+    }
+  }
+}
+
+.modal-title {
+  font-size: x-large;
+  font-weight: 550;
+  margin-bottom: 15px;
+  line-height: normal;
+}
+
+.modal-content {
+  font-size: medium;
+}
+
+.modal-info-field {
+  margin-block: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-color {
+  border: none;
+  background: white;
+  height: 150px !important;
+  width: 200px !important;
+}
+
+.modal-space-between-btns-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between !important;
+}
+
+.modal-btns-container {
+  justify-content: flex-end;
+  padding: 24px 24px 5px;
+
+  button {
+    margin-top: 8px;
+  }
+}
+
+.create-event-btns-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-header-with-mat-select-container {
+  display: flex;
+  align-items: center;
+}
+
+.table-header-mat-select-trigger-icon {
+  margin-left: 15px;
+  cursor: pointer;
+
+  &:hover {
+    color: #8bdeac;
+  }
+}
+
+.secondaryBtn {
+  color: white !important;
+  background-color: gv.$trms-blue !important;
+}
+
+.table-header-mat-select-container {
+  position: absolute;
+  visibility: hidden;
+}
+
+.error-message {
+  color: gv.$trms-red;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.success-message {
+  color: gv.$trms-green-500;
+  height: 10px;
+}
+
+.delete-btn {
+  color: white !important;
+  background-color: gv.$trms-red !important;
+}
+
+.close-modal-icon-btn {
+  position: absolute;
+  right: 0;
+}

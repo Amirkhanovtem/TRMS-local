@@ -1,0 +1,74 @@
+<div class="input-fields-container">
+  <!--   MAIN TARGET AUDIENCE   -->
+  <div class="modal-input-field">
+    <h3>
+      {{ 'notificationMainTargetAudienceLabel' | transloco }}
+    </h3>
+    <p class="modal-input-field-title">
+      {{ 'notificationTargetAudienceColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <mat-select
+        multiple
+        required
+        [placeholder]="'notificationTargetAudienceColTable' | transloco"
+        [(ngModel)]="parent.notificationTemplate.mainTargetAudience"
+        [compareWith]="compareWithFn"
+        [formControl]="mainTargetAudienceControl"
+      >
+        @for (audienceTarget of allTargetAudiences; track audienceTarget) {
+          <mat-option [value]="audienceTarget" [disabled]="parent.dialogParams?.isView">
+            {{ audienceTarget[localEnumField] }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="error-message">
+      @if (parent.isFieldEmpty('mainTargetAudience')) {
+        <span>
+          {{ 'validatorsEmptyFieldMessage' | transloco }}
+        </span>
+      }
+    </div>
+  </div>
+
+  <!--   MAIN ADDITIONAL EMAILS  -->
+  @if (selectedAdditionalEmails(parent.notificationTemplate.mainTargetAudience)) {
+    <app-additional-target-audience-email [additionalEmailType]="mainAdditionalEmailType" [parent]="parent">
+    </app-additional-target-audience-email>
+  }
+
+  <!--   COPY TARGET AUDIENCE   -->
+  <div class="modal-input-field">
+    <mat-divider class="divider"></mat-divider>
+    <h3>
+      {{ 'notificationCopyTargetAudienceLabel' | transloco }}
+    </h3>
+    <p class="modal-input-field-title">
+      {{ 'notificationTargetAudienceColTable' | transloco }}
+    </p>
+
+    <mat-form-field appearance="outline">
+      <mat-select
+        multiple
+        [placeholder]="'notificationTargetAudienceColTable' | transloco"
+        [(ngModel)]="parent.notificationTemplate.copyTargetAudience"
+        [compareWith]="compareWithFn"
+      >
+        @for (audienceTarget of allTargetAudiences; track audienceTarget) {
+          <mat-option [value]="audienceTarget" [disabled]="parent.dialogParams?.isView">
+            {{ audienceTarget[localEnumField] }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!--   COPY ADDITIONAL EMAILS  -->
+  @if (selectedAdditionalEmails(parent.notificationTemplate.copyTargetAudience)) {
+    <app-additional-target-audience-email [additionalEmailType]="copyAdditionalEmailType" [parent]="parent">
+    </app-additional-target-audience-email>
+  }
+</div>

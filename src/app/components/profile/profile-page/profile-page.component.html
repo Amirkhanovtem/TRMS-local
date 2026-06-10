@@ -1,0 +1,116 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      {{ 'navBarBtnProfile' | transloco }}
+    </h1>
+  </div>
+
+  <div class="page-content">
+    <!-- Profile Information Section -->
+    <div class="profile-info-section">
+      <h2 class="section-title">{{ 'profileInfoTitle' | transloco }}</h2>
+
+      <!-- Profile Header with main info -->
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="profile-main-info">
+          <h3 class="profile-name">{{ person.lastName }} {{ person.firstName }} {{ person.patronymic }}</h3>
+          <p class="profile-position">{{ person.position?.[localEnumField] }}</p>
+          <p class="profile-email">{{ person.email }}</p>
+        </div>
+      </div>
+
+      <!-- Profile Details Grid -->
+      <div class="profile-details-grid">
+        <!-- USERNAME -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personUserNameColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.username }}</span>
+        </div>
+
+        <!-- TRMS ROLE -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personTrmsRoleColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.trmsRole?.[localEnumField] }}</span>
+        </div>
+
+        <!-- EMPLOYMENT DATE -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personEmploymentDateColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.employmentDate | date: 'dd.MM.yyyy' }}</span>
+        </div>
+
+        <!-- COST CENTER -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personCostCenterColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.costCenter?.name }}</span>
+        </div>
+
+        <!-- LANGUAGE -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personLanguageColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.language?.[localEnumField] }}</span>
+        </div>
+
+        <!-- CITY -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personCityColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.city?.[localEnumField] }}</span>
+        </div>
+
+        <!-- COMPANY -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personCompanyColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.company?.name }}</span>
+        </div>
+
+        <!-- STATUS -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personStatusColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.status?.[localEnumField] }}</span>
+        </div>
+
+        <!-- DATE OF BIRTH -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personDateOfBirthColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.dateOfBirth | date: 'dd.MM.yyyy' }}</span>
+        </div>
+
+        <!-- GENDER -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personGenderColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.gender?.[localEnumField] }}</span>
+        </div>
+
+        <!-- PLACE OF BIRTH -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personPlaceOfBirthColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.placeOfBirth }}</span>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personExperienceColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.experience }}</span>
+        </div>
+
+        <!-- PERSONAL NUMBER -->
+        <div class="profile-detail-item">
+          <span class="detail-label">{{ 'personPersonalNumberColTable' | transloco }}:</span>
+          <span class="detail-value">{{ person.personalNumber }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Training and Certificates Section -->
+    <div class="training-certificates-section">
+      <h2 class="section-title">{{ 'profileTrainingCertificatesTitle' | transloco }}</h2>
+
+      <div class="training-table-container">
+        <app-person-training-table [personId]="person.id"></app-person-training-table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+.modal-container {
+  height: 300px;
+  width: 750px;
+  padding: 55px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 550;
+}
+
+.creating-event-modal-mat-select {
+  width: 100%;
+}
+
+.creating-event-modal-btn-container {
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    width: 45%;
+  }
+}
+
+::ng-deep {
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      background-color: white;
+      border-radius: 5px;
+    }
+  }
+}
+
+.modal-input-field-title {
+  font-size: large;
+  color: black;
+  margin-bottom: 10px;
+}

@@ -1,0 +1,561 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@attachment-info-table-interfaces/*": ["src/app/components/attachment-info-table/interfaces/*"],
+      "@attachment-info-table-models/*": ["src/app/components/attachment-info-table/models/*"],
+      "@attachment-info-table/*": ["src/app/components/attachment-info-table/*"],
+
+      "@attended-training-models/*": ["src/app/components/attended-training/models/*"],
+      "@attended-training-services/*": ["src/app/components/attended-training/services/*"],
+      "@attended-training/*": ["src/app/components/attended-training/*"],
+
+      "@certificate-issue-modals/*": ["src/app/components/certificate/certificate-issue/modals/*"],
+      "@certificate-issue-models/*": ["src/app/components/certificate/certificate-issue/models/*"],
+      "@certificate-issue-services/*": ["src/app/components/certificate/certificate-issue/services/*"],
+      "@certificate-issue/*": ["src/app/components/certificate/certificate-issue/*"],
+
+      "@common-input-file-models/*": ["src/app/components/common/components/common-input-file/models/*"],
+      "@common-input-file/*": ["src/app/components/common/components/common-input-file/*"],
+
+      "@common-table-models/*": ["src/app/components/common/components/common-table/models/*"],
+      "@common-table-table-export/*": ["src/app/components/common/components/common-table/table-export/*"],
+      "@common-table-table-filter-column/*": [
+        "src/app/components/common/components/common-table/table-filter-column/*"
+      ],
+      "@common-table-table-hide-column/*": ["src/app/components/common/components/common-table/table-hide-column/*"],
+      "@common-table-table-header-drag-and-drop-services/*": [
+        "src/app/components/common/components/common-table/table-header-drag-and-drop/services/*"
+      ],
+      "@common-table-table-header-drag-and-drop/*": [
+        "src/app/components/common/components/common-table/table-header-drag-and-drop/*"
+      ],
+      "@common-table-table-resize-column/*": [
+        "src/app/components/common/components/common-table/table-resize-column/*"
+      ],
+      "@common-table-table-wrapper-directives/*": [
+        "src/app/components/common/components/common-table/table-wrapper/directives/*"
+      ],
+      "@common-table-table-wrapper/*": ["src/app/components/common/components/common-table/table-wrapper/*"],
+      "@common-table/*": ["src/app/components/common/components/common-table/*"],
+
+      "@common-tree-tree-node-btns/*": [
+        "src/app/components/common/components/common-tree/child-components/tree-node-btns/*"
+      ],
+      "@common-tree-child-components/*": ["src/app/components/common/components/common-tree/child-components/*"],
+      "@common-tree-modals-default-create-update/*": [
+        "src/app/components/common/components/common-tree/modals/default-create-update/*"
+      ],
+      "@common-tree-modals-selection/*": ["src/app/components/common/components/common-tree/modals/selection/*"],
+      "@common-tree-modals/*": ["src/app/components/common/components/common-tree/modals/*"],
+      "@common-tree-models/*": ["src/app/components/common/components/common-tree/models/*"],
+      "@common-tree-services/*": ["src/app/components/common/components/common-tree/services/*"],
+      "@common-tree/*": ["src/app/components/common/components/common-tree/*"],
+
+      "@common-search/*": ["src/app/components/common/components/search/*"],
+      "@common-components/*": ["src/app/components/common/components/*"],
+      "@common-confirm-modal/*": ["src/app/components/common/modals/confirm-modal/*"],
+
+      "@common-drag-order-modal-models/*": ["src/app/components/common/modals/drag-order-modal/models/*"],
+      "@common-drag-order-modal-services/*": ["src/app/components/common/modals/drag-order-modal/services/*"],
+      "@common-drag-order-modal/*": ["src/app/components/common/modals/drag-order-modal/*"],
+
+      "@common-modals/*": ["src/app/components/common/modals/*"],
+      "@common-models/*": ["src/app/components/common/models/*"],
+      "@common-services/*": ["src/app/components/common/services/*"],
+
+      "@complete-syllabuses/models/*": ["src/app/components/complete-syllabuses/models/*"],
+      "@complete-syllabuses/services/*": ["src/app/components/complete-syllabuses/services/*"],
+      "@complete-syllabuses/*": ["src/app/components/complete-syllabuses/*"],
+
+      "@complete-trainings-models/*": ["src/app/components/complete-trainings/models/*"],
+      "@complete-trainings-services/*": ["src/app/components/complete-trainings/services/*"],
+      "@complete-trainings/*": ["src/app/components/complete-trainings/*"],
+
+      "@certificate-history-template-files-modal/models/*": [
+        "src/app/components/certificate/certificate-history-template-files-modal/models/*"
+      ],
+      "@certificate-history-template-files-modal/services/*": [
+        "src/app/components/certificate/certificate-history-template-files-modal/services/*"
+      ],
+      "@certificate-history-template-files-modal/*": [
+        "src/app/components/certificate/certificate-history-template-files-modal/*"
+      ],
+
+      "@certificate-template-modals-view/*": [
+        "src/app/components/dictionaries/certificate-group/certificate-template/modals/view/*"
+      ],
+      "@certificate-template-modals-create-update/*": [
+        "src/app/components/dictionaries/certificate-group/certificate-template/modals/create-update/*"
+      ],
+      "@certificate-template-modals/*": [
+        "src/app/components/dictionaries/certificate-group/certificate-template/modals/*"
+      ],
+      "@certificate-template-models/*": [
+        "src/app/components/dictionaries/certificate-group/certificate-template/models/*"
+      ],
+      "@certificate-template-services/*": [
+        "src/app/components/dictionaries/certificate-group/certificate-template/services/*"
+      ],
+      "@certificate-template/*": ["src/app/components/dictionaries/certificate-template/certificate-group/*"],
+
+      "@dictionaries-common-crud-btns/*": ["src/app/components/dictionaries/common/crud-btns/*"],
+      "@dictionaries-common-crud/*": ["src/app/components/dictionaries/common/*"],
+
+      "@equipment-modals-child-table/*": [
+        "src/app/components/dictionaries/equipment-group/equipment/modals/child-table/*"
+      ],
+      "@equipment-modals-create-update/*": [
+        "src/app/components/dictionaries/equipment-group/equipment/modals/create-update/*"
+      ],
+      "@equipment-modals-view/*": ["src/app/components/dictionaries/equipment-group/equipment/modals/view/*"],
+      "@equipment-modals/*": ["src/app/components/dictionaries/equipment-group/equipment/modals/*"],
+      "@equipment-models/*": ["src/app/components/dictionaries/equipment-group/equipment/models/*"],
+      "@equipment-services/*": ["src/app/components/dictionaries/equipment-group/equipment/services/*"],
+      "@equipment/*": ["src/app/components/dictionaries/equipment-group/equipment/*"],
+
+      "@equipment-category-modals-create-update/*": [
+        "src/app/components/dictionaries/equipment-group/equipment-category/modals/create-update/*"
+      ],
+      "@equipment-category-modals-view/*": [
+        "src/app/components/dictionaries/equipment-group/equipment-category/modals/view/*"
+      ],
+      "@equipment-category-modals/*": ["src/app/components/dictionaries/equipment-group/equipment-category/modals/*"],
+      "@equipment-category-models/*": ["src/app/components/dictionaries/equipment-group/equipment-category/models/*"],
+      "@equipment-category-services/*": [
+        "src/app/components/dictionaries/equipment-group/equipment-category/services/*"
+      ],
+      "@equipment-category/*": ["src/app/components/dictionaries/equipment-group/equipment-category/*"],
+
+      "@exam-template-modals-create-update/*": ["src/app/components/dictionaries/exam-template/modals/create-update/*"],
+      "@exam-template-modals-training-template-table/*": [
+        "src/app/components/dictionaries/exam-template/modals/exam-template-training-template-table/*"
+      ],
+      "@exam-template-modals-view/*": ["src/app/components/dictionaries/exam-template/modals/view/*"],
+      "@exam-template-modals/*": ["src/app/components/dictionaries/exam-template/modals/*"],
+      "@exam-template-models/*": ["src/app/components/dictionaries/exam-template/models/*"],
+      "@exam-template-services/*": ["src/app/components/dictionaries/exam-template/services/*"],
+      "@exam-template/*": ["src/app/components/dictionaries/exam-template/*"],
+
+      "@location-modals-create-update/*": ["src/app/components/dictionaries/location/modals/create-update/*"],
+      "@location-modals-view/*": ["src/app/components/dictionaries/location/modals/view/*"],
+      "@location-modals/*": ["src/app/components/dictionaries/location/modals/*"],
+      "@location-models/*": ["src/app/components/dictionaries/location/models/*"],
+      "@location-services/*": ["src/app/components/dictionaries/location/services/*"],
+      "@location/*": ["src/app/components/dictionaries/location/*"],
+
+      "@module-template-modals-create-update/*": [
+        "src/app/components/dictionaries/module-template/modals/create-update/*"
+      ],
+      "@module-template-modals-view/*": ["src/app/components/dictionaries/module-template/modals/view/*"],
+      "@module-template-modals/*": ["src/app/components/dictionaries/module-template/modals/*"],
+      "@module-template-models/*": ["src/app/components/dictionaries/module-template/models/*"],
+      "@module-template-services/*": ["src/app/components/dictionaries/module-template/services/*"],
+      "@module-template/*": ["src/app/components/dictionaries/module-template/*"],
+
+      "@city-modals-create-update/*": ["src/app/components/dictionaries/other-group/city/modals/create-update/*"],
+      "@city-modals/*": ["src/app/components/dictionaries/other-group/city/modals/*"],
+      "@city-models/*": ["src/app/components/dictionaries/other-group/city/models/*"],
+      "@city-services/*": ["src/app/components/dictionaries/other-group/city/services/*"],
+      "@city/*": ["src/app/components/dictionaries/other-group/city/*"],
+
+      "@company-modals-create-update/*": ["src/app/components/dictionaries/other-group/company/modals/create-update/*"],
+      "@company-modals/*": ["src/app/components/dictionaries/other-group/company/modals/*"],
+      "@company-models/*": ["src/app/components/dictionaries/other-group/company/models/*"],
+      "@company-services/*": ["src/app/components/dictionaries/other-group/company/services/*"],
+      "@company/*": ["src/app/components/dictionaries/other-group/company/*"],
+
+      "@cost-center-modals-create-update/*": [
+        "src/app/components/dictionaries/other-group/cost-center/modals/create-update/*"
+      ],
+      "@cost-center-modals/*": ["src/app/components/dictionaries/other-group/cost-center/modals/*"],
+      "@cost-center-models/*": ["src/app/components/dictionaries/other-group/cost-center/models/*"],
+      "@cost-center-services/*": ["src/app/components/dictionaries/other-group/cost-center/services/*"],
+      "@cost-center/*": ["src/app/components/dictionaries/other-group/cost-center/*"],
+
+      "@position-modals-create-update/*": [
+        "src/app/components/dictionaries/other-group/position/modals/create-update/*"
+      ],
+      "@position-modals/*": ["src/app/components/dictionaries/other-group/position/modals/*"],
+      "@position-models/*": ["src/app/components/dictionaries/other-group/position/models/*"],
+      "@position-services/*": ["src/app/components/dictionaries/other-group/position/services/*"],
+      "@position/*": ["src/app/components/dictionaries/other-group/position/*"],
+
+      "@subdivision-services/*": ["src/app/components/dictionaries/other-group/subdivision/services/*"],
+      "@subdivision/*": ["src/app/components/dictionaries/other-group/subdivision/*"],
+
+      "@person-modals-create-update/*": ["src/app/components/dictionaries/person/modals/create-update/*"],
+      "@person-modals-full-name-info-table/*": ["src/app/components/dictionaries/person/modals/full-name-info-table/*"],
+      "@person-modals-select-persons-by-personal-number/*": [
+        "src/app/components/dictionaries/person/modals/select-persons-by-personal-number-modal/*"
+      ],
+      "@person-modals-selection/*": ["src/app/components/dictionaries/person/modals/selection/*"],
+      "@person-modals-view/*": ["src/app/components/dictionaries/person/modals/view/*"],
+      "@person-modals/*": ["src/app/components/dictionaries/person/modals/*"],
+      "@person-models/*": ["src/app/components/dictionaries/person/models/*"],
+      "@person-services/*": ["src/app/components/dictionaries/person/services/*"],
+      "@person/*": ["src/app/components/dictionaries/person/*"],
+
+      "@room-modals-create-update/*": ["src/app/components/dictionaries/room/modals/create-update/*"],
+      "@room-modals-selection/*": ["src/app/components/dictionaries/room/modals/selection/*"],
+      "@room-modals-view/*": ["src/app/components/dictionaries/room/modals/view/*"],
+      "@room-modals/*": ["src/app/components/dictionaries/room/modals/*"],
+      "@room-models/*": ["src/app/components/dictionaries/room/models/*"],
+      "@room-services/*": ["src/app/components/dictionaries/room/services/*"],
+      "@room/*": ["src/app/components/dictionaries/room/*"],
+
+      "@syllabus-template-modals-create-update/*": [
+        "src/app/components/dictionaries/syllabus-template/modals/create-update/*"
+      ],
+      "@syllabus-template-modals-training-template-table/*": [
+        "src/app/components/dictionaries/syllabus-template/modals/syllabus-template-training-template-table/*"
+      ],
+      "@syllabus-template-modals-view/*": ["src/app/components/dictionaries/syllabus-template/modals/view/*"],
+      "@syllabus-template-modals/*": ["src/app/components/dictionaries/syllabus-template/modals/*"],
+      "@syllabus-template-models/*": ["src/app/components/dictionaries/syllabus-template/models/*"],
+      "@syllabus-template-services/*": ["src/app/components/dictionaries/syllabus-template/services/*"],
+      "@syllabus-template/*": ["src/app/components/dictionaries/syllabus-template/*"],
+
+      "@trainer-modals-create-update-child-tables-trainer-training-table/*": [
+        "src/app/components/dictionaries/trainer-group/trainer/modals/create-update/child-tables/trainer-training-table/*"
+      ],
+      "@trainer-modals-create-update-child-tables/*": [
+        "src/app/components/dictionaries/trainer-group/trainer/modals/create-update/child-tables/*"
+      ],
+      "@trainer-modals-create-update/*": [
+        "src/app/components/dictionaries/trainer-group/trainer/modals/create-update/*"
+      ],
+      "@trainer-modals-selection/*": ["src/app/components/dictionaries/trainer-group/trainer/modals/selection/*"],
+      "@trainer-modals/*": ["src/app/components/dictionaries/trainer-group/trainer/modals/*"],
+      "@trainer-models/*": ["src/app/components/dictionaries/trainer-group/trainer/models/*"],
+      "@trainer-services/*": ["src/app/components/dictionaries/trainer-group/trainer/services/*"],
+      "@trainer/*": ["src/app/components/dictionaries/trainer-group/trainer/*"],
+
+      "@trainer-category-services/*": ["src/app/components/dictionaries/trainer-group/trainer-category/services/*"],
+      "@trainer-category/*": ["src/app/components/dictionaries/trainer-group/trainer-category/*"],
+
+      "@training-category-models/*": ["src/app/components/dictionaries/training-group/training-category/models/*"],
+      "@training-category-services/*": ["src/app/components/dictionaries/training-group/training-category/services/*"],
+      "@training-category/*": ["src/app/components/dictionaries/training-group/training-category/*"],
+
+      "@training-template-modals-create-update/*": [
+        "src/app/components/dictionaries/training-group/training-template/modals/create-update/*"
+      ],
+      "@training-template-modals-selection/*": [
+        "src/app/components/dictionaries/training-group/training-template/modals/selection/*"
+      ],
+      "@training-template-modals-module-template-table/*": [
+        "src/app/components/dictionaries/training-group/training-template/modals/training-template-module-template-table/*"
+      ],
+      "@training-template-modals-syllabus-template-table/*": [
+        "src/app/components/dictionaries/training-group/training-template/modals/training-template-syllabus-template-table/*"
+      ],
+      "@training-template-modals-view/*": [
+        "src/app/components/dictionaries/training-group/training-template/modals/view/*"
+      ],
+      "@training-template-modals/*": ["src/app/components/dictionaries/training-group/training-template/modals/*"],
+      "@training-template-models/*": ["src/app/components/dictionaries/training-group/training-template/models/*"],
+      "@training-template-services/*": ["src/app/components/dictionaries/training-group/training-template/services/*"],
+      "@training-template/*": ["src/app/components/dictionaries/training-group/training-template/*"],
+
+      "@training-type-modals-create-update/*": [
+        "src/app/components/dictionaries/training-group/training-type/modals/create-update/*"
+      ],
+      "@training-type-modals/*": ["src/app/components/dictionaries/training-group/training-type/modals/*"],
+      "@training-type-models/*": ["src/app/components/dictionaries/training-group/training-type/models/*"],
+      "@training-type-services/*": ["src/app/components/dictionaries/training-group/training-type/services/*"],
+      "@training-type/*": ["src/app/components/dictionaries/training-group/training-type/*"],
+
+      "@event-general-child-equipment-table": ["src/app/components/event/components/general-child-table/equipment/*"],
+      "@event-general-child-linear-trainer-table": [
+        "src/app/components/event/components/general-child-table/linear-trainer/*"
+      ],
+      "@event-general-child-linear-main-table": [
+        "src/app/components/event/components/general-child-table/main-trainer/*"
+      ],
+      "@event-general-child-person-table": ["src/app/components/event/components/general-child-table/person-trainer/*"],
+      "@event-general-child-room-table": ["src/app/components/event/components/general-child-table/room-trainer/*"],
+
+      "@event-module-modals-create-update-person-trainer-step/*": [
+        "src/app/components/event/components/module/modals/create-update/person-trainer-step/*"
+      ],
+      "@event-module-modals-create-update-resource-step/*": [
+        "src/app/components/event/components/module/modals/create-update/resource-step/*"
+      ],
+      "@event-module-modals-create-update-services/*": [
+        "src/app/components/event/components/module/modals/create-update/services/*"
+      ],
+      "@event-module-modals-create-update/*": ["src/app/components/event/components/module/modals/create-update/*"],
+      "@event-module-modals/*": ["src/app/components/event/components/module/modals/*"],
+      "@event-module-models/*": ["src/app/components/event/components/module/models/*"],
+      "@event-module-services/*": ["src/app/components/event/components/module/services/*"],
+      "@event-module/*": ["src/app/components/event/components/module/*"],
+
+      "@event-snackbar-info/*": ["src/app/components/event/components/snackbar-info/*"],
+
+      "@event-syllabus-modals-create-update-person-trainer-step/*": [
+        "src/app/components/event/components/syllabus/modals/create-update/person-trainer-step/*"
+      ],
+      "@event-syllabus-modals-create-update-resource-step/*": [
+        "src/app/components/event/components/syllabus/modals/create-update/resource-step/*"
+      ],
+      "@event-syllabus-modals-create-update/*": ["src/app/components/event/components/syllabus/modals/create-update/*"],
+      "@event-syllabus-modals-training-table/*": [
+        "src/app/components/event/components/syllabus/modals/syllabus-training-table/*"
+      ],
+      "@event-syllabus-modals/*": ["src/app/components/event/components/syllabus/modals/*"],
+      "@event-syllabus-models/*": ["src/app/components/event/components/syllabus/models/*"],
+      "@event-syllabus-services/*": ["src/app/components/event/components/syllabus/services/*"],
+      "@event-syllabus/*": ["src/app/components/event/components/syllabus/*"],
+
+      "@event-training-modals-create-update-person-trainer-step/*": [
+        "src/app/components/event/components/training/modals/create-update/person-trainer-step/*"
+      ],
+      "@event-training-modals-create-update-resource-step/*": [
+        "src/app/components/event/components/training/modals/create-update/resource-step/*"
+      ],
+      "@event-training-modals-create-update/*": ["src/app/components/event/components/training/modals/create-update/*"],
+      "@event-training-modals-training-module-table/*": [
+        "src/app/components/event/components/training/modals/training-module-table/*"
+      ],
+      "@event-training-modals/*": ["src/app/components/event/components/training/modals/*"],
+      "@event-training-models/*": ["src/app/components/event/components/training/models/*"],
+      "@event-training-services/*": ["src/app/components/event/components/training/services/*"],
+      "@event-training/*": ["src/app/components/event/components/training/*"],
+
+      "@event-components/*": ["src/app/components/event/components/*"],
+      "@event-modals-create-models/*": ["src/app/components/event/modals/create/models/*"],
+      "@event-modals-create/*": ["src/app/components/event/modals/create/*"],
+      "@event-modals-create-errors-table/*": ["src/app/components/event/modals/create-errors-table/*"],
+      "@event-modals-sure-leave-location-collision-confirm/*": [
+        "src/app/components/event/modals/sure-leave-location-collision-confirm/*"
+      ],
+      "@event-modals/*": ["src/app/components/event/modals/*"],
+      "@event-models/*": ["src/app/components/event/models/*"],
+      "@event-services/*": ["src/app/components/event/services/*"],
+
+      "@exam-result-modals-create-update/*": ["src/app/components/exam-result/modals/create-update/*"],
+      "@exam-result-modals/*": ["src/app/components/exam-result/modals/*"],
+      "@exam-result-models/*": ["src/app/components/exam-result/models/*"],
+      "@exam-result-services/*": ["src/app/components/exam-result/services/*"],
+      "@exam-result/*": ["src/app/components/exam-result/*"],
+
+      "@gantt-modals-draft-selection/*": ["src/app/components/gantt/modals/draft-selection/*"],
+      "@gantt-modals-filter-selection-models/*": ["src/app/components/gantt/modals/filter-selection/models/*"],
+      "@gantt-modals-filter-selection-services/*": ["src/app/components/gantt/modals/filter-selection/services/*"],
+      "@gantt-modals-filter-selection/*": ["src/app/components/gantt/modals/filter-selection/*"],
+      "@gantt-modals-tolltips-event/*": ["src/app/components/gantt/modals/tolltips/event/*"],
+      "@gantt-modals-tolltips-resource/*": ["src/app/components/gantt/modals/tolltips/resource/*"],
+      "@gantt-modals-tolltips/*": ["src/app/components/gantt/modals/tolltips/*"],
+      "@gantt-modals-view-selection-models/*": ["src/app/components/gantt/modals/view-selection/models/*"],
+      "@gantt-modals-view-selection/*": ["src/app/components/gantt/modals/view-selection/*"],
+      "@gantt-modals/*": ["src/app/components/gantt/modals/*"],
+      "@gantt-models/*": ["src/app/components/gantt/models/*"],
+      "@gantt-services/*": ["src/app/components/gantt/services/*"],
+      "@gantt/*": ["src/app/components/gantt/*"],
+
+      "@historical-data-modals-upload/*": ["src/app/components/integration/historical-data/modals/upload/*"],
+      "@historical-data-modals-upload-info/*": ["src/app/components/integration/historical-data/modals/upload-info/*"],
+      "@historical-data-modals/*": ["src/app/components/integration/historical-data/modals/*"],
+      "@historical-data-models/*": ["src/app/components/integration/historical-data/models/*"],
+      "@historical-data-services/*": ["src/app/components/integration/historical-data/services/*"],
+      "@historical-data/*": ["src/app/components/integration/historical-data/*"],
+
+      "@holiday-models/*": ["src/app/components/holiday/models/*"],
+      "@holiday-services/*": ["src/app/components/holiday/services/*"],
+      "@holiday/*": ["src/app/components/holiday/*"],
+
+      "@home/*": ["src/app/components/home/*"],
+
+      "@jodit-services/*": ["src/app/components/jodit/services/*"],
+      "@jodit/*": ["src/app/components/jodit/services/*"],
+
+      "@load-page/*": ["src/app/components/load-page/*"],
+
+      "@navbar/*": ["src/app/components/navbar/*"],
+      "@navbutton/*": ["src/app/components/navbutton/*"],
+
+      "@notification-checking-service/*": ["src/app/components/notification/checking/service/*"],
+      "@notification-checking/*": ["src/app/components/notification/checking/*"],
+
+      "@notification-sent-selection-modals-body-view/*": [
+        "src/app/components/notification/sent/components/selection/modals/body-view/*"
+      ],
+      "@notification-sent-selection-modals/*": ["src/app/components/notification/sent/components/selection/modals/*"],
+      "@notification-sent-selection/*": ["src/app/components/notification/sent/components/selection/*"],
+      "@notification-sent-components/*": ["src/app/components/notification/sent/components/*"],
+      "@notification-sent-modals-by-target-notification/*": [
+        "src/app/components/notification/sent/modals/by-target-notification/*"
+      ],
+      "@notification-sent-modals/*": ["src/app/components/notification/sent/modals/*"],
+      "@notification-sent-models/*": ["src/app/components/notification/sent/models/*"],
+      "@notification-sent-services/*": ["src/app/components/notification/sent/services/*"],
+      "@notification-sent/*": ["src/app/components/notification/sent/*"],
+
+      "@notification-target-modals-list/*": ["src/app/components/notification/target/modals/list/*"],
+      "@notification-target-modals-notification-template/*": [
+        "src/app/components/notification/target/modals/notification-template/*"
+      ],
+      "@notification-target-modals/*": ["src/app/components/notification/target/modals/*"],
+      "@notification-target-models/*": ["src/app/components/notification/target/models/*"],
+      "@notification-target-services/*": ["src/app/components/notification/target/services/*"],
+      "@notification-target/*": ["src/app/components/notification/target/*"],
+
+      "@notification-template-modals-create-update-steps-editor/*": [
+        "src/app/components/notification/template/modals/create-update/steps/editor/*"
+      ],
+      "@notification-template-modals-create-update-steps-general-settings/*": [
+        "src/app/components/notification/template/modals/create-update/steps/general-settings/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-audience-add-email/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-audience/additional-email/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-audience-add-target-email-table-models/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-audience/additional-target-email-table/models/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-audience-add-target-email-table/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-audience/additional-target-email-table/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-audience/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-audience/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-object-models/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-object/models/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-object-select-syllabus/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-object/select-syllabus/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-object-select-training/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-object/select-training/*"
+      ],
+      "@notification-template-modals-create-update-steps-target-object/*": [
+        "src/app/components/notification/template/modals/create-update/steps/target-object/*"
+      ],
+      "@notification-template-modals-create-update-steps-time-need-repeat-settings/*": [
+        "src/app/components/notification/template/modals/create-update/steps/time/need-repeat-settings/*"
+      ],
+      "@notification-template-modals-create-update-steps-time/*": [
+        "src/app/components/notification/template/modals/create-update/steps/time/*"
+      ],
+      "@notification-template-modals-create-update-steps/*": [
+        "src/app/components/notification/template/modals/create-update/steps/*"
+      ],
+      "@notification-template-modals-create-update/*": [
+        "src/app/components/notification/template/modals/create-update/*"
+      ],
+      "@notification-template-modals-selection-models/*": [
+        "src/app/components/notification/template/modals/selection/models/*"
+      ],
+      "@notification-template-modals-selection/*": ["src/app/components/notification/template/modals/selection/*"],
+      "@notification-template-modals-view/*": ["src/app/components/notification/template/modals/view/*"],
+      "@notification-template-modals/*": ["src/app/components/notification/template/modals/*"],
+      "@notification-template-models-enums/*": ["src/app/components/notification/template/models/enums/*"],
+      "@notification-template-models/*": ["src/app/components/notification/template/models/*"],
+      "@notification-template-services/*": ["src/app/components/notification/template/services/*"],
+      "@notification-template/*": ["src/app/components/notification/template/*"],
+      "@notification/*": ["src/app/components/notification/*"],
+
+      "@participant-training-card-services/*": ["src/app/components/participant-training-card/services/*"],
+      "@participant-training-card/*": ["src/app/components/participant-training-card/*"],
+
+      "@participation-card-modals-generate-participation-sheet/*": [
+        "src/app/components/participation-card/modals/generate-participation-sheet/*"
+      ],
+      "@participation-card-modals-training-notes-modals-create-update/*": [
+        "src/app/components/participation-card/modals/training-notes/modals/create-update/*"
+      ],
+      "@participation-card-modals-training-notes-modals/*": [
+        "src/app/components/participation-card/modals/training-notes/modals/*"
+      ],
+      "@participation-card-modals-training-notes-models/*": [
+        "src/app/components/participation-card/modals/training-notes/models/*"
+      ],
+      "@participation-card-modals-training-notes-services/*": [
+        "src/app/components/participation-card/modals/training-notes/services/*"
+      ],
+      "@participation-card-modals-training-notes/*": ["src/app/components/participation-card/modals/training-notes/*"],
+      "@participation-card-modals/*": ["src/app/components/participation-card/modals/*"],
+      "@participation-card-models/*": ["src/app/components/participation-card/models/*"],
+      "@participation-card-services/*": ["src/app/components/participation-card/services/*"],
+      "@participation-card/*": ["src/app/components/participation-card/*"],
+
+      "@profile-child-tables-person-training-models/*": [
+        "src/app/components/profile/child-tables/person-training/models/*"
+      ],
+      "@profile-child-tables-person-training/*": ["src/app/components/profile/child-tables/person-training/*"],
+      "@profile-full/*": ["src/app/components/profile/full/*"],
+      "@profile-services/*": ["src/app/components/profile/services/*"],
+      "@profile/*": ["src/app/components/profile/*"],
+
+      "@unavailability-resources-period-modals/*": [
+        "src/app/components/unavailability-resources/unavailability-resources-period/modals/*"
+      ],
+      "@unavailability-resources-period-models/*": [
+        "src/app/components/unavailability-resources/unavailability-resources-period/models/*"
+      ],
+      "@unavailability-resources-period-services/*": [
+        "src/app/components/unavailability-resources/unavailability-resources-period/services/*"
+      ],
+      "@unavailability-resources-period/*": [
+        "src/app/components/unavailability-resources/unavailability-resource-period/*"
+      ],
+
+      "@unavailability-resources-label-modals/*": [
+        "src/app/components/unavailability-resources/unavailability-resources-label/modals/*"
+      ],
+      "@unavailability-resources-label-models/*": [
+        "src/app/components/unavailability-resources/unavailability-resources-label/models/*"
+      ],
+      "@unavailability-resources-label-services/*": [
+        "src/app/components/unavailability-resources/unavailability-resources-label/services/*"
+      ],
+      "@unavailability-resources-label/*": [
+        "src/app/components/unavailability-resources/unavailability-resource-label/*"
+      ],
+      "@unavailability-resources/*": ["src/app/components/unavailability-resources/*"],
+
+      "@tag-role-modals-create-update/*": ["src/app/components/tag/tag-role/modals/create-update/*"],
+      "@tag-role-modals/*": ["src/app/components/tag/tag-role/modals/*"],
+      "@tag-role-models/*": ["src/app/components/tag/tag-role/models/*"],
+      "@tag-role-services/*": ["src/app/components/tag/tag-role/services/*"],
+      "@tag-role/*": ["src/app/components/tag/tag-role/*"],
+
+      "@components/*": ["src/app/components/*"],
+      "@config/*": ["src/app/config/*"],
+      "@directives/*": ["src/app/directives/*"],
+      "@guards/*": ["src/app/guards/*"],
+      "@interceptors/*": ["src/app/interceptors/*"],
+      "@localization/*": ["src/app/localization/*"],
+      "@material/*": ["src/app/material/*"],
+      "@modules/*": ["src/app/modules/*"],
+      "@pipes/*": ["src/app/pipes/*"],
+      "@services/*": ["src/app/services/*"],
+      "@utils/*": ["src/app/utils/*"]
+    },
+    "outDir": "./dist/out-tsc",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": ["ES2022", "dom"]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

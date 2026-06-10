@@ -1,0 +1,16 @@
+<mat-icon
+  class="row-btns view"
+  (click)="viewCertificate()"
+  [matTooltip]="'participationCardModalViewCertificateBtnTooltip' | transloco"
+>
+  assignment_ind
+</mat-icon>
+<app-download-certificate-by-participant-card-ids
+  [class]="'row-btns edit'"
+  [titleLocaleKey]="'participationCardModalDownloadCertificateBtnTooltip'"
+  [iconBtn]="true"
+  [iconKey]="'save_alt'"
+  [participantTrainingCardIds]="[participantTrainingCardId]"
+  (click)="$event.stopPropagation()"
+>
+</app-download-certificate-by-participant-card-ids>

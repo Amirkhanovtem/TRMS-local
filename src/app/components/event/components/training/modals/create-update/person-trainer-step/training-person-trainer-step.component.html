@@ -1,0 +1,116 @@
+<div class="input-fields-container">
+  <div class="modal-input-field">
+    <mat-accordion class="accordion" multi>
+      <!--   MAIN TRAINER   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'trainingMainTrainerColTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-main-trainer-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventTrainingMainTrainerTable'"
+          [trainingTemplateId]="parent.training.trainingTemplate.id"
+          [modules]="parent.training.trainingModules"
+        >
+        </app-creating-event-main-trainer-table>
+      </mat-expansion-panel>
+
+      <!--   LINEAR TRAINER   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'trainingLinearTrainerColTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-linear-trainer-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventTrainingLinearTrainerTable'"
+          [trainingTemplateId]="parent.training.trainingTemplate.id"
+          [modules]="parent.training.trainingModules"
+        >
+        </app-creating-event-linear-trainer-table>
+      </mat-expansion-panel>
+
+      <!--   PERSON   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'trainingPersonsListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-creating-event-person-table
+          [isView]="parent.dialogParams?.isView"
+          [tableId]="'creatingEventTrainingPersonTable'"
+          [modules]="parent.training.trainingModules"
+        >
+        </app-creating-event-person-table>
+      </mat-expansion-panel>
+
+      <!--   SELF ENROLLMENT SETTINGS     -->
+      @if (parent?.training?.trainingTemplate?.trainingTemplateSelfEnrollmentSettings?.isEnabledOpenSelfEnrollment) {
+        <div class="modal-input-field">
+          <p class="modal-input-field-title">
+            {{ 'selfEnrollmentSettingColTable' | transloco }}
+            <mat-slide-toggle
+              [color]="'primary'"
+              [formControl]="selfEnrollmentEnabledControl"
+              [(ngModel)]="parent.training.trainingSelfEnrollmentSettings.isEnabled"
+              [disabled]="parent.dialogParams?.isView"
+            >
+            </mat-slide-toggle>
+          </p>
+          <div class="input-with-title-container">
+            <span>
+              {{ 'selfEnrollmentSetting.registrationLimit' | transloco }}
+            </span>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                required
+                type="number"
+                [min]="parent.MIN_REGISTRATION_LIMIT"
+                [max]="parent.MAX_REGISTRATION_LIMIT"
+                appAllowNumbersOnlyDirective
+                [(ngModel)]="parent.training.trainingSelfEnrollmentSettings.registrationLimit"
+                [formControl]="selfEnrollmentRegistrationLimitControl"
+                [placeholder]="'selfEnrollmentSetting.registrationLimit' | transloco"
+                [readonly]="parent.dialogParams?.isView || !parent.training.trainingSelfEnrollmentSettings.isEnabled"
+              />
+            </mat-form-field>
+          </div>
+          <div class="error-message">
+            @if (parent.isFieldEmpty('selfEnrollmentRegistrationLimit')) {
+              <span>
+                {{ 'validatorsEmptyFieldMessage' | transloco }}
+              </span>
+            }
+            @if (parent.isFieldOutOfTheRange('selfEnrollmentRegistrationLimit')) {
+              <span>
+                {{
+                  parent.fieldOutOfTheRangeErrorMessage(parent.MIN_REGISTRATION_LIMIT, parent.MAX_REGISTRATION_LIMIT)
+                }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+
+      <!--   MODULE   -->
+      <mat-expansion-panel class="expansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-expansion-bold-title">
+            {{ 'trainingModulesListTable' | transloco }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-training-module-table
+          (updateChildComponentsTable)="parent.updateChildComponentsTable()"
+          [training]="parent.training"
+          [isView]="parent.dialogParams?.isView"
+          [allModulesInEvent]="parent.collectAllModulesInEvent()"
+        ></app-training-module-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+/**
+ * @see BACK ParticipantTrainingCardCertificateTemplateInfo
+ */
+export enum ParticipantTrainingCardCertificateTemplateInfoEnum {
+  HAS_NOT_CERTIFICATE_TEMPLATE = 'HAS_NOT_CERTIFICATE_TEMPLATE',
+  HAS_CERTIFICATE_TEMPLATE = 'HAS_CERTIFICATE_TEMPLATE',
+  HAS_CERTIFICATE_TEMPLATE_FILE = 'HAS_CERTIFICATE_TEMPLATE_FILE',
+}
