@@ -4,9 +4,14 @@ import {
   LearningRequestPrototypeService,
   TrainingOption,
 } from '@components/learning-requests-prototype/learning-request-prototype.service';
+import {
+  FeedbackAssignment,
+  FeedbackPrototypeService,
+  FeedbackResponse,
+} from '@components/feedback-prototype/feedback-prototype.service';
 import { Subscription } from 'rxjs';
 
-type ManagerPage = 'self' | 'team' | 'requests' | 'dashboards' | 'reports';
+type ManagerPage = 'self' | 'team' | 'requests' | 'feedback' | 'dashboards' | 'reports';
 type RequestStatusFilter = LearningRequest['statusKey'] | 'all';
 
 interface ModalInfo {
@@ -89,6 +94,7 @@ export class ManagerProfilePrototypeComponent implements OnInit, OnDestroy {
     self: 'Мой профиль руководителя, часы обучения, матрица позиции и рекомендации.',
     team: 'Прямое подчинение, профиль сотрудника, сертификаты, тренинги, рекомендации и зачисление.',
     requests: 'Заявки в Training Academy, статусы рассмотрения, приоритеты и чат.',
+    feedback: 'Feedback по команде: ожидающие опросы, QR, NPS и ответы участников.',
     dashboards: 'Power BI зона: тренинги, часы, сотрудники, тренеры, online/offline learning analytics.',
     reports: 'Табличные отчеты с выгрузкой по TRMS и онлайн-платформе.',
   };
@@ -306,7 +312,10 @@ export class ManagerProfilePrototypeComponent implements OnInit, OnDestroy {
   private toastTimer: ReturnType<typeof setTimeout>;
   private readonly subscriptions = new Subscription();
 
-  constructor(private readonly learningRequestService: LearningRequestPrototypeService) {}
+  constructor(
+    private readonly learningRequestService: LearningRequestPrototypeService,
+    public readonly feedbackService: FeedbackPrototypeService,
+  ) {}
 
   public ngOnInit(): void {
     this.subscriptions.add(
@@ -446,6 +455,33 @@ export class ManagerProfilePrototypeComponent implements OnInit, OnDestroy {
     return this.employees.filter(employee =>
       `${employee.name} ${employee.position} ${employee.grade}`.toLowerCase().includes(query),
     );
+  }
+
+  public get teamFeedbackAssignments(): Array<FeedbackAssignment> {
+    const employeeNames = this.employees.map(employee => employee.name);
+    return this.feedbackService.assignments.filter(assignment => employeeNames.includes(assignment.participantName));
+  }
+
+  public get teamFeedbackResponses(): Array<FeedbackResponse> {
+    const employeeNames = this.employees.map(employee => employee.name);
+    return this.feedbackService.responses.filter(response => employeeNames.includes(response.participantName));
+  }
+
+  public get pendingTeamFeedbackCount(): number {
+    return this.teamFeedbackAssignments.filter(assignment => assignment.status === 'pending').length;
+  }
+
+  public get teamFeedbackCompletion(): number {
+    if (!this.teamFeedbackAssignments.length) {
+      return 0;
+    }
+    const completed = this.teamFeedbackAssignments.filter(assignment => assignment.status === 'completed').length;
+    return Math.round((completed / this.teamFeedbackAssignments.length) * 100);
+  }
+
+  public completeTeamFeedback(assignmentId: string): void {
+    this.feedbackService.completeAssignment(assignmentId, 'notification');
+    this.showToast('Feedback и статус участия обновлены');
   }
 
   public switchPage(page: ManagerPage): void {

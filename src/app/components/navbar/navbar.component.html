@@ -34,7 +34,7 @@
 
       <button mat-menu-item routerLink="employee-profile-prototype" routerLinkActive="active-link">
         <mat-icon>badge</mat-icon>
-        <span>Профиль сотрудник</span>
+        <span>Профиль сотрудника</span>
       </button>
 
       <button mat-menu-item routerLink="manager-profile-prototype" routerLinkActive="active-link">
@@ -50,6 +50,21 @@
       <button mat-menu-item routerLink="planner-requests-prototype" routerLinkActive="active-link">
         <mat-icon>event_note</mat-icon>
         <span>Заявки Планер</span>
+      </button>
+
+      <button mat-menu-item routerLink="lms-prototype" routerLinkActive="active-link">
+        <mat-icon>hub</mat-icon>
+        <span>LMS</span>
+      </button>
+
+      <button mat-menu-item routerLink="lms-certificates-prototype" routerLinkActive="active-link">
+        <mat-icon>workspace_premium</mat-icon>
+        <span>LMS сертификаты</span>
+      </button>
+
+      <button mat-menu-item routerLink="feedback-prototype" routerLinkActive="active-link">
+        <mat-icon>dynamic_form</mat-icon>
+        <span>Feedback</span>
       </button>
 
       @if (hasRoleForProfile()) {

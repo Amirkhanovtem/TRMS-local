@@ -1,0 +1,165 @@
+<div class="feedback-prototype">
+  <header class="hero">
+    <div>
+      <small>TRMS Feedback</small>
+      <h1>Feedback</h1>
+      <p>Опросы после тренингов, QR-сценарий, ответы участников, экспорт и дашборды.</p>
+    </div>
+    <div class="hero-actions">
+      <button class="secondary" type="button" (click)="export('pdf')">PDF отчет</button>
+      <button class="primary" type="button" (click)="export('xlsx')">Excel выгрузка</button>
+    </div>
+  </header>
+
+  <section class="stats-grid">
+    <article class="stat-card"><small>Активные формы</small><strong>{{ forms.length }}</strong><span>С учетом черновиков и архива</span></article>
+    <article class="stat-card"><small>Заполнено</small><strong>{{ completionRate }}%</strong><span>По назначенным участникам</span></article>
+    <article class="stat-card"><small>NPS</small><strong>{{ averageNps }}</strong><span>Средний по ответам</span></article>
+    <article class="stat-card"><small>Ответы</small><strong>{{ responses.length }}</strong><span>Feedback repository</span></article>
+  </section>
+
+  <div class="workspace-grid">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Опросники</h2>
+          <p>Шаблон связывается с кодом тренинга, чтобы TRMS понимал, какую форму отправить после завершения.</p>
+        </div>
+      </div>
+
+      <div class="panel-body split">
+        <div class="form-list">
+          @for (form of forms; track form.id) {
+            <button class="form-row" type="button" [class.active]="selectedFormId === form.id" (click)="selectedFormId = form.id">
+              <div>
+                <strong>{{ form.title }}</strong>
+                <span>{{ form.trainingTemplateCode }} · {{ form.trainingTitle }}</span>
+              </div>
+              <span class="pill" [class.warn]="form.status === 'draft'" [class.bad]="form.status === 'archived'">{{ form.status }}</span>
+            </button>
+          }
+        </div>
+
+        @if (selectedForm) {
+          <div class="form-editor">
+            <div class="editor-card">
+              <div>
+                <small>Выбранный опросник</small>
+                <h3>{{ selectedForm.title }}</h3>
+                <p>{{ selectedForm.owner }} · обновлен {{ selectedForm.updatedAt }}</p>
+              </div>
+              <div class="metric-line">
+                <span>{{ selectedForm.responses }} ответов</span>
+                <span>Средняя оценка {{ selectedForm.averageScore || 0 }}</span>
+              </div>
+            </div>
+
+            <div class="link-grid">
+              <label>
+                Тренинг
+                <input [(ngModel)]="linkDraft.trainingTitle" />
+              </label>
+              <label>
+                Код шаблона тренинга
+                <input [(ngModel)]="linkDraft.trainingTemplateCode" />
+              </label>
+              <button class="primary" type="button" (click)="linkSelectedForm()">Связать</button>
+            </div>
+
+            <div class="question-tools">
+              @for (questionType of questionTypes; track questionType.type) {
+                <button type="button" (click)="addQuestion(questionType.type)">{{ questionType.label }}</button>
+              }
+            </div>
+
+            <div class="question-list">
+              @for (question of selectedForm.questions; track question.id) {
+                <article class="question-card">
+                  <span>{{ question.type }}</span>
+                  <strong>{{ question.title }}</strong>
+                  <small>{{ question.required ? 'Обязательный' : 'Необязательный' }}</small>
+                </article>
+              }
+            </div>
+
+            <div class="button-row">
+              <button class="secondary" type="button" (click)="activateSelectedForm()">Активировать</button>
+              <button class="ghost" type="button" (click)="archiveSelectedForm()">Архивировать</button>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Назначения и QR</h2>
+          <p>После завершения тренинга участнику приходит уведомление или показывается QR для feedback.</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        @for (assignment of selectedFormAssignments; track assignment.id) {
+          <article class="assignment-card">
+            <div>
+              <strong>{{ assignment.participantName }}</strong>
+              <span>{{ assignment.trainingTitle }} · {{ assignment.trainingDate }}</span>
+              <small>Attendance: {{ assignment.attendanceStatus }} · {{ assignment.qrToken }}</small>
+            </div>
+            <div class="assignment-actions">
+              <span class="pill" [class.warn]="assignment.status === 'pending'">{{ assignment.status }}</span>
+              <button class="secondary" type="button" (click)="completeFromAdmin(assignment)">Закрыть feedback</button>
+            </div>
+          </article>
+        }
+        @if (!selectedFormAssignments.length) {
+          <div class="empty-state">По выбранному опроснику пока нет назначений.</div>
+        }
+      </div>
+    </section>
+  </div>
+
+  <div class="workspace-grid bottom-grid">
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Ответы участников</h2>
+          <p>Реестр как в SurveyMonkey / MS Forms: фильтры, экспорт, детализация.</p>
+        </div>
+        <input class="search" [(ngModel)]="responseFilter" placeholder="Курс, сотрудник, департамент" />
+      </div>
+      <div class="panel-body response-table">
+        <div class="table-head"><span>Участник</span><span>Тренинг</span><span>NPS</span><span>Оценка</span><span>Источник</span></div>
+        @for (response of filteredResponses; track response.id) {
+          <div class="table-row">
+            <span><strong>{{ response.participantName }}</strong><small>{{ response.department }}</small></span>
+            <span><strong>{{ response.trainingTitle }}</strong><small>{{ response.submittedAt }}</small></span>
+            <span>{{ response.nps }}</span>
+            <span>{{ response.satisfaction }}/5</span>
+            <span>{{ response.source }}</span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="panel dashboard-card">
+      <div class="panel-head">
+        <div>
+          <h2>Dashboard</h2>
+          <p>Блок для будущей Power BI связки по тренингам и формам.</p>
+        </div>
+      </div>
+      <div class="panel-body dashboard-body">
+        <div class="bar-line"><span>Инструктор</span><div><i style="width: 86%"></i></div><strong>4.8</strong></div>
+        <div class="bar-line"><span>Материалы</span><div><i style="width: 78%"></i></div><strong>4.4</strong></div>
+        <div class="bar-line"><span>Практика</span><div><i style="width: 70%"></i></div><strong>4.1</strong></div>
+        <div class="insight">
+          <strong>Системное правило</strong>
+          <p>Когда планер переводит training session в завершено, TRMS создает назначение feedback по связанному шаблону и отправляет уведомление участнику.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" [class.open]="toastText">{{ toastText }}</div>
+</div>

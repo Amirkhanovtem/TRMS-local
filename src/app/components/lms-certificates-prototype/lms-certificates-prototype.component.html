@@ -1,0 +1,222 @@
+<section class="cert-page">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Docebo completion queue</p>
+      <h1>LMS сертификаты</h1>
+      <p class="hero-text">
+        Очередь завершений LMS: webhook дает быстрые события, reconciliation дозагружает пропущенные записи,
+        а сертификаты выпускаются через действующий модуль TRMS.
+      </p>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <strong>{{ readyCount }}</strong>
+        <span>готово к выпуску</span>
+      </div>
+      <div>
+        <strong>{{ issuedCount }}</strong>
+        <span>выпущено</span>
+      </div>
+      <div>
+        <strong>{{ attentionCount }}</strong>
+        <span>требует внимания</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="panel control-panel">
+    <div>
+      <h2>Контроль синхронизации</h2>
+      <p>Последний reconciliation: {{ lastReconciliationAt }}. Webhook: course.enrollment.completed.</p>
+    </div>
+    <div class="panel-actions">
+      <button type="button" class="btn ghost" (click)="runReconciliation()">Запустить reconciliation</button>
+      <button type="button" class="btn primary" (click)="issueFilteredCertificates()">Выпустить готовые</button>
+    </div>
+  </article>
+
+  <article class="panel filter-panel">
+    <div class="tabs">
+      @for (tab of tabs; track tab.id) {
+        <button type="button" [class.active]="activeTab === tab.id" (click)="selectTab(tab.id)">
+          <span>{{ tab.title }}</span>
+          <b>{{ getTabCount(tab.id) }}</b>
+        </button>
+      }
+    </div>
+
+    <div class="filter-grid">
+      <label>
+        <span>Курс</span>
+        <select [(ngModel)]="filters.course">
+          <option value="all">Все курсы</option>
+          @for (course of courses; track course) {
+            <option [value]="course">{{ course }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Отдел</span>
+        <select [(ngModel)]="filters.department">
+          <option value="all">Все отделы</option>
+          @for (department of departments; track department) {
+            <option [value]="department">{{ department }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Код / табельный / Docebo ID</span>
+        <input type="text" [(ngModel)]="filters.code" placeholder="LMS-DL, CERT, A10234" />
+      </label>
+
+      <label>
+        <span>Статус</span>
+        <select [(ngModel)]="filters.status">
+          <option value="all">Все статусы</option>
+          @for (status of statuses; track status) {
+            <option [value]="status">{{ status }}</option>
+          }
+        </select>
+      </label>
+
+      <button type="button" class="btn ghost reset-btn" (click)="resetFilters()">Очистить</button>
+    </div>
+  </article>
+
+  <div class="content-grid">
+    <article class="panel list-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Записи очереди</h2>
+          <p>Показываются записи активной вкладки с учетом фильтров.</p>
+        </div>
+        @if (toastText) {
+          <span class="toast">{{ toastText }}</span>
+        }
+      </div>
+
+      <div class="record-table">
+        <div class="table-head">
+          <span>Сотрудник</span>
+          <span>Курс Docebo</span>
+          <span>Связка TRMS</span>
+          <span>Статус</span>
+          <span>Действие</span>
+        </div>
+
+        @for (record of filteredRecords; track record.id) {
+          <div class="table-row" [class.selected]="selectedRecord.id === record.id" (click)="selectRecord(record)">
+            <div>
+              <b>{{ record.employee }}</b>
+              <span>{{ record.personnelNumber }} · {{ record.department }}</span>
+            </div>
+            <div>
+              <b>{{ record.courseTitle }}</b>
+              <span>{{ record.courseCode }} · {{ record.courseId }}</span>
+            </div>
+            <div>
+              <b>{{ record.trainingCode || 'нет связки' }}</b>
+              <span>{{ record.certificateTemplate || 'нет сертификата' }}</span>
+            </div>
+            <div>
+              <span
+                class="state"
+                [class.ready]="record.status === 'Готов к выпуску'"
+                [class.blocked]="record.status === 'Ошибка данных' || record.status === 'Требует сопоставления'"
+                [class.issued]="record.status === 'Выпущен'"
+              >
+                {{ record.status }}
+              </span>
+              <small>{{ record.source }} · {{ record.completedAt }}</small>
+            </div>
+            <div class="row-actions">
+              @if (record.status === 'Готов к выпуску') {
+                <button type="button" class="btn small" (click)="issueCertificate(record); $event.stopPropagation()">
+                  Выпустить
+                </button>
+              } @else if (record.status === 'Требует сопоставления' || record.status === 'Ошибка данных') {
+                <button type="button" class="btn small ghost" (click)="markAsResolved(record); $event.stopPropagation()">
+                  Сопоставить
+                </button>
+              } @else {
+                <button type="button" class="btn small ghost" (click)="selectRecord(record); $event.stopPropagation()">
+                  Открыть
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        @if (!filteredRecords.length) {
+          <div class="empty-row">В этой вкладке нет записей по выбранным фильтрам.</div>
+        }
+      </div>
+    </article>
+
+    <aside class="panel detail-panel">
+      <div class="panel-title compact">
+        <div>
+          <h2>Карточка выпуска</h2>
+          <p>Проверка перед передачей в модуль сертификатов TRMS.</p>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="person-card">
+          <span>{{ selectedRecord.personnelNumber }} · {{ selectedRecord.doceboUserId }}</span>
+          <h3>{{ selectedRecord.employee }}</h3>
+          <p>{{ selectedRecord.department }} · {{ selectedRecord.position }}</p>
+        </div>
+
+        <dl class="details">
+          <div>
+            <dt>Docebo course ID</dt>
+            <dd>{{ selectedRecord.courseId }}</dd>
+          </div>
+          <div>
+            <dt>Код курса</dt>
+            <dd>{{ selectedRecord.courseCode }}</dd>
+          </div>
+          <div>
+            <dt>TRMS шаблон</dt>
+            <dd>{{ selectedRecord.trainingCode || 'не сопоставлен' }}</dd>
+          </div>
+          <div>
+            <dt>Сертификат</dt>
+            <dd>{{ selectedRecord.certificateTemplate || 'не выбран' }}</dd>
+          </div>
+          <div>
+            <dt>Проблема</dt>
+            <dd>{{ selectedRecord.problem || 'нет' }}</dd>
+          </div>
+        </dl>
+
+        <div class="timeline">
+          <div class="timeline-item done">
+            <b></b>
+            <span>LMS передал завершение курса</span>
+          </div>
+          <div class="timeline-item" [class.done]="!!selectedRecord.trainingCode">
+            <b></b>
+            <span>Найдена связка с TRMS training template</span>
+          </div>
+          <div class="timeline-item" [class.done]="!!selectedRecord.certificateTemplate">
+            <b></b>
+            <span>Найден шаблон сертификата TRMS</span>
+          </div>
+          <div class="timeline-item" [class.done]="selectedRecord.status === 'Выпущен'">
+            <b></b>
+            <span>Сертификат выпущен</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn primary wide" [disabled]="!selectedIsIssuable" (click)="issueCertificate(selectedRecord)">
+          Выпустить сертификат
+        </button>
+      </div>
+    </aside>
+  </div>
+</section>

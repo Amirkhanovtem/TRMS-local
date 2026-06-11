@@ -1,6 +1,10 @@
 ﻿import { Component } from '@angular/core';
+import {
+  FeedbackAssignment,
+  FeedbackPrototypeService,
+} from '@components/feedback-prototype/feedback-prototype.service';
 
-type EmployeePage = 'home' | 'store' | 'forum' | 'rewards' | 'history';
+type EmployeePage = 'home' | 'store' | 'forum' | 'rewards' | 'feedback' | 'history';
 type CourseFilter = 'all' | 'progress' | 'planned' | 'completed';
 type CourseMode = 'all' | 'online' | 'offline';
 
@@ -43,6 +47,7 @@ export class EmployeeProfilePrototypeComponent {
     store: 'Самозачисление на тренинги по фильтрам.',
     forum: 'Сообщество сотрудников, FAQ и обсуждения.',
     rewards: 'Reward Shop, бейджи, ачивки и персональный баннер.',
+    feedback: 'Опросы после тренингов, QR и статусы участия.',
     history: 'История обучения, сертификаты и курсы.',
   };
 
@@ -76,6 +81,17 @@ export class EmployeeProfilePrototypeComponent {
     { id: 'sky', title: 'Sky Progress' },
     { id: 'gold', title: 'Gold Recognition' },
   ];
+
+  constructor(public readonly feedbackService: FeedbackPrototypeService) {}
+
+  public get myFeedbackAssignments(): Array<FeedbackAssignment> {
+    return this.feedbackService.assignmentsForParticipant('Темирлан Амирханов');
+  }
+
+  public get pendingFeedbackCount(): number {
+    return this.myFeedbackAssignments.filter(assignment => assignment.status === 'pending').length;
+  }
+
   public discussions: Array<{ title: string; subtitle: string; likes: number; modalKey: string }> = [
     {
       title: 'Как применять HEART в ночную смену?',
@@ -540,6 +556,13 @@ export class EmployeeProfilePrototypeComponent {
   public saveRewardProfile(): void {
     this.showToast('Настройки наград сохранены');
   }
+
+  public completeFeedback(assignmentId: string, source: 'notification' | 'qr', event?: Event): void {
+    event?.stopPropagation();
+    this.feedbackService.completeAssignment(assignmentId, source);
+    this.showToast(source === 'qr' ? 'QR принят: участие завершено, отзыв сохранен' : 'Feedback отправлен');
+  }
+
   public isCourseVisible(course: Course): boolean {
     const statusMatch = this.courseFilter === 'all' || course.status === this.courseFilter;
     const modeMatch = this.courseMode === 'all' || course.mode === this.courseMode;

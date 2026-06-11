@@ -23,12 +23,15 @@ import { EquipmentComponent } from '@equipment/equipment.component';
 import { EquipmentCategoryComponent } from '@equipment-category/equipment-category.component';
 import { EmployeeProfilePrototypeComponent } from '@components/employee-profile-prototype/employee-profile-prototype.component';
 import { ExamTemplateComponent } from '@exam-template/exam-template.component';
+import { FeedbackPrototypeComponent } from '@components/feedback-prototype/feedback-prototype.component';
 import { GanttComponent } from '@gantt/gantt.component';
 import { RedirectGuard } from '@guards/redirect-guard';
 import { TvBoardGuard } from '@guards/tv-board-guard';
 import { HistoricalDataComponent } from '@historical-data/historical-data.component';
 import { HomeComponent } from '@home/home.component';
 import { LocationComponent } from '@location/location.component';
+import { LmsCertificatesPrototypeComponent } from '@components/lms-certificates-prototype/lms-certificates-prototype.component';
+import { LmsPrototypeComponent } from '@components/lms-prototype/lms-prototype.component';
 import { NewReleaseComponent } from '@components/new-release/new-release.component';
 import { ManagerProfilePrototypeComponent } from '@components/manager-profile-prototype/manager-profile-prototype.component';
 import { PlannerRequestsPrototypeComponent } from '@components/planner-requests-prototype/planner-requests-prototype.component';
@@ -229,6 +232,18 @@ const routes: Routes = [
       {
         path: 'planner-requests-prototype',
         component: PlannerRequestsPrototypeComponent,
+      },
+      {
+        path: 'lms-prototype',
+        component: LmsPrototypeComponent,
+      },
+      {
+        path: 'lms-certificates-prototype',
+        component: LmsCertificatesPrototypeComponent,
+      },
+      {
+        path: 'feedback-prototype',
+        component: FeedbackPrototypeComponent,
       },
       {
         path: 'tag-role',

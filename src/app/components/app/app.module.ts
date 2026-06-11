@@ -90,6 +90,9 @@ import { CreateUpdateEquipmentCategoryModalComponent } from '@equipment-category
 import { EquipmentChildTableComponent } from '@equipment-modals-child-table/equipment-child-table.component';
 import { CreateUpdateEquipmentModalComponent } from '@equipment-modals-create-update/create-update-equipment-modal.component';
 import { EmployeeProfilePrototypeComponent } from '@components/employee-profile-prototype/employee-profile-prototype.component';
+import { FeedbackPrototypeComponent } from '@components/feedback-prototype/feedback-prototype.component';
+import { LmsCertificatesPrototypeComponent } from '@components/lms-certificates-prototype/lms-certificates-prototype.component';
+import { LmsPrototypeComponent } from '@components/lms-prototype/lms-prototype.component';
 import { ManagerProfilePrototypeComponent } from '@components/manager-profile-prototype/manager-profile-prototype.component';
 import { PlannerRequestsPrototypeComponent } from '@components/planner-requests-prototype/planner-requests-prototype.component';
 import { RequestsPrototypeComponent } from '@components/requests-prototype/requests-prototype.component';
@@ -364,6 +367,9 @@ export function initializeKeycloak(
     ManagerProfilePrototypeComponent,
     RequestsPrototypeComponent,
     PlannerRequestsPrototypeComponent,
+    LmsPrototypeComponent,
+    LmsCertificatesPrototypeComponent,
+    FeedbackPrototypeComponent,
     HomeComponent,
     LoadPageComponent,
     ProfileComponent,

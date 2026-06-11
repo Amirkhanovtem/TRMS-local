@@ -19,6 +19,10 @@
           <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" /><path d="M8 8h8" /><path d="M8 12h8" /><path d="M8 16h5" /></svg>
           Запросы на обучение
         </button>
+        <button type="button" [class.active]="activePage === 'feedback'" (click)="switchPage('feedback')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" /><path d="M8 8h8" /><path d="M8 12h5" /><path d="M8 16h4" /></svg>
+          Feedback
+        </button>
         <button type="button" [class.active]="activePage === 'dashboards'" (click)="switchPage('dashboards')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18" /><path d="M7 15v-5" /><path d="M12 15V7" /><path d="M17 15v-9" /></svg>
           Дэшборды
@@ -328,6 +332,53 @@
             </div>
           }
         </section>
+      </section>
+
+      <section class="page" [class.active]="activePage === 'feedback'">
+        <div class="grid-4">
+          <section class="panel stat"><small>Ожидают feedback</small><strong>{{ pendingTeamFeedbackCount }}</strong><span>По моей команде</span></section>
+          <section class="panel stat"><small>Заполнено</small><strong>{{ teamFeedbackCompletion }}%</strong><span>После завершенных тренингов</span></section>
+          <section class="panel stat"><small>Ответы</small><strong>{{ teamFeedbackResponses.length }}</strong><span>NPS и комментарии</span></section>
+          <section class="panel stat"><small>QR</small><strong>On</strong><span>Для очных занятий</span></section>
+        </div>
+
+        <div class="grid-2">
+          <section class="panel">
+            <div class="panel-head"><div><h2>Feedback по сотрудникам</h2><p>Статус участия меняется после отправки формы или сканирования QR.</p></div></div>
+            <div class="panel-pad manager-feedback-list">
+              @for (assignment of teamFeedbackAssignments; track assignment.id) {
+                <article class="feedback-item">
+                  <div>
+                    <strong>{{ assignment.participantName }}</strong>
+                    <span>{{ assignment.trainingTitle }} · {{ assignment.trainingDate }}</span>
+                    <small>Участие: {{ assignment.attendanceStatus }} · {{ assignment.qrToken }}</small>
+                  </div>
+                  <span class="pill" [class.warn]="assignment.status === 'pending'">{{ assignment.status === 'completed' ? 'Заполнено' : 'Ожидает' }}</span>
+                  <button class="secondary" type="button" [disabled]="assignment.status === 'completed'" (click)="completeTeamFeedback(assignment.id)">Закрыть</button>
+                </article>
+              }
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>Последние ответы</h2><p>Руководитель видит сводку по своей команде.</p></div></div>
+            <div class="panel-pad manager-feedback-list">
+              @for (response of teamFeedbackResponses; track response.id) {
+                <article class="feedback-item response">
+                  <div>
+                    <strong>{{ response.trainingTitle }}</strong>
+                    <span>{{ response.participantName }} · {{ response.submittedAt }}</span>
+                    <small>{{ response.comment }}</small>
+                  </div>
+                  <span class="pill">NPS {{ response.nps }}</span>
+                </article>
+              }
+              @if (!teamFeedbackResponses.length) {
+                <div class="empty-state"><strong>Ответов пока нет</strong><span>Они появятся после завершения тренингов.</span></div>
+              }
+            </div>
+          </section>
+        </div>
       </section>
 
       <section class="page" [class.active]="activePage === 'dashboards'">

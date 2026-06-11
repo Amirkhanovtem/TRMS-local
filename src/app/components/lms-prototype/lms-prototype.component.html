@@ -1,0 +1,245 @@
+<section class="lms-page">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Docebo integration center</p>
+      <h1>LMS</h1>
+      <p class="hero-text">
+        Управление связками TRMS training template → Docebo course → TRMS certificate template.
+        Экран показывает качество интеграции до того, как завершения попадут в выпуск сертификатов.
+      </p>
+    </div>
+
+    <div class="hero-stats" aria-label="Сводка">
+      <div>
+        <strong>{{ activeMappingsCount }}</strong>
+        <span>активные связки</span>
+      </div>
+      <div>
+        <strong>{{ issueReadyCount }}</strong>
+        <span>готово к выпуску</span>
+      </div>
+      <div>
+        <strong>{{ qualityProblemsCount }}</strong>
+        <span>требует проверки</span>
+      </div>
+    </div>
+  </header>
+
+  <article class="panel sync-panel">
+    <div class="sync-info">
+      <span class="status-dot"></span>
+      <div>
+        <h2>Состояние синхронизации</h2>
+        <p>{{ syncState }} · последняя синхронизация {{ lastSyncAt }}</p>
+        <p>{{ dictionaryState }}</p>
+      </div>
+    </div>
+    <div class="panel-actions">
+      <button type="button" class="btn ghost" (click)="testConnection()">Проверить Docebo</button>
+      <button type="button" class="btn ghost" (click)="importCourses()">Импортировать курсы</button>
+      <button type="button" class="btn primary" (click)="runQualityCheck()">Проверить связки</button>
+    </div>
+  </article>
+
+  <div class="workspace-grid">
+    <article class="panel builder-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Правило интеграции</h2>
+          <p>Одна карточка TRMS должна ссылаться на один стабильный Docebo course ID и один шаблон сертификата.</p>
+        </div>
+        <span class="status-pill">Docebo → TRMS</span>
+      </div>
+
+      <div class="mapping-builder">
+        <label class="field">
+          <span>Шаблон тренинга TRMS</span>
+          <select [(ngModel)]="selectedTrainingCode">
+            @for (template of trainingTemplates; track template.code) {
+              <option [value]="template.code">{{ template.code }} · {{ template.title }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Курс Docebo</span>
+          <select [(ngModel)]="selectedCourseId">
+            @for (course of doceboCourses; track course.id) {
+              <option [value]="course.id">{{ course.code }} · {{ course.title }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Шаблон сертификата TRMS</span>
+          <select [(ngModel)]="selectedCertificateCode">
+            @for (certificate of certificateTemplates; track certificate.code) {
+              <option [value]="certificate.code">{{ certificate.code }} · {{ certificate.title }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="switch-grid">
+        <label class="switch-card">
+          <input type="checkbox" [(ngModel)]="reviewRequired" />
+          <span>
+            <b>Ручная проверка</b>
+            <small>Сертификат попадет в очередь перед выпуском</small>
+          </span>
+        </label>
+
+        <label class="switch-card">
+          <input type="checkbox" [(ngModel)]="autoIssue" />
+          <span>
+            <b>Автовыпуск</b>
+            <small>Разрешать только для низкорисковых курсов</small>
+          </span>
+        </label>
+      </div>
+
+      <div class="preview-grid">
+        <div class="preview-card">
+          <span class="card-label">TRMS</span>
+          <h3>{{ selectedTraining?.title }}</h3>
+          <p>{{ selectedTraining?.department }} · {{ selectedTraining?.format }}</p>
+          <b>{{ selectedTraining?.code }}</b>
+        </div>
+
+        <div class="preview-card">
+          <span class="card-label">Docebo</span>
+          <h3>{{ selectedCourse?.title }}</h3>
+          <p>ID {{ selectedCourse?.id }} · {{ selectedCourse?.hours }} ч</p>
+          <b>{{ selectedCourse?.code }}</b>
+        </div>
+
+        <div class="preview-card certificate-card">
+          <span class="card-label">Certificate</span>
+          <h3>{{ selectedCertificate?.title }}</h3>
+          <p>{{ selectedCertificate?.language }} · {{ selectedCertificate?.validity }}</p>
+          <b>{{ selectedCertificate?.code }}</b>
+
+          <div class="certificate-upload">
+            <label class="upload-zone">
+              <mat-icon>upload_file</mat-icon>
+              <span>Загрузить шаблон</span>
+              <small>PDF, DOCX, HTML, PNG, JPG до 10 MB</small>
+              <input
+                type="file"
+                accept=".pdf,.docx,.html,.htm,.png,.jpg,.jpeg"
+                (change)="uploadCertificateTemplate($event)"
+              />
+            </label>
+
+            <div class="uploaded-template" [class.empty]="!uploadedCertificateTemplateName">
+              <div>
+                <b>{{ uploadedCertificateTemplateName || 'Шаблон не выбран' }}</b>
+                <span>
+                  {{ uploadedCertificateTemplateName ? uploadedCertificateTemplateSize : uploadedCertificateTemplateStatus }}
+                </span>
+              </div>
+              @if (uploadedCertificateTemplateName) {
+                <button type="button" class="icon-btn small-icon" aria-label="Очистить шаблон" (click)="clearUploadedCertificateTemplate()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button type="button" class="btn primary" (click)="createMapping()">Сохранить связку</button>
+        <button type="button" class="btn ghost" (click)="resetForm()">Очистить</button>
+        @if (toastText) {
+          <span class="toast">{{ toastText }}</span>
+        }
+      </div>
+    </article>
+
+    <aside class="panel guide-panel">
+      <div class="panel-title compact">
+        <div>
+          <h2>Курсы Docebo без связки</h2>
+          <p>Такие завершения попадут в ошибку сопоставления.</p>
+        </div>
+      </div>
+
+      <div class="unmapped-list">
+        @for (course of unmappedCourses; track course.id) {
+          <button type="button" class="unmapped-card" (click)="mapUnmappedCourse(course)">
+            <b>{{ course.code }}</b>
+            <span>{{ course.title }}</span>
+            <small>ID {{ course.id }} · {{ course.lastCompletionAt }}</small>
+          </button>
+        }
+        @if (!unmappedCourses.length) {
+          <div class="empty-state">Все активные курсы Docebo связаны с TRMS.</div>
+        }
+      </div>
+    </aside>
+  </div>
+
+  <article class="panel list-panel">
+    <div class="panel-title table-title">
+      <div>
+        <h2>Реестр связок</h2>
+        <p>Эти правила используются webhook-обработчиком и reconciliation-задачей.</p>
+      </div>
+
+      <label class="search-field">
+        <span>Поиск</span>
+        <input type="text" [(ngModel)]="searchText" placeholder="TRMS, Docebo, certificate, статус" />
+      </label>
+    </div>
+
+    <div class="mapping-table">
+      <div class="table-head">
+        <span>TRMS тренинг</span>
+        <span>Docebo курс</span>
+        <span>Сертификат</span>
+        <span>Контроль</span>
+        <span>Действия</span>
+      </div>
+
+      @for (mapping of filteredMappings; track mapping.trainingCode) {
+        <div class="table-row">
+          <div>
+            <b>{{ getTraining(mapping.trainingCode)?.title }}</b>
+            <span class="code-pill">{{ mapping.trainingCode }}</span>
+          </div>
+          <div>
+            <b>{{ getCourse(mapping.doceboCourseId)?.title || 'Курс не найден' }}</b>
+            <span>{{ mapping.doceboCourseCode }} · {{ mapping.doceboCourseId }}</span>
+          </div>
+          <div>
+            <b>{{ getCertificate(mapping.certificateCode)?.title || 'Шаблон не выбран' }}</b>
+            <span>{{ mapping.certificateCode || 'нет шаблона' }}</span>
+            @if (mapping.certificateFileName) {
+              <small>{{ mapping.certificateFileName }}</small>
+            }
+          </div>
+          <div>
+            <span
+              class="state"
+              [class.warning]="getMappingStatusLabel(mapping) !== 'Активна'"
+              [class.disabled]="mapping.status === 'Отключена'"
+            >
+              {{ getMappingStatusLabel(mapping) }}
+            </span>
+            <small>
+              {{ mapping.autoIssue ? 'автовыпуск' : 'ручной выпуск' }} ·
+              {{ mapping.reviewRequired ? 'с проверкой' : 'без проверки' }}
+            </small>
+          </div>
+          <div class="row-actions">
+            <button type="button" class="btn small" (click)="selectMapping(mapping)">Открыть</button>
+            <button type="button" class="btn small ghost" (click)="toggleMapping(mapping)">
+              {{ mapping.status === 'Отключена' ? 'Включить' : 'Отключить' }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+</section>
