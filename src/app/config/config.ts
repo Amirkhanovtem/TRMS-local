@@ -5,6 +5,10 @@ import { environment } from '../../environments/environment';
 
 export class Config {
   public static get URL(): string {
+    if (!environment.production && environment.envVar.apiBaseUrl && environment.envVar.apiBaseUrl !== 'VAR_APP_API_URL') {
+      return environment.envVar.apiBaseUrl.replace(/\/$/, '');
+    }
+
     return `${getBasePath()}/api`;
   }
 

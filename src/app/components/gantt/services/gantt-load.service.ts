@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StandardTreeModel } from '@common-tree-models/standard-tree.model';
 import { GanttComponent } from '@gantt/gantt.component';
 import { GanttFilterService } from '@gantt-modals-filter-selection-services/gantt-filter.service';
 import { GanttRangeEnum } from '@gantt-modals-view-selection-models/gantt-range.enum';
@@ -7,6 +8,7 @@ import { HolidayService } from '@holiday-services/holiday.service';
 import { UnavailabilityResourcesPeriodService } from '@unavailability-resources-period-services/unavailability-resources-period.service';
 import { Cit } from 'cit-angular';
 import moment from 'moment';
+import { forkJoin } from 'rxjs';
 import SchedulerViewPort = Cit.SchedulerViewPort;
 import { ParentEventModel } from '@event-models/parent-event.model';
 
@@ -153,6 +155,32 @@ export class GanttLoadService {
         }
       },
       error: e => {
+        this.loadResourcesFromFilterTrees(callback);
+      },
+    });
+  }
+
+  private loadResourcesFromFilterTrees(callback?): void {
+    forkJoin({
+      rooms: this.ganttFilterService.roomHierarchy(),
+      trainers: this.ganttFilterService.trainerHierarchy(),
+      equipments: this.ganttFilterService.equipmentHierarchy(),
+    }).subscribe({
+      next: data => {
+        const resources = [
+          this.createResourceGroup('ROOM_GROUP', 'Rooms', data.rooms),
+          this.createResourceGroup('TRAINER_GROUP', 'Trainers', data.trainers),
+          this.createResourceGroup('EQUIPMENT_GROUP', 'Equipment', data.equipments),
+        ].filter(resource => resource.children?.length);
+
+        this.ganttComponent.config.resources = resources.length ? resources : this.fallbackResources;
+        this.ganttComponent.scheduler?.control?.update(this.ganttComponent.config);
+
+        if (callback) {
+          callback();
+        }
+      },
+      error: e => {
         this.ganttComponent.config.resources = this.fallbackResources;
         this.ganttComponent.scheduler?.control?.update(this.ganttComponent.config);
 
@@ -161,6 +189,27 @@ export class GanttLoadService {
         }
       },
     });
+  }
+
+  private createResourceGroup(id: string, name: string, tree: Array<StandardTreeModel>): Cit.ResourceData {
+    return {
+      id,
+      name,
+      expanded: true,
+      group: true,
+      groupId: id,
+      children: this.mapTreeToResources(tree, id),
+    } as Cit.ResourceData;
+  }
+
+  private mapTreeToResources(tree: Array<StandardTreeModel> = [], groupId: string): Array<Cit.ResourceData> {
+    return tree.map(node => ({
+      id: node.id,
+      name: node.name || node.nameRu || node.nameEn || node.id,
+      expanded: true,
+      groupId,
+      children: this.mapTreeToResources(node.children ?? [], groupId),
+    })) as Array<Cit.ResourceData>;
   }
 
   /**
